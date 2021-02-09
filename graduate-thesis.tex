@@ -1,0 +1,110 @@
+\documentclass[a4paper,10pt]{report}
+
+\usepackage[utf8]{inputenx}
+\usepackage[style=apa,backend=biber,alldates=iso8601,doi=false]{biblatex}
+\usepackage[nottoc]{tocbibind}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage[toc, page]{appendix}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{palatino}
+\usepackage{lipsum}
+\usepackage[margin=3.25cm]{geometry}
+
+% Variables
+\newcommand{\thesistitle}{Graduate Thesis}
+\newcommand{\authorname}{Steven Oud}
+
+\addbibresource{graduate-thesis.bib}
+
+\titleformat{\chapter}{\LARGE\bfseries}{\thechapter}{1em}{\LARGE}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+\title{\thesistitle}
+\author{\authorname\thanks{Tel.: +31621451016}\\
+    500776959\\
+    \\
+    Amsterdam University of Applied Sciences\\
+    \emph{Faculty of Computer Science, Information Technology,}\\
+    \emph{Business IT and Management}\\
+    Software Engineering
+    \\
+    \\
+    Advisor: Marten Teitsma}
+\date{\today}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+    \begin{center}
+        \vspace*{1cm}
+        \textbf{\LARGE \thesistitle}
+        
+        \vspace{1.5cm}
+        \textit{\large Thesis submitted by}
+
+        \vspace{0.75cm}
+        
+        \textbf{\large \authorname}
+        
+        \vspace{0.75cm}
+        \textit{\large under the guidance of}
+        
+        \vspace{0.75cm}
+        \textbf{\large Harold Meerwaldt, QuTech\\
+            Damian Podareanu, SURF\\
+            Richard Versluis, TNO}
+        
+        \vspace{0.75cm}
+        \textit{\large in partial fulfillment of the requirements for the degree of}
+        
+        \vspace{0.75cm}
+        \textbf{\large Bachelor of Science}
+        
+    \end{center}
+\end{titlepage}
+
+\pagenumbering{roman}
+
+\maketitle
+
+\begin{abstract}
+    \lipsum[5]
+\end{abstract}
+
+\cleardoublepage
+\tableofcontents
+
+\cleardoublepage
+\listoffigures
+
+\cleardoublepage
+\listoftables
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\lipsum[1]
+\section{Motivation}
+\lipsum[1]
+\section{Objective}
+\lipsum[1]
+\section{Outline}
+\lipsum[1]
+
+\chapter{Background}
+\lipsum[1]
+\section{Computational Complexity}
+\lipsum[1]
+\section{Quantum Information}
+\lipsum[1]
+\section{Quantum Computation}
+\lipsum[1]
+
+\chapter{Hybrid Quantum Algorithms}
+\section{Variational Quantum Eigensolver}
+\lipsum[1]
+\section{Quantum Approximate Optimization Algorithm}
+\lipsum[1]
+\end{document}
