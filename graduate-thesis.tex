@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt]{report}
 
 \usepackage[utf8]{inputenx}
-\usepackage[style=ieee,backend=biber,alldates=iso8601,doi=false]{biblatex}
+\usepackage[style=ieee,backend=biber,alldates=iso8601]{biblatex}
 \usepackage[nottoc]{tocbibind}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage[toc,page]{appendix}
@@ -11,12 +11,17 @@
 \usepackage{newpxmath}
 \usepackage{lipsum}
 \usepackage[margin=3cm]{geometry}
-\usepackage[toc,nonumberlist,nogroupskip]{glossaries}
+\usepackage[toc,nonumberlist,nogroupskip,nopostdot]{glossaries}
 \usepackage{graphicx}
 \usepackage[english]{babel}
 \usepackage{fix-cm}
 \usepackage{xcolor}
 \usepackage{titlesec}
+\usepackage{titlecaps}
+\usepackage[abbreviations]{glossaries-extra}
+
+\glssetcategoryattribute{general}{glossdesc}{firstuc}
+\glssetcategoryattribute{abbreviation}{glossdesc}{title}
 
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
@@ -34,12 +39,11 @@
 
 \makenoidxglossaries
 
-\newacronym{nisq}{NISQ}{Noisy Intermediate\babelhyphen{hard}Scale Quantum}
-\newacronym{hqca}{HQCA}{Hybrid Quantum\babelhyphen{hard}Classical Algorithm}
-\newacronym{qpu}{QPU}{Quantum Processing Unit}
-\newacronym{hpc}{HPC}{High Performance Computing}
-\newacronym{vqe}{VQE}{Variational Quantum Eigensolver}
-\newacronym{qaoa}{QAOA}{Quantum Approximate Optimization Algorithm}
+\newabbreviation{nisq}{NISQ}{noisy intermediate\--scale quantum}
+\newabbreviation{hqca}{HQCA}{hybrid quantum\--classical algorithm}
+\newabbreviation{hpc}{HPC}{high performance computing}
+\newabbreviation{vqe}{VQE}{Variational Quantum Eigensolver}
+\newabbreviation{qaoa}{QAOA}{Quantum Approximate Optimization Algorithm}
 
 \addbibresource{graduate-thesis.bib}
 
