@@ -1,37 +1,65 @@
-\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,11pt]{report}
 
 \usepackage[utf8]{inputenx}
-\usepackage[style=apa,backend=biber,alldates=iso8601,doi=false]{biblatex}
+\usepackage[style=ieee,backend=biber,alldates=iso8601,doi=false]{biblatex}
 \usepackage[nottoc]{tocbibind}
-\usepackage[font=small, labelfont=bf]{caption}
-\usepackage[toc, page]{appendix}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[toc,page]{appendix}
 \usepackage{hyperref}
-\usepackage{titlesec}
+\usepackage{cleveref}
 \usepackage{palatino}
+\usepackage{newpxmath}
 \usepackage{lipsum}
-\usepackage[margin=3.25cm]{geometry}
+\usepackage[margin=3cm]{geometry}
+\usepackage[toc,nonumberlist,nogroupskip]{glossaries}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{fix-cm}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+% Pretty chapter numbering
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{0pt}}
+\titleformat{\chapter}[hang]{\flushleft
+    \fontseries{b}\fontsize{80}{100}\selectfont}{\fontseries{b}\fontsize{100}{130}\selectfont \textcolor{gray75}\thechapter\hsp}{0pt}{\leavevmode\\\Huge\bfseries}[]
+\titleformat{name=\chapter,numberless}[hang]{}{}{0pt}{\Huge\bfseries}[]
+\titlespacing*{\chapter}{0pt}{0pt}{30pt}
 
 % Variables
-\newcommand{\thesistitle}{Graduate Thesis}
+\newcommand{\thesistitle}{A High Performance Computing Infrastructure for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
 \newcommand{\authorname}{Steven Oud}
 
-\addbibresource{graduate-thesis.bib}
+\makenoidxglossaries
 
-\titleformat{\chapter}{\LARGE\bfseries}{\thechapter}{1em}{\LARGE}
-\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+\newacronym{nisq}{NISQ}{Noisy Intermediate\babelhyphen{hard}Scale Quantum}
+\newacronym{hqca}{HQCA}{Hybrid Quantum\babelhyphen{hard}Classical Algorithm}
+\newacronym{qpu}{QPU}{Quantum Processing Unit}
+\newacronym{hpc}{HPC}{High Performance Computing}
+\newacronym{vqe}{VQE}{Variational Quantum Eigensolver}
+\newacronym{qaoa}{QAOA}{Quantum Approximate Optimization Algorithm}
+
+\addbibresource{graduate-thesis.bib}
 
 \title{\thesistitle}
 \author{\authorname\thanks{Tel.: +31621451016}\\
     500776959\\
     \\
-    Amsterdam University of Applied Sciences\\
     \emph{Faculty of Computer Science, Information Technology,}\\
     \emph{Business IT and Management}\\
     Software Engineering
     \\
     \\
-    Advisor: Marten Teitsma}
-\date{\today}
+    \\
+    Advisor: Marten Teitsma
+    \\
+    \\
+    \\
+    Amsterdam University of Applied Sciences\\
+    \today}
+\date{}
 
 \begin{document}
 \begin{titlepage}
@@ -64,13 +92,13 @@
     \end{center}
 \end{titlepage}
 
-\pagenumbering{roman}
-
 \maketitle
 
-\begin{abstract}
-    \lipsum[5]
-\end{abstract}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\pagenumbering{roman}
+
+\chapter*{Abstract}
+\lipsum[5]
 
 \cleardoublepage
 \tableofcontents
@@ -84,27 +112,16 @@
 \cleardoublepage
 \pagenumbering{arabic}
 
-\chapter{Introduction}
-\lipsum[1]
-\section{Motivation}
-\lipsum[1]
-\section{Objective}
-\lipsum[1]
-\section{Outline}
-\lipsum[1]
+\input{chapters/01-introduction.tex}
 
-\chapter{Background}
-\lipsum[1]
-\section{Computational Complexity}
-\lipsum[1]
-\section{Quantum Information}
-\lipsum[1]
-\section{Quantum Computation}
-\lipsum[1]
+\input{chapters/02-background.tex}
 
-\chapter{Hybrid Quantum Algorithms}
-\section{Variational Quantum Eigensolver}
-\lipsum[1]
-\section{Quantum Approximate Optimization Algorithm}
-\lipsum[1]
+\input{chapters/03-hybrid-quantum-algorithms.tex}
+
+\cleardoublepage
+\printbibliography[heading=bibintoc]
+
+\cleardoublepage
+\printnoidxglossaries
+
 \end{document}
