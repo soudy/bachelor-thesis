@@ -10,16 +10,50 @@ Some problems seem to be inherently uncomputable: there exists no general soluti
 This report will not go further into what problems are computable and uncomputable.
 Rather, it will look at the computational efficiency of certain algorithms: how much resources are required to solve a problem?
 
+\subsection{Big-O Notation}
 The time and space taken by an algorithm generally grows as the size of the input grows.
-Because of this, it is traditional to describing the efficiency of an algorithm as a function of the size of its input.
+Because of this, it is traditional to describing the efficiency of an algorithm as a function of the size of its input~\cite{cormen2009introduction}.
+This function's output can be thought of as the number of primitive operations it performs for given input size.
 The notion for input size here depends on the context of the problem.
 For example, when computing the discrete Fourier transform, the input size refers to the dimension of the input vector.
 When talking about a problem like integer multiplication however, it is more fitting to talk about the input size as the amount of bits needed to represent the input in binary.
 
+When analyzing the efficiency of algorithms, we look at the asymptotic growth for given input size.
+Consider an algorithm that given input size $n$ takes $n^2$ primitive operations to run, and another algorithm that takes $500n^2 + \log n$ primitive operations to run.
+In big-O notation, both these algorithms would be described as running in $O(n^2)$ (quadratic) time.
+That is, the amount of primitive operations it performs scales quadratically with the input size.
+Constant factors are ignored as they become negligible as $n \to \infty$.
+While they are practically significant --- an algorithm which runs in $O(n/2)$ runs twice as fast as an algorithm which runs in $O(n)$ --- they are not relevant to asymptotic analysis. 
 
-% the set of computable problems does not depend on the computational models - all known computational models can simulat eachother (though not necessarily efficiently)
+Formally, if we have functions $f(n)$ and $g(n)$ such that $f$ eventually grows slower than some multiple of $g$ as $n \to \infty$, we say $f(n) = O(g(n))$.
+For example, given $f(n) = 200n^2$ and $g(n) = n^3$, $f$ begins to grow slower than $g$ when $n > 200$.
+Thus, $g(n)$ bounds $f(n)$ from above, and $f(n) = O(g(n)) = O(n^3)$.
+Some common big-O run times are shown in \Cref{table:common-big-o}, along with their written name and an example.
+Throughout this report, algorithms that are bounded above by a polynomial (i.e. all run times until polynomial in \Cref{table:common-big-o}) will be referred to as polynomial-time algorithms, and algorithms that are not bounded above by a polynomial will be referred to as superpolynomial-time algorithms.
 
+\begin{table}[ht]
+    \centering
+    {\renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{ c|c|c }
+        Notation & Name & Example \\
+        \hline
+        $O(1)$ & Constant & Accessing single element from array \\
+        $O(\log n)$ & Logarithmic & Binary search \\
+        $O(n)$ & Linear & Unstructured database search \\
+        $O(n \log n)$ & Linearithmic & Fast Fourier Transform \\
+        $O(n^2)$ & Quadratic & Insertion sort \\
+        $O(n^k)$ & Polynomial & Gaussian elimination \\
+        $O(k^n)$ & Exponential & Graph coloring \\
+    \end{tabular}
+    }
+    \caption{Common big-O run times from fast to slow.}
+    \label{table:common-big-o}
+\end{table}
 
+\subsection{Complexity Classes}
+Complexity classes are sets of computational problems that share some common feature with regard to the computational resources they need to solve some problem~\cite{arora2009computational}.
+They are defined in terms of a type of computational problem, computational model, and a bounded resource such as time or space.
+In general, most complexity classes describe decision problems solvable by deterministic Turing machines --- though many complexity classes are defined in terms of other types of problems and computational models.
 \section{Quantum Information}
 
 \section{Quantum Computation}
