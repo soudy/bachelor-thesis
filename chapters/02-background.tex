@@ -58,8 +58,32 @@ The standard computational model used for this is the Turing machine.
 It is chosen as computational model for the analysis of computational efficiency because of its simplicity and because it is able to simulate most physically realizable computational models with little overhead~\cite{arora2009computational}.
 An exception to this is the quantum computational model: as far as we know, no classical Turing machine can efficiently simulate a quantum computer~\cite{deutsch1985quantum}.
 
-%A Turing machine is an abstract machine that manipulates symbols on one or multiple infinite length tapes divided into cells~\cite{turing1937computable}.
-%Formally, a Turing machine $M$ can be describes by a tuple $(\Gamma, Q, \delta)$ containing:
+A Turing machine is an abstract machine that manipulates symbols from a work alphabet on a finite amount of one-way infinite length tapes divided into cells~\cite{turing1937computable}~(\Cref{fig:single-tape-turing-machine}).
+Along these tapes runs a tape head which can read and write one symbol at a time.
+The machine has a finite set of states, which the machine executes one at a time by loading them into the state register.
+At any time, the machine can be in one of the finite number of states.
+A state can be thought of as a rule with the following form:
+\begin{equation} \label{eqn:turing-state}
+(q_i,a) \mapsto (q_j,b,H),
+\end{equation}
+where $q_i$ and $q_j$ are states, $a$ and $b$ are symbols from the work alphabet, and $H \in \{L, S, R\}$ decides how to move the tape head: one cell to the left ($L$), stay in the same position ($S$), or one cell to the right ($R$).
+These states as described in \Cref{eqn:turing-state} can be read as ``in state $q_i$, if the read symbol is $a$, go to state $q_j$, write symbol $b$, and move the tape head to $H$".
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/single-tape-turing-machine.pdf}
+    \caption[The tape of a single-tape Turing machine in an arbitrary state.]{The tape of a single-tape Turing machine in an arbitrary state. Note that any multi-tape Turing machines can be efficiently simulated by a single-tape Turing machine~\cite{hartmanis1965computational}, so complexity classes are not affected by changing between single-tape and multi-tape machines.}
+    \label{fig:single-tape-turing-machine}
+\end{figure}
+
+Everything that can be computed on models of computations we use these days can be computed on a Turing machine~\cite{dershowitz2008natural}.
+This hypothesis is known as the Church-Turing thesis.
+Related to the Church-Turing thesis is the extended Church-Turing thesis, which states that any physically realizable model of computation can be efficiently simulated on a Turing machine.
+That is, can a Turing machine efficiently (in polynomial time) simulate any model of computation?
+The quantum computational model brings doubt to this claim.
+It is known that quantum computers can efficiently simulate a Turing machine, so they are at least as powerful as classical computers~\cite{bennett1973logical}.
+However, there appears to be no efficient algorithm for simulating a quantum computer on a Turing machine.
+Furthermore, \textcite{arute2019quantum} experimentally demonstrated a quantum computer sampling from a probability distribution intractable by a classical computer.
 
 \subsection{Complexity Classes}
 Complexity classes are sets of computational problems that share some common feature with regard to the computational resources they need to solve some problem~\cite{arora2009computational}.
