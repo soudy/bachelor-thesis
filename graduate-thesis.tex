@@ -8,8 +8,9 @@
 \usepackage{hyperref}
 \usepackage{palatino}
 \usepackage{newpxmath}
+\usepackage{fancyhdr}
 \usepackage{lipsum}
-\usepackage[margin=3cm]{geometry}
+\usepackage[margin=3.2cm]{geometry}
 \usepackage[toc,nonumberlist,nogroupskip,nopostdot]{glossaries}
 \usepackage{graphicx}
 \usepackage[english]{babel}
@@ -20,6 +21,11 @@
 \usepackage[abbreviations]{glossaries-extra}
 \usepackage[bold]{complexity}
 \usepackage{cleveref}
+
+\pagestyle{fancy}
+\cfoot{\thepage}
+\lhead[\leftmark]{}
+\rhead[]{\leftmark}
 
 \glssetcategoryattribute{general}{glossdesc}{firstuc}
 \glssetcategoryattribute{abbreviation}{glossdesc}{title}

@@ -8,22 +8,22 @@ Finally, an overview of quantum computation is given.
 In computer science, there seems to be a fundamental limit to what problems we can solve.
 Some problems seem to be inherently uncomputable: there exists no general solution that does not go into an infinite loop for certain inputs~\cite{church1936note, turing1937computable}.
 This report will not go further into what problems are computable and uncomputable.
-Rather, it will look at the computational efficiency of certain algorithms: how much resources are required to solve a problem?
+Rather, it will look at the computational efficiency of certain algorithms: how many resources are required to solve a problem?
 
 \subsection{Big-O Notation}
-The time and space taken by an algorithm generally grows as the size of the input grows.
-Because of this, it is traditional to describing the efficiency of an algorithm as a function of the size of its input~\cite{cormen2009introduction}.
+The time and space required by an algorithm generally grows as the size of the input grows.
+Because of this, it is traditional to describe the efficiency of an algorithm as a function of the size of its input~\cite{cormen2009introduction}.
 This function describes the number of primitive operations it performs for a given input size.
-The notion for input size here depends on the context of the problem.
+The notion of input size here depends on the context of the problem.
 For example, when computing the discrete Fourier transform, the input size refers to the dimension of the input vector.
-When talking about a problem like integer multiplication however, it is more fitting to talk about the input size as the amount of bits needed to represent the input in binary.
+When talking about a problem like integer multiplication, however, it is more fitting to talk about the input size as the number of bits needed to represent the input in binary.
 
-When analyzing the efficiency of algorithms, we look at the asymptotic growth for given input size.
-Consider an algorithm that given input size $n$ takes $n^2$ primitive operations to run, and another algorithm that takes $500n^2 + \log n$ primitive operations to run.
-In big-O notation, both these algorithms are said to run in $O(n^2)$ (quadratic) time.
-That is, the amount of primitive operations it performs scales quadratically with the input size.
+When analyzing the efficiency of algorithms, we look at the asymptotic growth for a given input size.
+Consider an algorithm that given input size $n$ takes $n^2$ primitive operations to run and another algorithm that takes $500n^2 + \log n$ primitive operations to run.
+In big-O notation, both these algorithms are said to run in $O(n^2)$ time.
+That is, the number of primitive operations it performs scales quadratically with the input size.
 Constant factors are ignored as they become negligible as $n \to \infty$.
-While they are practically significant --- an algorithm which runs in $O(n/2)$ runs twice as fast as an algorithm which runs in $O(n)$ --- they are not relevant to asymptotic analysis. 
+While they are practically significant --- an algorithm that runs in $O(n/2)$ runs twice as fast as an algorithm that runs in $O(n)$ --- they are not relevant to asymptotic analysis. 
 
 Formally, if we have functions $f(n)$ and $g(n)$ such that $f$ eventually grows slower than some multiple of $g$ as $n \to \infty$, we say $f(n) = O(g(n))$.
 For example, given $f(n) = 200n^2$ and $g(n) = n^3$, $f$ begins to grow slower than $g$ when $n > 200$.
@@ -34,18 +34,18 @@ Throughout this report, algorithms that are bounded above by a polynomial (i.e. 
 \begin{table}[ht]
     \centering
     {\renewcommand{\arraystretch}{1.1}
-    \begin{tabular}{ c|c|c }
-        Notation & Name & Example \\
-        \hline
-        $O(1)$ & Constant & Accessing single element from array \\
-        $O(\log n)$ & Logarithmic & Binary search \\
-        $O(n)$ & Linear & Unstructured database search \\
-        $O(n \log n)$ & Linearithmic & Fast Fourier Transform \\
-        $O(n^2)$ & Quadratic & Insertion sort \\
-        $O(n^k)$ & Polynomial & Gaussian elimination \\
-        $O(k^n)$ & Exponential & Graph coloring \\
-        $O(n!)$ & Factorial & Brute-force search traveling salesman problem \\
-    \end{tabular}
+        \begin{tabular}{ c|c|c }
+            Notation & Name & Example \\
+            \hline
+            $O(1)$ & Constant & Accessing single element from array \\
+            $O(\log n)$ & Logarithmic & Binary search \\
+            $O(n)$ & Linear & Unstructured database search \\
+            $O(n \log n)$ & Linearithmic & Fast Fourier Transform \\
+            $O(n^2)$ & Quadratic & Insertion sort \\
+            $O(n^k)$ & Polynomial & Gaussian elimination \\
+            $O(k^n)$ & Exponential & Graph coloring \\
+            $O(n!)$ & Factorial & Brute-force search traveling salesman problem \\
+        \end{tabular}
     }
     \caption{Common big-O run times from fast to slow.}
     \label{table:common-big-o}
@@ -56,12 +56,11 @@ The previous section described the measurement of computational efficiency as th
 This abstract definition can be extended by choosing a computational model in order to define what a primitive operation means.
 The standard computational model used for this is the Turing machine.
 It is chosen as computational model for the analysis of computational efficiency because of its simplicity and because it is able to simulate most physically realizable computational models with little overhead~\cite{arora2009computational}.
-An exception to this is the quantum computational model: as far as we know, no classical Turing machine can efficiently simulate a quantum computer~\cite{deutsch1985quantum}.
 
 A Turing machine is an abstract machine that manipulates symbols from a work alphabet on a finite amount of one-way infinite length tapes divided into cells~\cite{turing1937computable}~(\Cref{fig:single-tape-turing-machine}).
-Along these tapes runs a tape head which can read and write one symbol at a time.
+Along these tapes runs a tape head that can read and write one symbol at a time.
 The machine has a finite set of states, which the machine executes one at a time by loading them into the state register.
-At any time, the machine can be in one of the finite number of states.
+At any time, the machine can be in one of the finite states.
 A state can be thought of as a rule with the following form:
 \begin{equation} \label{eqn:turing-state}
 (q_i,a) \mapsto (q_j,b,H),
@@ -79,10 +78,10 @@ These states as described in \Cref{eqn:turing-state} can be read as ``in state $
 Everything that can be computed on models of computations we use these days can be computed on a Turing machine~\cite{dershowitz2008natural}.
 This hypothesis is known as the Church-Turing thesis.
 Related to the Church-Turing thesis is the extended Church-Turing thesis, which states that any physically realizable model of computation can be efficiently simulated on a Turing machine.
-That is, can a Turing machine efficiently (in polynomial time) simulate any model of computation?
+That is, can a Turing machine simulate any model of computation in polynomial time?
 The quantum computational model brings doubt to this claim.
 It is known that quantum computers can efficiently simulate a Turing machine, so they are at least as powerful as classical computers~\cite{bennett1973logical}.
-However, there appears to be no efficient algorithm for simulating a quantum computer on a Turing machine.
+However, there appears to be no efficient algorithm for simulating a quantum computer on a Turing machine~\cite{deutsch1985quantum}.
 Furthermore, \textcite{arute2019quantum} experimentally demonstrated a quantum computer sampling from a probability distribution intractable by a classical computer.
 
 \subsection{Complexity Classes}
@@ -91,8 +90,37 @@ They are defined in terms of a type of computational problem, computational mode
 In general, most complexity classes describe decision problems solvable by deterministic Turing machines --- though many complexity classes are defined in terms of other types of problems and computational models.
 This report mainly focuses on complexity classes involving Turing machines and quantum Turing machines.
 
-The class $\P$ contains all decision problems solvable by a deterministic Turing machine in $O(n^k)$ (polynomial) time for some constant $k$.
+The class $\P$ contains all decision problems solvable by a deterministic Turing machine in polynomial time.
 Problems that fall under this class are often referred to as tractable or easy problems~\cite{cormen2009introduction}.
+The class $\NP$ (non-deterministic polynomial) contains all problems \emph{verifiable} by a deterministic Turing machine in polynomial time.
+Equivalently, $\NP$ can be thought of as all problems solvable in polynomial time by a non-deterministic Turing machine.
+A non-deterministic Turing machine is a variant of the Turing machine which is not entirely determined by its input and transition function, but can choose from a set of possible transitions when transitioning.
+One could then define $\NP$ as consisting of two phases: first, a non-deterministic Turing machine makes a guess about the solution, and then a second, deterministic Turing machine verifies if the guess is correct.
+It is clear that $\P \subseteq \NP$, because if you can solve a problem in polynomial time, you can also verify it in polynomial time.
+A still unsolved and important question in computer science is whether $\P = \NP$?
+That is, can all problems that can be verified in polynomial time also be solved in polynomial time?
+
+In computer science, it is sometimes possible to speed up computation using randomness.
+These kinds of algorithms are referred to as probabilistic algorithms and are defined in terms of a probabilistic Turing machine.
+A probabilistic Turing machine is a non-deterministic Turing machine that can choose from a set of possible transitions according to some probability distribution when transitioning.
+The probabilistic equivalent of $\P$ is $\BPP$ (bounded-error probabilistic polynomial time) and contains all decision problems solvable by a probabilistic Turing machine in polynomial time where a bounded error rate of $1/3$ is allowed.
+Since a non-deterministic Turing machine can efficiently simulate a deterministic Turing machine, $\P \subseteq \BPP$.
+There are problems to be known in $\BPP$ and not in $\P$, but the number of such problems is decreasing, and \textcite{goldreich2011world, nisan1994hardness} argue that $\P = \BPP$.
+
+How do quantum computers relate to these complexity classes?
+Quantum computers are probabilistic computational devices, and its complexity class equivalent to $\P$ can be defined by replacing the probabilistic Turing machine from $\BPP$ with a quantum computer.\footnote{Note that quantum computers are not simply probabilistic Turing machines as will be shown in the following section.}
+The class $\BQP$ (bounded-error quantum polynomial time) consists all decision problems solvable by a quantum computer in polynomial time where a bounded error rate of $1/3$ is allowed.
+It is known that there are $\NP$ problems that can be efficiently solved on a quantum computer like integer factorization, discrete logarithms, and quantum many-body simulation.
+As mentioned in the previous section, quantum computers can also solve all problems in $\P$ efficiently, so $\P \subseteq \BQP$.
+Furthermore, quantum computers are more powerful than classical probabilistic computers~\cite{bernstein1997quantum}, giving $\BPP \subseteq \BQP$.
+How $\BQP$ relates to $\NP$ is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \caption[An overview of the hierarchy of the complexity classes discussed.]{An overview of the hierarchy of the complexity classes discussed. $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.}
+    \label{fig:complexity-classes-hierarchy}
+\end{figure}
 
 \section{Quantum Information}
 

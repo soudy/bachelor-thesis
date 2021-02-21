@@ -5,3 +5,4 @@ docs: $(wildcard *.tex)
 
 clean:
 	latexmk -CA
+	@rm -f graduate-thesis.bbl
