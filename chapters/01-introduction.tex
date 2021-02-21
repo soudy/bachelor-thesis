@@ -16,7 +16,7 @@ These days, however, thanks to recent technological advances, various quantum de
 Furthermore, technological giants such as IBM, Microsoft, Intel, and Google are investing heavily in the development of quantum computers.
 The applications of these current quantum devices are very limited however, due to their inability to store information for a long time and their sensitivity to errors.
 For instance, \textcite[Appendix~M]{fowler2012surface} estimate that to factor a 2000-bit number using Shor's algorithm would require a quantum computer with about a billion physical qubits, and error rates below $4 \times 10^{-13}$.
-In contrast, devices today have about 50 to 100 physical qubits and error rates above $0.1$.
+In contrast, devices today have about 50 to 100 physical qubits with error rates above $0.1$.
 
 These small and error-prone quantum devices, referred to as \gls{nisq} devices, may be unfit to run quantum algorithms like Shor's algorithm, but they may still prove to be useful and perform tasks intractable by classical computers~\cite{preskill2018quantum}.
 To deal with the limitations of \gls{nisq} devices, \glspl{hqca} are being actively researched.
@@ -50,3 +50,4 @@ In a hybrid setup like this, overheads such as quantum and classic scheduling wa
 
 \section{Outline}
 This report is structured as follows. \Cref{chap:background} provides the reader with a background on computational complexity, quantum information, and quantum computation. \Cref{chap:hybrid-quantum-classical-algorithms} takes a deeper look into well-known \glspl{hqca} and their working.
+\Cref{chap:practical-hybrid-quantum-classical-computing} demonstrates the practical execution of \glspl{hqca} using Quantum Inspire and SURF's \gls{hpc} center.

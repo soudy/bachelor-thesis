@@ -94,7 +94,7 @@ The class $\P$ contains all decision problems solvable by a deterministic Turing
 Problems that fall under this class are often referred to as tractable or easy problems~\cite{cormen2009introduction}.
 The class $\NP$ (non-deterministic polynomial) contains all problems \emph{verifiable} by a deterministic Turing machine in polynomial time.
 Equivalently, $\NP$ can be thought of as all problems solvable in polynomial time by a non-deterministic Turing machine.
-A non-deterministic Turing machine is a variant of the Turing machine which is not entirely determined by its input and transition function, but can choose from a set of possible transitions when transitioning.
+A non-deterministic Turing machine is a variant of a Turing machine which is not entirely determined by its input and transition function, but can choose from a set of possible transitions when transitioning.
 One could then define $\NP$ as consisting of two phases: first, a non-deterministic Turing machine makes a guess about the solution, and then a second, deterministic Turing machine verifies if the guess is correct.
 It is clear that $\P \subseteq \NP$, because if you can solve a problem in polynomial time, you can also verify it in polynomial time.
 A still unsolved and important question in computer science is whether $\P = \NP$?
@@ -105,15 +105,15 @@ These kinds of algorithms are referred to as probabilistic algorithms and are de
 A probabilistic Turing machine is a non-deterministic Turing machine that can choose from a set of possible transitions according to some probability distribution when transitioning.
 The probabilistic equivalent of $\P$ is $\BPP$ (bounded-error probabilistic polynomial time) and contains all decision problems solvable by a probabilistic Turing machine in polynomial time where a bounded error rate of $1/3$ is allowed.
 Since a non-deterministic Turing machine can efficiently simulate a deterministic Turing machine, $\P \subseteq \BPP$.
-There are problems to be known in $\BPP$ and not in $\P$, but the number of such problems is decreasing, and \textcite{goldreich2011world, nisan1994hardness} argue that $\P = \BPP$.
+There are problems to be known in $\BPP$ and not in $\P$, but the number of such problems is decreasing, and \textcite{goldreich2011world, nisan1994hardness} even argue that $\P = \BPP$.
 
 How do quantum computers relate to these complexity classes?
-Quantum computers are probabilistic computational devices, and its complexity class equivalent to $\P$ can be defined by replacing the probabilistic Turing machine from $\BPP$ with a quantum computer.\footnote{Note that quantum computers are not simply probabilistic Turing machines as will be shown in the following section.}
+Quantum computers are probabilistic computational devices, and its complexity class equivalent to $\P$ can be defined by replacing the probabilistic Turing machine from $\BPP$ with a quantum computer.\footnote{Note that quantum computers are not simply probabilistic Turing machines as will be shown in the following sections.}
 The class $\BQP$ (bounded-error quantum polynomial time) consists all decision problems solvable by a quantum computer in polynomial time where a bounded error rate of $1/3$ is allowed.
 It is known that there are $\NP$ problems that can be efficiently solved on a quantum computer like integer factorization, discrete logarithms, and quantum many-body simulation.
 As mentioned in the previous section, quantum computers can also solve all problems in $\P$ efficiently, so $\P \subseteq \BQP$.
 Furthermore, quantum computers are more powerful than classical probabilistic computers~\cite{bernstein1997quantum}, giving $\BPP \subseteq \BQP$.
-How $\BQP$ relates to $\NP$ is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
+How $\BQP$ relates to $\NP$ exactly is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
 
 \begin{figure}[ht]
     \centering
@@ -123,5 +123,7 @@ How $\BQP$ relates to $\NP$ is still unknown, however, it seems unlikely that $\
 \end{figure}
 
 \section{Quantum Information}
+In classic information theory, the smallest unit of information is the bit.
+A bit can be in one of two states: 0 or 1.
 
 \section{Quantum Computation}
