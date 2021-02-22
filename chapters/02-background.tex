@@ -130,7 +130,7 @@ Qubits are physical objects that appear in nature on the scale of atoms and suba
 A qubit can be any two-state quantum-mechanical system such as the spin of an electron, which can be spin up or down, or the polarization of a photon, which can be horizontally of vertically polarized.
 In this report, qubits will be treated as abstract mathematical objects as the physical realization of qubits is beyond the scope of this work.
 
-\subsection{Quantum States}
+\subsection{Quantum States} \label{sec:quantum-states}
 The state of a qubit is denoted as follows:
 \begin{equation} \label{eqn:qubit-state}
 \ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}.
@@ -139,7 +139,7 @@ Quantum states are often described using Dirac notation \ket{\,\cdotp\,}, which 
 The states $\{\ket{0}, \ket{1}\}$ are the computational basis states which are defined as $(\begin{matrix}1 & 0\end{matrix})^T$ and $(\begin{matrix}0 & 1\end{matrix})^T$ respectively, and form an orthonormal basis for this vector space.
 The values $\alpha, \beta \in \mathbb{C}$ are the state's probability amplitudes, and cannot be examined directly.\footnote{The field of quantum tomography focuses on recovering these values through multiple measurements, but this requires prior knowledge about the system~\cite{d2003quantum}.}
 When measuring a qubit, it collapses probabilistically to one of the basis states.
-The probability of it collapsing to \ket{0} is given by the absolute square $|\alpha_0|^2$, and the probability of it collapsing to \ket{1} is given by $|\alpha_1|^2$.
+The probability of measuring 0 is given by the absolute square $|\alpha_0|^2$, and the probability of measuring 1 is given by $|\alpha_1|^2$.
 As these values are probabilities, they should be normalized: $|\alpha_0|^2 + |\alpha_1|^2 = 1$.
 Formally, a qubit can be thought of as a unit vector in a two-dimensional Hilbert space.
 
@@ -151,15 +151,15 @@ For example, consider the state
 \begin{equation} \label{eqn:plus-state}
 \ket{+} = \dfrac{1}{\sqrt{2}}\left(\ket{0} + \ket{1}\right).
 \end{equation}
-This state has equal probability of measuring \ket{0} and \ket{1}, as $|1/\sqrt{2}|^2 = 1/2$.
-Note that measurement changes the state of a qubit: if the state from \Cref{eqn:plus-state} is measured as \ket{1}, the superposition is lost and the state becomes \ket{1}.
+This state has equal probability of measuring 0 and 1, as $|1/\sqrt{2}|^2 = 1/2$.
+Note that measurement changes the state of a qubit: if the state from \Cref{eqn:plus-state} is measured as 1, the superposition is lost and the state becomes \ket{1}.
 
 A helpful geometric interpretation of a qubit's state can be obtained by rewriting \Cref{eqn:qubit-state} as
 \begin{equation}
 \ket{\psi} = e^{i\delta} \left(\cos\dfrac{\theta}{2}\ket{0} + e^{i\varphi}\sin\dfrac{\theta}{2}\ket{1}\right),
 \end{equation}
 where $\delta, \theta, \varphi \in \mathbb{R}$.
-The global phase $e^{i\delta}$ can often be ignored, as $\forall \delta \in \mathbb{R} : |e^{i\delta}| = 1$, so it does not impact measurement outcome.
+The global phase $e^{i\delta}$ can often be ignored, as $\forall \delta \in \mathbb{R} : |e^{i\delta}| = 1$, so it does not impact measurement outcome~\cite{nielsen2002quantum}.
 Simplifying then, the state of a qubit can be written as
 \begin{equation}
 \ket{\psi} = \cos\dfrac{\theta}{2}\ket{0} + e^{i\varphi}\sin\dfrac{\theta}{2}\ket{1}.
@@ -262,12 +262,12 @@ R_z(\theta)\ket{1} &= e^{i\theta}\ket{1}.
 
 Multi-qubit operators act on two or more qubits.
 They are required for creating entangled states.
-Two common two-qubit operators are the $CNOT$ and $CZ$ operators.
-The $CNOT$ operator can be thought of as a controlled-$X$ operator, which applies an $X$ operation on the target qubit if the control qubit is in the \ket{1} state.
+Two common two-qubit operators are the $\textnormal{CNOT}$ and $CZ$ operators.
+The $\textnormal{CNOT}$ operator can be thought of as a controlled-$X$ operator, which applies an $X$ operation on the target qubit if the control qubit is in the \ket{1} state.
 Equivalently, the $CZ$ operator applies a $Z$ operation on the target qubit if the control qubit is \ket{1}.
 Their matrix representations are as follows:
 \begin{equation}
-CNOT = \begin{pmatrix}
+\textnormal{CNOT} = \begin{pmatrix}
 1 & 0 & 0 & 0 \\
 0 & 1 & 0 & 0 \\
 0 & 0 & 0 & 1 \\
@@ -282,5 +282,43 @@ CZ = \begin{pmatrix}
 \end{equation}
 
 \subsection{Measurement}
+While the evolution of quantum states in a closed system is unitary, at some point the quantum state has to interact with the outside world.
+This is what measurement means: any interaction from an outside system with the quantum system.
+Formally, measurement is defined by a set of $\{M_m\}$ measurement operators, where the probability of measuring the state $m$ is given by
+\begin{equation}
+p(m) = \bra{\psi}M_m^\dagger M_m\ket{\psi}.
+\end{equation}
+With $\bra{\psi} = \ket{\psi}^\dagger$, this equation can then be read as the inner product between $M_m\ket{\psi}$ and itself. 
+This is just a generalization of the definition of measurement given in \Cref{sec:quantum-states}.
+For example, what is the probability of measuring 0 for an arbitrary state $\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$?
+Using $M_0 = \op{0}{0}$:
+\begin{equation} \label{eqn:measurement}
+\begin{aligned} 
+p(0) &= \bra{\psi}M_0^\dagger M_0\ket{\psi} \\
+&= \ip{\psi}{0}\ip{0}{0}\ip{0}{\psi} \\
+&= \ip{\psi}{0}\ip{0}{\psi} \\
+&= \begin{pmatrix}\alpha_0^* & \alpha_1^*\end{pmatrix}\begin{pmatrix}1 \\ 0\end{pmatrix}
+\begin{pmatrix}1 & 0\end{pmatrix}\begin{pmatrix}\alpha_0 \\ \alpha_1\end{pmatrix} \\
+&= \alpha_0^* \alpha_0 \\
+&= |\alpha_0|^2.
+\end{aligned}
+\end{equation}
+Similarly, using $M_1 = \op{1}{1}$ gives $p(1) = |\alpha_1|^2$.
+Measuring with the measurement operators $\left\{\op{0}{0}, \op{1}{1}\right\}$ is referred to as measuring in the computational basis.
+
+After measurement, the state of the system can be described as follows:
+\begin{equation}
+\ket{\psi} = \dfrac{M_m\ket{\psi}}{\sqrt{p(m)}}.
+\end{equation}
+Following the example from \Cref{eqn:measurement} with $M_0 = \op{0}{0}$ and $p(0) = |\alpha_0|^2$, after measuring 0 the system is in the state
+\begin{equation}
+\begin{aligned}
+\ket{\psi} &= \dfrac{\ket{0}\ip{0}{\psi}}{\sqrt{|\alpha_0|^2}} \\
+&= \dfrac{\ket{0}\alpha_0}{|\alpha_0|} \\
+&= \dfrac{\alpha_0}{|\alpha_0|} \ket{0}.
+\end{aligned}
+\end{equation}
+Note that a global phase $e^{i\delta}$ shows up as the factor $\alpha_0/|\alpha_0|$.
+As mentioned in \Cref{sec:quantum-states}, the states $e^{i\delta}\ket{0}$ and $\ket{0}$ are considered equal up to a global phase factor.
 
 \section{Quantum Computation}
