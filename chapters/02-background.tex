@@ -135,7 +135,7 @@ The state of a qubit is denoted as follows:
 \begin{equation} \label{eqn:qubit-state}
 \ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}.
 \end{equation}
-Quantum states are often described using Dirac notation \ket{\,\cdotp\,}, which describes a column vector in $\mathbb{C}^n$.
+Quantum states are often described using Dirac notation \ket{\,\cdotp\,}, which describes a column vector in $\mathbb{C}^{2^n}$.
 The states $\{\ket{0}, \ket{1}\}$ are the computational basis states which are defined as $(\begin{matrix}1 & 0\end{matrix})^T$ and $(\begin{matrix}0 & 1\end{matrix})^T$ respectively, and form an orthonormal basis for this vector space.
 The values $\alpha, \beta \in \mathbb{C}$ are the state's probability amplitudes, and cannot be examined directly.\footnote{The field of quantum tomography focuses on recovering these values through multiple measurements, but this requires prior knowledge about the system~\cite{d2003quantum}.}
 When measuring a qubit, it collapses probabilistically to one of the basis states.
@@ -164,7 +164,7 @@ Simplifying then, the state of a qubit can be written as
 \begin{equation}
 \ket{\psi} = \cos\dfrac{\theta}{2}\ket{0} + e^{i\varphi}\sin\dfrac{\theta}{2}\ket{1}.
 \end{equation}
-Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere (\Cref{fig:bloch-sphere}).
+Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.375\linewidth]{figures/bloch-sphere.pdf}
@@ -172,7 +172,7 @@ Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere (\Cref
     \label{fig:bloch-sphere}
 \end{figure}
 While this visualization is limited to a single qubit, it can be a useful visual to build intuition.
-For example, the \ket{+} state described in \Cref{eqn:plus-state} can be thought of as being exactly between \ket{0} and \ket{1} on the Bloch sphere.
+For example, the \ket{+} state described in \Cref{eqn:plus-state} can be thought of as being exactly between \ket{0} and \ket{1} on the $x$-axis of the Bloch sphere.
 
 The amount of probability amplitudes grows exponentially with the number of qubits.
 Consider a two-qubit system which lives in a $2^2=4$-dimensional Hilbert space spanned by the computational basis states $\left\{\ket{00}, \ket{01}, \ket{10}, \ket{11}\right\}$.
@@ -192,7 +192,13 @@ Given states $\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$ and $\ket{\varphi}
 &= \alpha_0\beta_0\ket{00} + \alpha_0\beta_1\ket{01} + \alpha_1\beta_0\ket{10} + \alpha_1\beta_1\ket{11}.
 \end{aligned}
 \end{equation}
-The relative phases of $\alpha_0, \alpha_1$ and $\beta_0, \beta_1$ are responsible for the quantum mechanical property of interference.
+Often when describing multi-qubit states, the tensor product will be implied.
+The notations
+\begin{equation}
+\ket{0} \otimes \ket{0} = \ket{0}\ket{0} = \ket{00}
+\end{equation}
+all describe state.
+The relative phases of $\alpha_0, \alpha_1$ and $\beta_0, \beta_1$ in \Cref{eqn:tensor-product-states} are responsible for the quantum mechanical property of interference.
 When the phase of $\alpha_j$ and $\beta_j$ is the same, they will interfere constructively and increase the probability amplitude for that state.
 On the other hand, if $\alpha_j$ and $\beta_j$ have opposite phases, they will interfere destructively and decrease the probability amplitude for that state.
 
@@ -204,10 +210,10 @@ Consider the following state:
 This state cannot be expressed as a tensor product of two individual states, because that would imply $\big(\alpha_0\beta_0 = \alpha_1\beta_1 = 1/\sqrt2\,\big) \wedge \big(\alpha_0\beta_1 = \alpha_1\beta_0 = 0\big)$, which is a contradiction.
 States like $\ket{\Phi^+}$ are referred to as entangled states.
 Entanglement is the quantum phenomena of correlation in measurement outcomes.
-For example, when measuring the state $\ket{\Phi^+}$ from \Cref{eqn:bell-state}, the only two possible measurement outcomes are \ket{00} and \ket{11}.
+For example, when measuring the state $\ket{\Phi^+}$ from \Cref{eqn:bell-state}, the only two possible measurement outcomes are 00 and 11.
 So by measuring one qubit, one also knows the state of the other qubit.
 
-\subsection{State Evolution}
+\subsection{State Evolution} \label{sec:state-evolution}
 The evolution of a closed quantum system is described by a unitary transformation~\cite{nielsen2002quantum}.\footnote{In this report, a perfectly closed system is assumed, even though in reality all systems interact somewhat with other systems.}
 A state \ket{\psi} at time $t_1$ is related to state \ket{\psi'} at time $t_2$ by a unitary operator $U$:
 \begin{equation}
@@ -218,37 +224,21 @@ Single-qubit operators can be represented as $2 \times 2$ complex-valued unitary
 A common single-qubit operator is the Pauli-$X$ operator which transforms a state $\alpha_0\ket{0} + \alpha_1\ket{1}$ to $\alpha_1\ket{0} + \alpha_0\ket{1}$.
 It is part the set of Pauli matrices:
 \begin{equation}
-X = \begin{pmatrix}
-0 & 1 \\
-1 & 0
-\end{pmatrix}, \hspace*{5mm}
-Y = \begin{pmatrix}
-0 & -i \\
-i & \phantom{-}0
-\end{pmatrix}, \hspace*{5mm}
-Z = \begin{pmatrix}
-1 & \phantom{-}0 \\
-0 & -1
-\end{pmatrix}.
+X = \xgate{}, \hspace*{5mm}
+Y = \ygate{}, \hspace*{5mm}
+Z = \zgate{}.
 \end{equation}
 These matrices are ubiquitous in the study of quantum computation and information.
 Another useful and common operator is the Hadamard operator:
 \begin{equation}
-H = \dfrac{1}{\sqrt2}
-\begin{pmatrix}
-1 & \phantom{-}1 \\
-1 & -1
-\end{pmatrix},
+H = \hgate{},
 \end{equation}
 which maps the computational basis states to an equal superposition state.
 
 The Pauli-$Z$ operator is part of the $Z$-rotation operators family.
 The general form for $Z$-axis rotation can be described as follows:
 \begin{equation}
-R_z(\theta) = \begin{pmatrix}
-1 & 0 \\
-0 & e^{i\theta}
-\end{pmatrix}.
+R_z(\theta) = \phasegate{}.
 \end{equation}
 From this definition follows that $Z = R_z(\pi)$.
 Other common $Z$-axis rotation operators are $S = R_z(\pi/2)$ and $T = R_z(\pi/4)$.
@@ -267,18 +257,8 @@ The $\textnormal{CNOT}$ operator can be thought of as a controlled-$X$ operator,
 Equivalently, the $CZ$ operator applies a $Z$ operation on the target qubit if the control qubit is \ket{1}.
 Their matrix representations are as follows:
 \begin{equation}
-\textnormal{CNOT} = \begin{pmatrix}
-1 & 0 & 0 & 0 \\
-0 & 1 & 0 & 0 \\
-0 & 0 & 0 & 1 \\
-0 & 0 & 1 & 0 \\
-\end{pmatrix}, \hspace*{5mm}
-CZ = \begin{pmatrix}
-1 & 0 & 0 & \phantom{-}0 \\
-0 & 1 & 0 & \phantom{-}0 \\
-0 & 0 & 1 & \phantom{-}0 \\
-0 & 0 & 0 & -1 \\
-\end{pmatrix}.
+\textnormal{CNOT} = \cnotgate{}, \hspace*{5mm}
+CZ = \czgate{}.
 \end{equation}
 
 \subsection{Measurement}
@@ -322,3 +302,138 @@ Note that a global phase $e^{i\delta}$ shows up as the factor $\alpha_0/|\alpha_
 As mentioned in \Cref{sec:quantum-states}, the states $e^{i\delta}\ket{0}$ and $\ket{0}$ are considered equal up to the global phase factor.
 
 \section{Quantum Computation}
+This section combines the theory of computer science and quantum mechanics to introduce the fundamental model of quantum computation: the quantum circuit model.
+
+\subsection{Quantum Circuits}
+Analogous to the classical circuit model, the quantum circuit model uses gates which act on data.
+In the classical circuit model boolean functions (logic gates) act on bits, while in the quantum circuit model quantum gates act on qubits.
+Most of the common quantum gates used in quantum computing were already described as operators in \Cref{sec:state-evolution}.
+To be more in line with the nomenclature of classical computing, from here on out these operators will be referred to as quantum gates in the context of quantum circuits.
+
+In a quantum circuit time moves from left to right, where qubits are represented by wires on which gates can act, and classical bits are represented by double-lined wires.
+Usually the qubits are assumed to be instantiated to \ket{0}, unless noted otherwise.
+A list of frequently used quantum gates is shown in \Cref{table:common-quantum-gates}.
+\Cref{fig:bell-state-circuit} demonstrates a simple quantum circuit which creates a maximally entangled state $\ket{\Phi^+} = \left(\ket{00} + \ket{11}\right)/\sqrt{2}$ from \Cref{eqn:bell-state} and measures both qubits.
+This state is one of four maximally entangled two-qubit states referred to as a Bell state.
+\begin{figure}[ht]
+    \Large
+    \[
+    \Qcircuit @C=1em @R=1em @!R {
+        \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \meter & \cw  \\
+        \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \qw & \targ & \meter & \cw \\
+    }
+    \]
+    \caption{Quantum circuit for creating and measuring a Bell state \ket{\Phi^+}.}
+    \label{fig:bell-state-circuit}
+\end{figure}
+This circuit does the following.
+The system starts in state $\ket{\psi} = \ket{00}$.
+A Hadamard gate is applied on the first (using least-significant bit order) qubit:
+\begin{align}
+\ket{\psi} &= \ket{0}\dfrac{1}{\sqrt{2}}\left(\ket{0} + \ket{1}\right) \\
+&= \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{01}\right).
+\end{align}
+Then, a $\textnormal{CNOT}$ is applied with the first qubit as control and the second qubit as target, giving the final state
+\begin{equation}
+\ket{\psi} = \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right).
+\end{equation}
+This state is then measured, which will measure 00 or 11 with equal probability.
+
+\begin{table}[ht]
+    \centering
+    {\renewcommand{\arraystretch}{1.1}
+        \begin{tabular}{ c|c|c }
+            Gate name & Circuit symbol & Matrix representation \\
+            \hline
+            Hadamard &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{H} & \qw
+            }
+             & $\hgate{}$ \\
+             Pauli-$X$ &
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \gate{X} & \qw
+             }
+             & $\xgate{}$ \\
+             Pauli-$Y$ &
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \gate{Y} & \qw
+             }
+             & $\ygate{}$ \\
+             Pauli-$Z$ &
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \gate{Z} & \qw
+             }
+             & $\zgate{}$ \\
+             Phase/S &
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \gate{S} & \qw
+             }
+             &
+             $\begin{pmatrix}1 & 0 \\ 0 & i\end{pmatrix}$ \\
+             T &
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \gate{T} & \qw
+             }
+             &
+             $\begin{pmatrix}1 & 0 \\ 0 & e^{i\pi/4}\end{pmatrix}$ \\
+             CNOT &
+             $
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \ctrl{1} & \qw \\
+                 & \targ & \qw
+             }
+             $
+             & $\cnotgate{}$ \\
+             CZ &
+             $
+             \Large
+             \Qcircuit @C=1em @R=1em @!R {
+                 & \ctrl{1} & \qw \\
+                 & \control \qw & \qw
+             }
+             $
+             & $\czgate{}$ \\
+        \end{tabular}
+    }
+    \caption{Frequently used quantum gates and circuit symbols.}
+    \label{table:common-quantum-gates}
+\end{table}
+
+In classical computations, copying bits is a common operation.
+In quantum computing, the data one can copy is much more restricted.
+If a qubit is in a computational basic state, that state can be copied by a $\textnormal{CNOT}$ gate~(\Cref{fig:copy-basis-state}).
+\begin{figure}[ht]
+    \Large
+    \[
+    \Qcircuit @C=1em @R=1em @!R {
+        \push{\rule{0em}{1em}} & & \lstick{\ket{j}} & \ctrl{1} & \qw & \ket{j}  \\
+        \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \targ & \qw & \ket{j} \\
+    }
+    \]
+    \caption{Copying a computational basis state using $\textnormal{CNOT}$ where $j \in \{0, 1\}$.}
+    \label{fig:copy-basis-state}
+\end{figure}
+However, trying to copy an arbitrary state $\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$ using the circuit in \Cref{fig:copy-basis-state} gives
+\begin{equation}
+\ket{\psi} = \alpha_0\ket{00} + \alpha_1\ket{11}.
+\end{equation}
+This state does not contain two copies of \ket{\psi} (unless $\alpha_0\alpha_1 = 0$ as is true with computational basis states), which should have the form
+\begin{equation}
+\ket{\psi}\ket{\psi} = \alpha_0^2\ket{00} + \alpha_0\alpha_1\ket{01} + \alpha_1\alpha_0\ket{10} + \alpha_1^2\ket{11}.
+\end{equation}
+In fact, is it impossible to copy an unknown quantum state.
+There exists no solution for a unitary operator $U$ that does the transformation
+\begin{equation}
+\alpha_0\ket{00} + \alpha_1\ket{01} \xrightarrow[]{U} \alpha_0^2\ket{00} + \alpha_0\alpha_1\ket{01} + \alpha_1\alpha_0\ket{10} + \alpha_1^2\ket{11}.
+\end{equation}
+This property is known as the no-cloning theorem, and is a fundamental limit of quantum information.
+
+\subsection{Quantum Algorithms}

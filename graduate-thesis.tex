@@ -17,7 +17,6 @@
 \usepackage{fix-cm}
 \usepackage{xcolor}
 \usepackage{titlesec}
-\usepackage{titlecaps}
 \usepackage[abbreviations]{glossaries-extra}
 \usepackage[bold]{complexity}
 \usepackage[braket, qm]{qcircuit}
@@ -46,9 +45,64 @@
 \titleformat{name=\chapter,numberless}[hang]{}{}{0pt}{\Huge\bfseries}[]
 \titlespacing*{\chapter}{0pt}{0pt}{30pt}
 
+\renewcommand\mathbb{\vvmathbb}
+
 % Variables
 \newcommand{\thesistitle}{A High Performance Computing Infrastructure for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
 \newcommand{\authorname}{Steven Oud}
+\newcommand{\xgate}{
+    \begin{pmatrix}
+        0 & 1 \\
+        1 & 0
+    \end{pmatrix}
+}
+\newcommand{\ygate}{
+    \begin{pmatrix}
+        0 & -i \\
+        i & \phantom{-}0
+    \end{pmatrix}
+}
+\newcommand{\zgate}{
+    \begin{pmatrix}
+        1 & \phantom{-}0 \\
+        0 & -1
+    \end{pmatrix}
+}
+\newcommand{\hgate}{
+    \dfrac{1}{\sqrt2}
+    \begin{pmatrix}
+        1 & \phantom{-}1 \\
+        1 & -1
+    \end{pmatrix}
+}
+\renewcommand{\sgate}{
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & i
+    \end{pmatrix}
+}
+\newcommand{\phasegate}{
+    \begin{pmatrix}
+        1 & \phantom{e}0 \\
+        0 & e^{i\theta}
+    \end{pmatrix}
+}
+\newcommand{\cnotgate}{
+    \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 0 & 1 \\
+        0 & 0 & 1 & 0 \\
+    \end{pmatrix}
+}
+\newcommand{\czgate}{
+    \begin{pmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & -1 \\
+    \end{pmatrix}
+}
 
 \makenoidxglossaries
 
