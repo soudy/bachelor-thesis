@@ -2,10 +2,10 @@
 This chapter is focused on making the reader familiar with concepts used throughout this report.
 First, an introduction to computational complexity is given to establish a mathematical framework to describe the efficiency of computer algorithms.
 Second, the basic ideas of quantum mechanics are presented.
-Finally, an overview of quantum computation is given.
+Finally, an overview of the quantum computational circuit model is given.
 
 \section{Computational Complexity}
-In computer science, there seems to be a fundamental limit to what problems we can solve.
+In computer science, there seems to be a fundamental limit to what problems computers can solve.
 Some problems seem to be inherently uncomputable: there exists no general solution that does not go into an infinite loop for certain inputs~\cite{church1936note, turing1937computable}.
 This report will not go further into what problems are computable and uncomputable.
 Rather, it will look at the computational efficiency of certain algorithms: how many resources are required to solve a problem?
@@ -66,7 +66,7 @@ A state can be thought of as a rule with the following form:
 (q_i,a) \mapsto (q_j,b,H),
 \end{equation}
 where $q_i$ and $q_j$ are states, $a$ and $b$ are symbols from the work alphabet, and $H \in \{L, S, R\}$ decides how to move the tape head: one cell to the left ($L$), stay in the same position ($S$), or one cell to the right ($R$).
-These states as described in \Cref{eqn:turing-state} can be read as ``in state $q_i$, if the read symbol is $a$, go to state $q_j$, write symbol $b$, and move the tape head to $H$".
+These states as described in \Cref{eqn:turing-state} can be read as ``in state $q_i$, if the read symbol is $a$, go to state $q_j$, write symbol $b$, and move the tape head to $H$."
 
 \begin{figure}[ht]
     \centering
@@ -130,7 +130,7 @@ Qubits are physical objects that appear in nature on the scale of atoms and suba
 A qubit can be any two-state quantum-mechanical system such as the spin of an electron, which can be spin up or down, or the polarization of a photon, which can be horizontally of vertically polarized.
 In this report, qubits will be treated as abstract mathematical objects as the physical realization of qubits is beyond the scope of this work.
 
-\subsection{Quantum States} \label{sec:quantum-states}
+\subsection{Qubits} \label{sec:quantum-states}
 The state of a qubit is denoted as follows:
 \begin{equation} \label{eqn:qubit-state}
 \ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}.
@@ -145,7 +145,7 @@ Formally, a qubit can be thought of as a unit vector in a two-dimensional Hilber
 
 A qubit differs from a classical bit in that it can be in a linear combination, or superposition of states.
 While a bit can be only be in the state 0 or 1, a qubit can be in one of infinitely many superpositions of states.
-However, the laws of quantum mechanics restricts direct access to the probability amplitudes of a state.
+However, the laws of quantum mechanics restrict direct access to the probability amplitudes of a state.
 Instead, when measuring a qubit, it collapses to basis state \ket{j} with probability $|\alpha_j|^2$.
 For example, consider the state
 \begin{equation} \label{eqn:plus-state}
@@ -167,20 +167,20 @@ Simplifying then, the state of a qubit can be written as
 Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.35\linewidth]{figures/bloch-sphere.pdf}
+    \includegraphics[width=0.375\linewidth]{figures/bloch-sphere.pdf}
     \caption[Bloch sphere representation of a qubit's state.]{Bloch sphere representation of a qubit's state.}
     \label{fig:bloch-sphere}
 \end{figure}
 While this visualization is limited to a single qubit, it can be a useful visual to build intuition.
 For example, the \ket{+} state described in \Cref{eqn:plus-state} can be thought of as being exactly between \ket{0} and \ket{1} on the Bloch sphere.
 
-The amount of probability amplitudes grows exponentially with the amount of qubits.
+The amount of probability amplitudes grows exponentially with the number of qubits.
 Consider a two-qubit system which lives in a $2^2=4$-dimensional Hilbert space spanned by the computational basis states $\left\{\ket{00}, \ket{01}, \ket{10}, \ket{11}\right\}$.
 This state is defined by the linear combination
 \begin{equation} \label{eqn:two-qubit-state}
 \ket{\psi} = \alpha_0\ket{00} + \alpha_1\ket{01} + \alpha_2\ket{10} + \alpha_3\ket{11}.
 \end{equation}
-Again, unlike classical bits who can only be in one state at a time, this qubit can be in a superposition of all four states.
+Again, unlike classical bits who can only be in one state at a time, this state can be in a superposition of all four states.
 The normalization condition still applies for \Cref{eqn:two-qubit-state}: $\sum_{i=0}|\alpha_i|^2 = 1$.
 Single-qubit states can be combined to form multi-qubit states by taking the tensor product of the two states.
 Given states $\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$ and $\ket{\varphi} = \beta_0\ket{0} + \beta_1\ket{1}$:
@@ -278,7 +278,7 @@ CZ = \begin{pmatrix}
 0 & 1 & 0 & \phantom{-}0 \\
 0 & 0 & 1 & \phantom{-}0 \\
 0 & 0 & 0 & -1 \\
-\end{pmatrix}
+\end{pmatrix}.
 \end{equation}
 
 \subsection{Measurement}
@@ -319,6 +319,6 @@ Following the example from \Cref{eqn:measurement} with $M_0 = \op{0}{0}$ and $p(
 \end{aligned}
 \end{equation}
 Note that a global phase $e^{i\delta}$ shows up as the factor $\alpha_0/|\alpha_0|$.
-As mentioned in \Cref{sec:quantum-states}, the states $e^{i\delta}\ket{0}$ and $\ket{0}$ are considered equal up to a global phase factor.
+As mentioned in \Cref{sec:quantum-states}, the states $e^{i\delta}\ket{0}$ and $\ket{0}$ are considered equal up to the global phase factor.
 
 \section{Quantum Computation}
