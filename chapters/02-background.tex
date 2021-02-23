@@ -313,6 +313,12 @@ To be more in line with the nomenclature of classical computing, from here on ou
 In a quantum circuit time moves from left to right, where qubits are represented by wires on which gates can act, and classical bits are represented by double-lined wires.
 Usually the qubits are assumed to be instantiated to \ket{0}, unless noted otherwise.
 A list of frequently used quantum gates is shown in \Cref{table:common-quantum-gates}.
+Quantum gates are unitary and thus reversible, making the quantum circuit model a reversible model of computation.
+The inverse of a gate $U$ is denoted as the conjugate transpose $U^\dagger$.
+By the definition of unitary $UU^\dagger = U^\dagger U = I$, applying the inverse $U^\dagger$ after $U$ essentially uncomputes $U$ and vice versa.
+Gates whose conjugate transpose are equal to themselves are referred to as Hermitian.
+For example, $H$ is Hermitian as $H^\dagger = H$ and thus $H^2 = I$.
+ 
 \Cref{fig:bell-state-circuit} demonstrates a simple quantum circuit which creates a maximally entangled state $\ket{\Phi^+} = \left(\ket{00} + \ket{11}\right)/\sqrt{2}$ from \Cref{eqn:bell-state} and measures both qubits.
 This state is one of four maximally entangled two-qubit states referred to as a Bell state.
 \begin{figure}[ht]
@@ -435,5 +441,30 @@ There exists no solution for a unitary operator $U$ that does the transformation
 \alpha_0\ket{00} + \alpha_1\ket{01} \xrightarrow[]{U} \alpha_0^2\ket{00} + \alpha_0\alpha_1\ket{01} + \alpha_1\alpha_0\ket{10} + \alpha_1^2\ket{11}.
 \end{equation}
 This property is known as the no-cloning theorem, and is a fundamental limit of quantum information.
+Note that this holds for unknown quantum states.
+If one has the circuit to prepare \ket{\psi}, you could simply create \ket{\psi}\ket{\psi} by duplicating the circuit on a second qubit.
+
+\subsection{Universal Gate Sets}
+A universal gate set is defined as a finite set of gates that can be used to represent any other gate.
+In the classical circuit model, \textsc{NAND} is a universal gate with which all other gates can be represented.
+Equivalently, universal quantum gate sets are sets of quantum gates to which any quantum operation can be reduced to.
+A common universal gate set is $\{\textnormal{CNOT}, H, S, T\}$.
+Any quantum operation can be reduced to a combination of $\textnormal{CNOT}, H, S$ and  $T$ gates.
+For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffoli gate, can be decomposed into these gates as shown in~\Cref{fig:decomposition-toffoli}.
+\begin{figure}[ht]
+    \Large
+    \[
+    \Qcircuit @C=0.65em @R=1em @!R {
+        & \ctrl{1} & \qw   & &   & \qw      & \qw      & \qw              & \ctrl{2} & \qw & \qw & \qw & \ctrl{2} & \qw & \ctrl{1} & \qw & \ctrl{1} & \gate{T} & \qw \\
+        & \ctrl{1} & \qw   & = & & \qw      & \ctrl{1} & \qw              & \qw   & \qw &        \ctrl{1} & \qw & \qw & \gate{T^\dagger} & \targ & \gate{T^\dagger} & \targ & \gate{S} & \qw \\
+        & \targ \qwx & \qw & & & \gate{H} & \targ      & \gate{T^\dagger} & \targ & \gate{T} & \targ & \gate{T^\dagger} & \targ & \gate{T} & \gate{H} & \qw & \qw & \qw & \qw
+    }
+    \]
+    \caption{Decomposition of the Toffoli gate using $\textnormal{CNOT}, H, S$ and  $T$ gates.}
+    \label{fig:decomposition-toffoli}
+\end{figure}
 
 \subsection{Quantum Algorithms}
+\subsubsection{Deutch-Jozsa}
+\subsubsection{Quantum Fourier Transform}
+\subsubsection{Grover}
