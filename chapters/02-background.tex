@@ -260,6 +260,7 @@ Their matrix representations are as follows:
 \textnormal{CNOT} = \cnotgate{}, \hspace*{5mm}
 CZ = \czgate{}.
 \end{equation}
+Generally, a controlled-$U$ operator applies $U$ if the control qubit is \ket{1}.
 
 \subsection{Measurement}
 While the evolution of quantum states in a closed system is unitary, at some point the quantum state has to interact with the outside world.
@@ -317,7 +318,7 @@ As the observable $Z$ has the computational basis states as eigenvectors, a meas
 With this definition of projective measurements, the expectation value of an observable $O$ for state \ket{\psi} can be defined as
 \begin{equation}
 \begin{aligned}
-\langle O \rangle_\psi &= \bra{\psi}O\ket{\psi} \\
+\expval{O}_\psi &= \bra{\psi}O\ket{\psi} \\
 &= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0O\ket{\lambda_0} + \ldots + \alpha_{N-1}O\ket{\lambda_{N-1}}\big) \\
 &= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0\lambda_0\ket{\lambda_0} + \ldots + \alpha_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
 &=  \left\lvert \alpha_0\right\rvert^2\lambda_0 + \ldots + \left\lvert \alpha_{N-1}\right\rvert^2 \lambda_{N-1} \\
@@ -401,21 +402,21 @@ This state is then measured, which will measure 00 or 11 with equal probability.
                  & \gate{Z} & \qw
              }
              & $\zgate{}$ \\
-             Phase/S &
+             Phase ($S$) &
              \Large
              \Qcircuit @C=1em @R=1em @!R {
                  & \gate{S} & \qw
              }
              &
              $\begin{pmatrix}1 & 0 \\ 0 & i\end{pmatrix}$ \\
-             T &
+             $T$ &
              \Large
              \Qcircuit @C=1em @R=1em @!R {
                  & \gate{T} & \qw
              }
              &
              $\begin{pmatrix}1 & 0 \\ 0 & e^{i\pi/4}\end{pmatrix}$ \\
-             CNOT &
+             $\textnormal{CNOT}$ &
              $
              \Large
              \Qcircuit @C=1em @R=1em @!R {
@@ -424,7 +425,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
              }
              $
              & $\cnotgate{}$ \\
-             CZ &
+             $CZ$ &
              $
              \Large
              \Qcircuit @C=1em @R=1em @!R {
@@ -491,7 +492,7 @@ For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffo
 \end{figure}
 
 \subsection{Quantum Algorithms}
-Two quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the quantum Fourier transforms and Grover's algorithm.
+To demonstrate the quantum circuit computational model's ability to solve certain problems more efficiently than classical computers, two quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the \acrlong{qft} and Grover's algorithm.
 
 \subsubsection{Quantum Fourier Transform}
 The \gls{qft} is the quantum analogue of the \emph{inverse} \gls{dft}.
@@ -503,6 +504,58 @@ That is, the \gls{qft} is exponentially more efficient than the best-known class
 However, the applications of the \gls{qft} are limited.
 The result of the \gls{qft} are stored in the amplitudes of the quantum state.
 These amplitudes cannot be directly accessed by measurement, so there is no way to extract the results.
-On the other hand, the \gls{qft} is the backbone of the phase estimation algorithm, which in term can be used to solve problems including the order-finding problem and the factoring problem.
+On the other hand, the \gls{qft} is the backbone of the phase estimation algorithm, which in term can be used to solve problems including the order-finding problem and the factoring problem efficiently.
+
+The inverse \gls{dft} is a linear transformation on an input vector of $N$ complex values $(\begin{matrix}x,\ldots,x_N\end{matrix})$.
+It transforms a element $x_k$ as follows:
+\begin{equation}
+x_k' = \dfrac{1}{\sqrt{N}} \sum_{j=0}^{N-1} x_j e^{\tfrac{2\pi i}{N}jk}.
+\end{equation}
+Equivalently, the \gls{qft} is defined as a unitary operator which acts on a computational basis state \ket{j} as following:
+\begin{equation}
+\ket{j} \rightarrow \dfrac{1}{\sqrt N}\sum_{k=0}^{N-1}e^{\tfrac{2\pi i}{N} jk}\ket{k}.
+\end{equation}
+To describe the quantum circuit for the \gls{qft}, the following definition is useful:
+\begin{equation}
+R_k = \begin{pmatrix}
+1 & 0 \\
+0 & e^{\tfrac{2\pi i}{2^k}}
+\end{pmatrix}.
+\end{equation}
+Some useful identities are $R_2 = S$ and $R_3 = T$.
+Using this gate, the general quantum circuit for the \gls{qft} is shown in \Cref{fig:qft-general-circuit}.
+The gates at the end of the circuit are swap gates, which swaps two qubits.
+This is necessary to get the result in the correct order.
+
+\begin{figure}[ht]
+    \begin{adjustwidth}{-1cm}{-1cm}
+        \[
+        \Qcircuit @C=0.7em @R=0.5em @!R {
+            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_1}} & \gate{H} & \gate{R_2} & \qw & \dots & & \gate{R_{n-1}} & \gate{R_n} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[4] & \qw & \qw \\
+            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_2}} & \qw & \ctrl{-1} & \qw & \dots & & \qw & \qw & \gate{H} & \qw & \dots & & \gate{R_{n-2}} & \gate{R_{n-1}} & \qw & \dots & & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[2] & \qw \\
+            & \vdots & & & & \vdots & & & & & & & & & & & & & & & & & \vdots \\
+            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_{n - 1}}} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \dots & & \gate{H} & \gate{R_2} & \qw & \qw & \qw & \qswap & \qw \\
+            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_n}} & \qw  & \qw & \qw & \qw & \qw & \qw & \ctrl{-4} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \dots & & \qw & \ctrl{-1} & \gate{H} & \qw & \qswap & \qw & \qw \\
+        }
+        \]
+    \end{adjustwidth}
+    \caption{The general circuit for the \gls{qft} on $2^n$ amplitudes with $n$ qubits.}
+    \label{fig:qft-general-circuit}
+\end{figure}
+
+The \gls{qft} circuit works as follows.
+With $N = 2^n$ where $n$ is the number of qubits, the computational basis exists of the states $\left\{\ket{0}, \ldots, \ket{N-1}\right\}$.
+We use the notation $\ket{j}$ for a decimal number $j$ in the binary representation $j_1,\ldots,j_n$, e.g. $\ket{15} = \ket{j_1j_2j_3j_4} = \ket{1111}$.
+Furthermore, the following notation is used to represent fractional binary numbers:
+\begin{equation}
+[0.j_1\ldots j_m] = \sum_{k=1}^{m} j_k2^{-k}.
+\end{equation}
+For example, $j_1/2 + j_2/2^2$ is written as $[0.j_1j_2]$ in fractional binary notation.
+Using these definitions, the \gls{qft} can be represented as follows:
+\begin{equation}
+\textnormal{QFT}\ket{j_1 \ldots j_n} = \dfrac{1}{\sqrt{N}}\left(\ket{0} + e^{2\pi i [0.j_n]}\ket{1}\right)\left(\ket{0} + e^{2\pi i [0.j_{n-1}j_n]}\ket{1}\right)\cdots\left(\ket{0} + e^{2\pi i [0.j_1j_2\ldots j_n]}\ket{1}\right).
+\end{equation}
+The transformed values end up in the relative phases of the amplitudes.
+Again, these relative phases cannot be extracted, but the \gls{qft} is an essential part of many important quantum algorithms.
 
 \subsubsection{Grover}
