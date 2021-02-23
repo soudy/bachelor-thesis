@@ -174,7 +174,7 @@ Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere referr
 While this visualization is limited to a single qubit, it can be a useful visual to build intuition.
 For example, the \ket{+} state described in \Cref{eqn:plus-state} can be thought of as being exactly between \ket{0} and \ket{1} on the $x$-axis of the Bloch sphere.
 
-The amount of probability amplitudes grows exponentially with the number of qubits.
+The amount of probability amplitudes grows exponentially with the number of qubits: a $n$-qubit state has $N = 2^n$ amplitudes.
 Consider a two-qubit system which lives in a $2^2=4$-dimensional Hilbert space spanned by the computational basis states $\left\{\ket{00}, \ket{01}, \ket{10}, \ket{11}\right\}$.
 This state is defined by the linear combination
 \begin{equation} \label{eqn:two-qubit-state}
@@ -300,6 +300,32 @@ Following the example from \Cref{eqn:measurement} with $M_0 = \op{0}{0}$ and $p(
 \end{equation}
 Note that a global phase $e^{i\delta}$ shows up as the factor $\alpha_0/|\alpha_0|$.
 As mentioned in \Cref{sec:quantum-states}, the states $e^{i\delta}\ket{0}$ and $\ket{0}$ are considered equal up to the global phase factor.
+
+A special class of measurements called projective measurements is sometimes used to simplify calculations.
+A projective measurement is defined by an observable $O$, which is a Hermitian operator on the state space of the system.
+This observable has a spectral decomposition
+\begin{equation}
+O = \sum_{\lambda}\lambda P_\lambda,
+\end{equation}
+where $P_\lambda$ is the projector onto the eigenspace of $O$ with eigenvalue $\lambda$.
+For example, the Pauli-$Z$ operator can be thought of as an observable with the spectral decomposition
+\begin{equation}
+Z = 1\op{0}{0} - 1\op{1}{1},
+\end{equation}
+which has eigenvectors $\{\ket{0}, \ket{1}\}$ with respective eigenvalues $\{1, -1\}$.
+As the observable $Z$ has the computational basis states as eigenvectors, a measurement of $Z$ can also be thought of a measuring in the computational basis.
+With this definition of projective measurements, the expectation value of an observable $O$ for state \ket{\psi} can be defined as
+\begin{equation}
+\begin{aligned}
+\langle O \rangle_\psi &= \bra{\psi}O\ket{\psi} \\
+&= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0O\ket{\lambda_0} + \ldots + \alpha_{N-1}O\ket{\lambda_{N-1}}\big) \\
+&= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0\lambda_0\ket{\lambda_0} + \ldots + \alpha_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
+&=  \left\lvert \alpha_0\right\rvert^2\lambda_0 + \ldots + \left\lvert \alpha_{N-1}\right\rvert^2 \lambda_{N-1} \\
+&= \sum_{i=0}^{N-1} \left\lvert \alpha_i\right\rvert^2\lambda_i.
+\end{aligned}
+\end{equation}
+The expectation value is the sum of all possible outcomes (eigenvalues of $O$) weighted by their probability.
+Calculating the expectation value experimentally means preparing and measuring the state multiple times.
 
 \section{Quantum Computation}
 This section combines the theory of computer science and quantum mechanics to introduce the fundamental model of quantum computation: the quantum circuit model.
@@ -442,7 +468,7 @@ There exists no solution for a unitary operator $U$ that does the transformation
 \end{equation}
 This property is known as the no-cloning theorem, and is a fundamental limit of quantum information.
 Note that this holds for unknown quantum states.
-If one has the circuit to prepare \ket{\psi}, you could simply create \ket{\psi}\ket{\psi} by duplicating the circuit on a second qubit.
+If one has the circuit to prepare \ket{\psi}, you could simply create \ket{\psi}\ket{\psi} by executing the circuit on a second qubit.
 
 \subsection{Universal Gate Sets}
 A universal gate set is defined as a finite set of gates that can be used to represent any other gate.
@@ -460,11 +486,23 @@ For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffo
         & \targ \qwx & \qw & & & \gate{H} & \targ      & \gate{T^\dagger} & \targ & \gate{T} & \targ & \gate{T^\dagger} & \targ & \gate{T} & \gate{H} & \qw & \qw & \qw & \qw
     }
     \]
-    \caption{Decomposition of the Toffoli gate using $\textnormal{CNOT}, H, S$ and  $T$ gates.}
+    \caption{Decomposition of the Toffoli gate using $\textnormal{CNOT}, H, S$ and $T$ gates.}
     \label{fig:decomposition-toffoli}
 \end{figure}
 
 \subsection{Quantum Algorithms}
-\subsubsection{Deutch-Jozsa}
+Two quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the quantum Fourier transforms and Grover's algorithm.
+
 \subsubsection{Quantum Fourier Transform}
+The \gls{qft} is the quantum analogue of the \emph{inverse} \gls{dft}.
+The \gls{dft} is ubiquitous in the fields of engineering and computer science.
+In short, it transforms a signal in the time domain to the frequency domain and vice versa with the inverse \gls{dft}.
+For $N = 2^n$ amplitudes, the \gls{qft} uses $O(n^2)$ gates, where $n$ is the amount of qubits.
+The best-known classical algorithm for computing the \gls{dft} uses $O(n2^n)$ gates.
+That is, the \gls{qft} is exponentially more efficient than the best-known classical algorithm.
+However, the applications of the \gls{qft} are limited.
+The result of the \gls{qft} are stored in the amplitudes of the quantum state.
+These amplitudes cannot be directly accessed by measurement, so there is no way to extract the results.
+On the other hand, the \gls{qft} is the backbone of the phase estimation algorithm, which in term can be used to solve problems including the order-finding problem and the factoring problem.
+
 \subsubsection{Grover}
