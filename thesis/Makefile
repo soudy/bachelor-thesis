@@ -1,6 +1,6 @@
-.PHONY: docs
+.PHONY: all
 
-docs: $(wildcard *.tex)
+all: $(wildcard *.tex)
 	latexmk -pdf -use-make $^
 
 clean:
