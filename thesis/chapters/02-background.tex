@@ -2,7 +2,7 @@
 This chapter is focused on making the reader familiar with concepts used throughout this report.
 First, an introduction to computational complexity is given to establish a mathematical framework to describe the efficiency of computer algorithms.
 Second, the basic ideas of quantum mechanics are presented.
-Finally, an overview of the quantum computational circuit model is given along with the description of the \acrlong{qft} and Grover's algorithm.
+Finally, an overview of the quantum computational circuit model is given along with a description of the \acrlong{qft} algorithm and Grover's algorithm.
 
 \section{Computational Complexity}
 In computer science, there seems to be a fundamental limit to what problems computers can solve.
@@ -23,7 +23,7 @@ Consider an algorithm that given input size $n$ takes $n^2$ primitive operations
 In big-O notation, both these algorithms are said to run in $O(n^2)$ time.
 That is, the number of primitive operations it performs scales quadratically with the input size.
 Constant factors are ignored as they become negligible as $n \to \infty$.
-While they are practically significant --- an algorithm that runs in $O(n/2)$ runs twice as fast as an algorithm that runs in $O(n)$ --- they are not relevant to asymptotic analysis. 
+While they are practically significant --- an algorithm that runs in $O(n/2)$ performs half as many primitive operations as an algorithm that runs in $O(n)$ --- they are not relevant to asymptotic analysis. 
 
 Formally, if we have functions $f(n)$ and $g(n)$ such that $f$ eventually grows slower than some multiple of $g$ as $n \to \infty$, we say $f(n) = O(g(n))$.
 For example, given $f(n) = 200n^2$ and $g(n) = n^3$, $f$ begins to grow slower than $g$ when $n > 200$.
