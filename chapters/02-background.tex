@@ -2,7 +2,7 @@
 This chapter is focused on making the reader familiar with concepts used throughout this report.
 First, an introduction to computational complexity is given to establish a mathematical framework to describe the efficiency of computer algorithms.
 Second, the basic ideas of quantum mechanics are presented.
-Finally, an overview of the quantum computational circuit model is given.
+Finally, an overview of the quantum computational circuit model is given along with the description of the \acrlong{qft} and Grover's algorithm.
 
 \section{Computational Complexity}
 In computer science, there seems to be a fundamental limit to what problems computers can solve.
@@ -481,7 +481,7 @@ For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffo
 \begin{figure}[ht]
     \Large
     \[
-    \Qcircuit @C=0.65em @R=1em @!R {
+    \Qcircuit @C=0.6em @R=1em @!R {
         & \ctrl{1} & \qw   & &   & \qw      & \qw      & \qw              & \ctrl{2} & \qw & \qw & \qw & \ctrl{2} & \qw & \ctrl{1} & \qw & \ctrl{1} & \gate{T} & \qw \\
         & \ctrl{1} & \qw   & = & & \qw      & \ctrl{1} & \qw              & \qw   & \qw &        \ctrl{1} & \qw & \qw & \gate{T^\dagger} & \targ & \gate{T^\dagger} & \targ & \gate{S} & \qw \\
         & \targ \qwx & \qw & & & \gate{H} & \targ      & \gate{T^\dagger} & \targ & \gate{T} & \targ & \gate{T^\dagger} & \targ & \gate{T} & \gate{H} & \qw & \qw & \qw & \qw
@@ -558,4 +558,110 @@ Using these definitions, the \gls{qft} can be represented as follows:
 The transformed values end up in the relative phases of the amplitudes.
 Again, these relative phases cannot be extracted, but the \gls{qft} is an essential part of many important quantum algorithms.
 
-\subsubsection{Grover}
+\subsubsection{Grover's Algorithm}
+Grover's algorithm is a quantum algorithm for unstructured database search.
+Suppose you want to search through a search space of $n$ numbers.
+Given a function $f(x)$ that returns $1$ for the number $\omega$ that you are looking for, and $0$ for every other number:
+\begin{equation} \label{eqn:black-box-fn}
+f(x) =
+\begin{cases}
+\begin{aligned}
+1 & \text{ if } x = \omega \\
+0 & \text{ if } x \neq \omega
+\end{aligned}
+\end{cases}
+\end{equation}
+The goal is to find a $x$ so that $f(x) = 1$.
+On a classical computer, the best we can do is an exhaustive search of the entire search space, which takes $O(n)$ function calls.
+Using a quantum computer, this can be done with $O(\sqrt{n})$ function calls using Grover's algorithm~\cite{grover1996fast}.
+Grover's algorithm is asymptotically optimal: \textcite{zalka1999grover} show that $O(\sqrt{n})$ is the best we can do for unstructured database search.
+
+A common problem in computer science is examining a large number of different possibilities to see which of them satisfy a given condition.
+This is the same problem that Grover's algorithm looks to solve.
+Usually, there is some structure in the problem which allows for more efficient algorithms.
+For example, if a list of numbers is sorted, one can find a number in $O(\log n)$ using binary search.
+For hard problems that do not have such obvious structure like the boolean satisfiability problem, Grover's algorithm can provide a quadratic speedup.
+
+The function $f(x)$ from \Cref{eqn:black-box-fn} is sometimes referred to as a black box function, as its internal workings is not of interest.
+Grover's algorithm is a general algorithm which can be applied to many algorithms that use search heuristics.
+The quantum equivalent of a black box function is called an oracle, and has the following form:
+\begin{equation} \label{eqn:oracle}
+U_\omega\ket{x} = 
+\begin{cases}
+\begin{aligned}
+-\ket{x} & \text{ if } x = \omega \\
+\phantom{-}\ket{x} & \text{ if } x \neq \omega
+\end{aligned}
+\end{cases}
+\end{equation}
+where \ket{x} is any computational basis state, and $\omega$ is the bit string to find.
+That is, it marks the solution to the search problem by shifting the phase of the solution.
+An oracle \Cref{eqn:oracle} can be defined in terms of a black box function:
+\begin{equation}
+U_\omega\ket{x} = (-1)^{f(x)}\ket{x},
+\end{equation}
+which has the following matrix representation:
+\begin{equation}
+U_\omega =
+\begin{pmatrix}
+(-1)^{f(0)} & 0 & \cdots & 0 \\
+0 & (-1)^{f(1)} & \cdots & 0 \\
+\vdots & 0 & \ddots & \vdots \\
+0 & 0 & \cdots & (-1)^{f(2^n-1)}
+\end{pmatrix}.
+\end{equation}
+With the oracle defined, the quantum circuit of Grover's algorithm is shown in \Cref{fig:grover-circuit}.
+The qubits can be thought of as being in two registers: the target qubits $\ket{q1\ldots q_n}$ and the oracle qubit \ket{y}.
+The oracle qubit \ket{y} starts in the state $H\ket{1} = (\ket{0} - \ket{1})/\sqrt{2}$.
+When the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
+However, if the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
+After the oracle is applied, the solution is marked with a negative phase.
+To extract this solution, a procedure called amplitude amplification is used.
+
+\begin{figure}[ht]
+    \[
+    \Large
+    \Qcircuit @C=1em @R=0.5em @!R {
+        \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_1} = \ket{0}} & \gate{H} & \multigate{3}{U_\omega} & \gate{H} & \multigate{2}{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
+        & & \rstick{\,\vdots} & & & & & & & & \vdots \\
+        \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_n} = \ket{0}} & \gate{H} & \ghost{U_\omega} & \gate{H} & \ghost{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
+        \push{\rule{0em}{1em}} & & & & \lstick{\ket{y} = \ket{1}} & \gate{H} & \ghost{U_\omega} &  \qw & \qw \gategroup{1}{7}{4}{10}{1em}{--} & \qw & \qw & \qw \\
+        & & & & & & & \hspace{4cm} O(\sqrt{N}) \mbox{ times}
+    }
+    \]
+    \caption{Quantum circuit representation of Grover's algorithm.}
+    \label{fig:grover-circuit}
+\end{figure}
+
+Amplitude amplification can be thought of as inversion about the mean.
+Consider a search space of $N = 4$ with two qubits where we are looking for $\omega = 10$.
+The amplitudes of the search space start out in an equal superposition:
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/aa_initial_equal.pdf}
+\end{figure}
+
+\clearpage
+\noindent
+After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/aa_phase_flipped_mean.pdf}
+\end{figure}
+
+\noindent
+Note that measuring this state will still give each state with equal probabilities.
+Using the diffusion operator $H^{\otimes n}(2\op{0^n}{0^n} - I)H^{\otimes n}$, the amplitudes are inverted about their mean (displayed as the dotted orange line):
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/aa_diffused.pdf}
+\end{figure}
+
+\noindent
+The application of the oracle and amplitude amplification is often referred to as a Grover iteration.
+For this example, one Grover iteration was enough to give a probability of 1 of measuring the correct solution.
+Generally, the upper bound on the number of iterations  $R$ required is as follows:
+\begin{equation}
+R \leq \left\lceil \dfrac{\pi}{4}\sqrt{\dfrac{M}{N}} \right\rceil,
+\end{equation}
+where $M$ is the number of solutions and $N = 2^n$ is the size of the search space.
