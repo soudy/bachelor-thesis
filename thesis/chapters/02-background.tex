@@ -264,7 +264,7 @@ Generally, a controlled-$U$ operator applies $U$ on the target qubit if the cont
 \subsection{Measurement}
 While the evolution of quantum states in a closed system is unitary, at some point the quantum state has to interact with the outside world.
 This is what measurement means: any interaction from an outside system with the quantum system.
-Formally, measurement is defined by a set of $\{M_m\}$ measurement operators, where the probability of measuring the state $m$ is given by
+Formally, measurement is defined by a set of measurement operators  $\{M_m\}$, where the probability of measuring the state $m$ is given by
 \begin{equation}
 p(m) = \bra{\psi}M_m^\dagger M_m\ket{\psi}.
 \end{equation}
@@ -345,7 +345,7 @@ By the definition of unitary $UU^\dagger = U^\dagger U = I$, applying the invers
 Gates whose conjugate transpose are equal to themselves are referred to as Hermitian.
 For example, $H$ is Hermitian as $H^\dagger = H$ and thus $H^2 = I$.
  
-\Cref{fig:bell-state-circuit} demonstrates a simple quantum circuit which creates a maximally entangled state $\ket{\Phi^+} = \left(\ket{00} + \ket{11}\right)/\sqrt{2}$ from \Cref{eqn:bell-state} and measures both qubits.
+\Cref{fig:bell-state-circuit} demonstrates a simple quantum circuit which creates the maximally entangled state $\ket{\Phi^+} = \left(\ket{00} + \ket{11}\right)/\sqrt{2}$ from \Cref{eqn:bell-state} and measures both qubits.
 This state is one of four maximally entangled two-qubit states referred to as a Bell state.
 \begin{figure}[ht]
     \Large
@@ -373,7 +373,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
 
 \begin{table}[ht]
     \centering
-    {\renewcommand{\arraystretch}{1.05}
+    {\renewcommand{\arraystretch}{1.1}
         \begin{tabular}{ c|c|c }
             Gate name & Circuit symbol & Matrix representation \\
             \hline
@@ -418,7 +418,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
              $\textnormal{CNOT}$ &
              $
              \Large
-             \Qcircuit @C=1em @R=1em @!R {
+             \Qcircuit @C=1em @R=1em {
                  & \ctrl{1} & \qw \\
                  & \targ & \qw
              }
@@ -427,7 +427,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
              $CZ$ &
              $
              \Large
-             \Qcircuit @C=1em @R=1em @!R {
+             \Qcircuit @C=1em @R=1em {
                  & \ctrl{1} & \qw \\
                  & \control \qw & \qw
              }
@@ -491,12 +491,12 @@ For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffo
 \end{figure}
 
 \subsection{Quantum Algorithms}
-To demonstrate the quantum circuit computational model's ability to solve certain problems more efficiently than classical computers, two quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the \acrlong{qft} and Grover's algorithm.
+To demonstrate the quantum circuit computational model's ability to solve certain problems more efficiently than classical computers, two quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the \acrfull{qft} and Grover's algorithm.
 
 \subsubsection{Quantum Fourier Transform}
 The \gls{qft} is the quantum analogue of the \emph{inverse} \gls{dft}.
 The \gls{dft} is ubiquitous in the fields of engineering and computer science.
-In short, it transforms a signal in the time domain to the frequency domain and vice versa with the inverse \gls{dft}.
+In short, it transforms a signal in the time domain to the frequency domain, and vice versa with the inverse \gls{dft}.
 For $N = 2^n$ amplitudes, the \gls{qft} uses $O(n^2)$ gates, where $n$ is the amount of qubits.
 The best-known classical algorithm for computing the \gls{dft} uses $O(n2^n)$ gates.
 That is, the \gls{qft} is exponentially more efficient than the best-known classical algorithm.
