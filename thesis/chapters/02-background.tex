@@ -80,9 +80,9 @@ This hypothesis is known as the Church-Turing thesis.
 Related to the Church-Turing thesis is the extended Church-Turing thesis, which states that any physically realizable model of computation can be efficiently simulated on a Turing machine.
 That is, can a Turing machine simulate any model of computation in polynomial time?
 The quantum computational model brings doubt to this claim.
-It is known that quantum computers can efficiently simulate a Turing machine, so they are at least as powerful as classical computers~\cite{bennett1973logical}.
-However, there appears to be no efficient algorithm for simulating a quantum computer on a Turing machine~\cite{deutsch1985quantum}.
+It is known that quantum computers can efficiently simulate a Turing machine~\cite{bennett1973logical}, but there appears to be no efficient algorithm for simulating a quantum computer on a Turing machine~\cite{deutsch1985quantum}.
 Furthermore, \textcite{arute2019quantum} experimentally demonstrated a quantum computer sampling from a probability distribution intractable by a classical computer.
+This gives us good reasons to believe that classical computers cannot efficiently simulate quantum computers, and that quantum computers are more computationally powerful for some problems.
 
 \subsection{Complexity Classes}
 Complexity classes are sets of computational problems that share some common feature with regard to the computational resources they need to solve some problem~\cite{arora2009computational}.
@@ -117,7 +117,7 @@ How $\BQP$ relates to $\P$ and $\NP$ exactly is still unknown, however, it seems
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \includegraphics[width=0.4\linewidth]{figures/complexity-classes-hierarchy.pdf}
     \caption[An overview of the hierarchy of the complexity classes discussed.]{An overview of the hierarchy of the complexity classes discussed. This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$. $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.}
     \label{fig:complexity-classes-hierarchy}
 \end{figure}
@@ -167,7 +167,7 @@ Simplifying then, the state of a qubit can be written as
 Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.375\linewidth]{figures/bloch-sphere.pdf}
+    \includegraphics[width=0.365\linewidth]{figures/bloch-sphere.pdf}
     \caption[Bloch sphere representation of a qubit's state.]{Bloch sphere representation of a qubit's state.}
     \label{fig:bloch-sphere}
 \end{figure}
@@ -199,15 +199,15 @@ The notations
 \end{equation}
 all describe state.
 The relative phases of $\alpha_0, \alpha_1$ and $\beta_0, \beta_1$ in \Cref{eqn:tensor-product-states} are responsible for the quantum mechanical property of interference.
-When the phase of $\alpha_j$ and $\beta_j$ is the same, they will interfere constructively and increase the probability amplitude for that state.
-On the other hand, if $\alpha_j$ and $\beta_j$ have opposite phases, they will interfere destructively and decrease the probability amplitude for that state.
+When the phase of $\alpha_j$ and $\beta_k$ is the same, they will interfere constructively and increase the probability amplitude for that state.
+On the other hand, if $\alpha_j$ and $\beta_k$ have opposite phases, they will interfere destructively and decrease the probability amplitude for that state.
 
 Not all multi-qubit systems can be expressed as a tensor product of individual states as shown in \Cref{eqn:tensor-product-states}.
 Consider the following state:
 \begin{equation} \label{eqn:bell-state}
 \ket{\Phi^+} = \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right).
 \end{equation}
-This state cannot be expressed as a tensor product of two individual states, because that would imply $\big(\alpha_0\beta_0 = \alpha_1\beta_1 = 1/\sqrt2\,\big) \wedge \big(\alpha_0\beta_1 = \alpha_1\beta_0 = 0\big)$, which is a contradiction.
+This state cannot be expressed as a tensor product of two individual states, as that would imply $\big(\alpha_0\beta_0 = \alpha_1\beta_1 = 1/\sqrt2\,\big) \wedge \big(\alpha_0\beta_1 = \alpha_1\beta_0 = 0\big)$, which is a contradiction.
 States like $\ket{\Phi^+}$ are referred to as entangled states.
 Entanglement is the quantum phenomena of correlation in measurement outcomes.
 For example, when measuring the state $\ket{\Phi^+}$ from \Cref{eqn:bell-state}, the only two possible measurement outcomes are 00 and 11.
@@ -222,7 +222,7 @@ A state \ket{\psi} at time $t_1$ is related to state \ket{\psi'} at time $t_2$ b
 The unitary nature of these operators implies $UU^\dagger = U^\dagger U = I$, where $^\dagger$ is the conjugate transpose and $I$ the identity matrix.
 Single-qubit operators can be represented as $2 \times 2$ complex-valued unitary matrices.
 A common single-qubit operator is the Pauli-$X$ operator which transforms a state $\alpha_0\ket{0} + \alpha_1\ket{1}$ to $\alpha_1\ket{0} + \alpha_0\ket{1}$.
-It is part the set of Pauli matrices:
+It is part of the set of Pauli matrices:
 \begin{equation}
 X = \xgate{}, \hspace*{5mm}
 Y = \ygate{}, \hspace*{5mm}
@@ -250,8 +250,7 @@ R_z(\theta)\ket{1} &= e^{i\theta}\ket{1}.
 \end{aligned}
 \end{equation}
 
-Multi-qubit operators act on two or more qubits.
-They are required for creating entangled states.
+Multi-qubit operators act on two or more qubits and are required for creating entangled states.
 Two common two-qubit operators are the $\textnormal{CNOT}$ and $CZ$ operators.
 The $\textnormal{CNOT}$ operator can be thought of as a controlled-$X$ operator, which applies an $X$ operation on the target qubit if the control qubit is in the \ket{1} state.
 Equivalently, the $CZ$ operator applies a $Z$ operation on the target qubit if the control qubit is \ket{1}.
@@ -260,7 +259,7 @@ Their matrix representations are as follows:
 \textnormal{CNOT} = \cnotgate{}, \hspace*{5mm}
 CZ = \czgate{}.
 \end{equation}
-Generally, a controlled-$U$ operator applies $U$ if the control qubit is \ket{1}.
+Generally, a controlled-$U$ operator applies $U$ on the target qubit if the control qubit is \ket{1}.
 
 \subsection{Measurement}
 While the evolution of quantum states in a closed system is unitary, at some point the quantum state has to interact with the outside world.
@@ -302,7 +301,7 @@ Following the example from \Cref{eqn:measurement} with $M_0 = \op{0}{0}$ and $p(
 Note that a global phase $e^{i\delta}$ shows up as the factor $\alpha_0/|\alpha_0|$.
 As mentioned in \Cref{sec:quantum-states}, the states $e^{i\delta}\ket{0}$ and $\ket{0}$ are considered equal up to the global phase factor.
 
-A special class of measurements called projective measurements is sometimes used to simplify calculations.
+A special class of measurements called projective measurements can sometimes be used to simplify calculations.
 A projective measurement is defined by an observable $O$, which is a Hermitian operator on the state space of the system.
 This observable has a spectral decomposition
 \begin{equation}
@@ -326,7 +325,7 @@ With this definition of projective measurements, the expectation value of an obs
 \end{aligned}
 \end{equation}
 The expectation value is the sum of all possible outcomes (eigenvalues of $O$) weighted by their probability.
-Calculating the expectation value experimentally means preparing and measuring the state multiple times.
+Calculating the expectation value experimentally means preparing and measuring the state multiple times and is a practically useful notation to describe the behavior and output of quantum computations.
 
 \section{Quantum Computation}
 This section combines the theory of computer science and quantum mechanics to introduce the fundamental model of quantum computation: the quantum circuit model.
@@ -351,7 +350,7 @@ This state is one of four maximally entangled two-qubit states referred to as a 
 \begin{figure}[ht]
     \Large
     \[
-    \Qcircuit @C=1em @R=1em @!R {
+    \Qcircuit @C=1em @R=0.7em @!R {
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \meter & \cw  \\
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \qw & \targ & \meter & \cw \\
     }
@@ -374,7 +373,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
 
 \begin{table}[ht]
     \centering
-    {\renewcommand{\arraystretch}{1.1}
+    {\renewcommand{\arraystretch}{1.05}
         \begin{tabular}{ c|c|c }
             Gate name & Circuit symbol & Matrix representation \\
             \hline
@@ -441,12 +440,12 @@ This state is then measured, which will measure 00 or 11 with equal probability.
 \end{table}
 
 In classical computations, copying bits is a common operation.
-In quantum computing, the data one can copy is much more restricted.
+However, in quantum computing the data one can copy is much more restricted.
 If a qubit is in a computational basic state, that state can be copied by a $\textnormal{CNOT}$ gate~(\Cref{fig:copy-basis-state}).
 \begin{figure}[ht]
     \Large
     \[
-    \Qcircuit @C=1em @R=1em @!R {
+    \Qcircuit @C=1em @R=0.7em @!R {
         \push{\rule{0em}{1em}} & & \lstick{\ket{j}} & \ctrl{1} & \qw & \ket{j}  \\
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \targ & \qw & \ket{j} \\
     }
@@ -478,10 +477,10 @@ Equivalently, universal quantum gate sets are sets of quantum gates to which any
 A common universal gate set is $\{\textnormal{CNOT}, H, S, T\}$.
 Any quantum operation can be reduced to a combination of $\textnormal{CNOT}, H, S$ and  $T$ gates.
 For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffoli gate, can be decomposed into these gates as shown in~\Cref{fig:decomposition-toffoli}.
-\begin{figure}[ht]
+\begin{figure}[H]
     \Large
     \[
-    \Qcircuit @C=0.6em @R=1em @!R {
+    \Qcircuit @C=0.6em @R=0.7em @!R {
         & \ctrl{1} & \qw   & &   & \qw      & \qw      & \qw              & \ctrl{2} & \qw & \qw & \qw & \ctrl{2} & \qw & \ctrl{1} & \qw & \ctrl{1} & \gate{T} & \qw \\
         & \ctrl{1} & \qw   & = & & \qw      & \ctrl{1} & \qw              & \qw   & \qw &        \ctrl{1} & \qw & \qw & \gate{T^\dagger} & \targ & \gate{T^\dagger} & \targ & \gate{S} & \qw \\
         & \targ \qwx & \qw & & & \gate{H} & \targ      & \gate{T^\dagger} & \targ & \gate{T} & \targ & \gate{T^\dagger} & \targ & \gate{T} & \gate{H} & \qw & \qw & \qw & \qw
@@ -633,6 +632,7 @@ To extract this solution, a procedure called amplitude amplification is used.
     \label{fig:grover-circuit}
 \end{figure}
 
+\noindent
 Amplitude amplification can be thought of as inversion about the mean.
 Consider a search space of $N = 4$ with two qubits where we are looking for $\omega = 10$.
 The amplitudes of the search space start out in an equal superposition:
@@ -641,7 +641,6 @@ The amplitudes of the search space start out in an equal superposition:
     \includegraphics[width=0.5\linewidth]{figures/aa_initial_equal.pdf}
 \end{figure}
 
-\clearpage
 \noindent
 After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
 \begin{figure}[ht]
