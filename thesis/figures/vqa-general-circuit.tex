@@ -1,0 +1,28 @@
+\documentclass{standalone}
+\usepackage{amsmath}
+\usepackage{palatino}
+\usepackage{newpxmath}
+\usepackage[braket, qm]{qcircuit}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\begin{document}
+
+\Large
+\Qcircuit @C=1em @R=0.5em @!R {
+    & \\
+    \push{\rule{0em}{1em}} & & & \lstick{\ket{0}} & \gate{\theta_1} & \multigate{1}{\theta_4} & \qw & \dots & & \multigate{1}{\theta_{m-2}} & \meter & \cw & \:\: \expval{H_1} & \\
+    \push{\rule{0em}{1em}} & & & \lstick{\ket{0}} & \qw & \ghost{\theta_3} & \multigate{1}{\theta_6} & \dots & & \ghost{\theta_{m-2}} & \meter & \cw & \:\: \expval{H_2} \\
+    \push{\rule{0em}{1em}} & & & \lstick{\ket{0}} & \gate{\theta_2} & \qw &  \ghost{\theta_6} & \dots & & \gate{\theta_{m-1}} & \meter & \cw & \:\: \expval{H_3} \\
+    \push{\rule{0em}{1em}} & & \vdots &  &  &  &  & &  & & \vdots &  \\
+    \push{\rule{0em}{1em}} & & & \lstick{\ket{0}} & \qw & \multigate{1}{\theta_5} &  \qw & \dots & & \multigate{1}{\theta_m} & \meter & \cw & \; \; \; \; \; \expval{H_{n-1}} & & & \\
+    \push{\rule{0em}{1em}} & & & \lstick{\ket{0}} & \gate{\theta_3} & \ghost{\theta_5} &  \gate{\theta_7} & \dots & & \ghost{\theta_m} & \meter & \cw & \:\: \expval{H_n} & & \\
+    & \\
+}
+
+\begin{gathered}
+\argmin_{\vec{\theta}} C(\vec{\theta}) \\
+\expval{H}_{|\psi(\vec{\theta})\rangle} = \sum_{i=1}^n h_i \expval{H_i}
+\end{gathered}
+
+\end{document}
