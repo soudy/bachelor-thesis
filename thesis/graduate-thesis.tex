@@ -92,10 +92,22 @@
         0 & i
     \end{pmatrix}
 }
-\newcommand{\phasegate}{
+\newcommand{\rxgate}{
     \begin{pmatrix}
-        1 & \phantom{e}0 \\
-        0 & e^{i\theta}
+        \cos\tfrac{\theta}{2} & -i\sin\tfrac{\theta}{2} \\
+        -i\sin\tfrac{\theta}{2} & \cos\tfrac{\theta}{2}
+    \end{pmatrix}
+}
+\newcommand{\rygate}{
+    \begin{pmatrix}
+        \cos\tfrac{\theta}{2} & -\sin\tfrac{\theta}{2} \\
+        \sin\tfrac{\theta}{2} & \cos\tfrac{\theta}{2}
+    \end{pmatrix}
+}
+\newcommand{\rzgate}{
+    \begin{pmatrix}
+        e^{-i\tfrac{\theta}{2}} & 0 \\
+        0 & e^{i\tfrac{\theta}{2}}
     \end{pmatrix}
 }
 \newcommand{\cnotgate}{

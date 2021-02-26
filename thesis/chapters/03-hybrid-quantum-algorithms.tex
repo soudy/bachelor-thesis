@@ -32,13 +32,14 @@ In general, the cost function has the form
 \begin{equation}
 C(\vec{\theta}) = \sum_k f_k\left(\bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}\right),
 \end{equation}
-where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the parameterized ansatz, $H_k$ is an observable, and $n$ is the number of qubits.
+where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the parameterized quantum circuit, $H_k$ is an observable, and $n$ is the number of qubits.
 A key point of variational \glspl{hqca} is that a quantum computer is used to estimate $C(\vec{\theta})$ while using a classical computer to optimize the parameters $\vec{\theta}$.
 Furthermore, the cost function $C(\vec{\theta})$ should be efficient to estimate by performing measurements on a quantum computer.
 For the variational \gls{hqca} to have a quantum advantage, the cost should also not be efficiently computable with a classical computer.
 
-\subsection{Ansatze}
-To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit relatively shallow in depth.
+\subsection{Ans{\"a}tze}
+To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit (the ansatz) relatively shallow in depth.
+The ansatz defines the quantum circuit $U(\vec{\theta})$ that is used to prepare the quantum state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$.
 
 \subsection{Optimizers}
 
