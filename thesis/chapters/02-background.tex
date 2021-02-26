@@ -117,7 +117,7 @@ How $\BQP$ relates to $\P$ and $\NP$ exactly is still unknown, however, it seems
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.4\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \includegraphics[width=0.33\linewidth]{figures/complexity-classes-hierarchy.pdf}
     \caption[An overview of the hierarchy of the complexity classes discussed.]{An overview of the hierarchy of the complexity classes discussed. This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$. $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.}
     \label{fig:complexity-classes-hierarchy}
 \end{figure}
@@ -167,7 +167,7 @@ Simplifying then, the state of a qubit can be written as
 Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.365\linewidth]{figures/bloch-sphere.pdf}
+    \includegraphics[width=0.35\linewidth]{figures/bloch-sphere.pdf}
     \caption[Bloch sphere representation of a qubit's state.]{Bloch sphere representation of a qubit's state.}
     \label{fig:bloch-sphere}
 \end{figure}
@@ -478,9 +478,8 @@ A common universal gate set is $\{\textnormal{CNOT}, H, S, T\}$.
 Any quantum operation can be reduced to a combination of $\textnormal{CNOT}, H, S$ and  $T$ gates.
 For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffoli gate, can be decomposed into these gates as shown in~\Cref{fig:decomposition-toffoli}.
 \begin{figure}[H]
-    \Large
     \[
-    \Qcircuit @C=0.6em @R=0.7em @!R {
+    \Qcircuit @C=0.8em @R=1em @!R {
         & \ctrl{1} & \qw   & &   & \qw      & \qw      & \qw              & \ctrl{2} & \qw & \qw & \qw & \ctrl{2} & \qw & \ctrl{1} & \qw & \ctrl{1} & \gate{T} & \qw \\
         & \ctrl{1} & \qw   & = & & \qw      & \ctrl{1} & \qw              & \qw   & \qw &        \ctrl{1} & \qw & \qw & \gate{T^\dagger} & \targ & \gate{T^\dagger} & \targ & \gate{S} & \qw \\
         & \targ \qwx & \qw & & & \gate{H} & \targ      & \gate{T^\dagger} & \targ & \gate{T} & \targ & \gate{T^\dagger} & \targ & \gate{T} & \gate{H} & \qw & \qw & \qw & \qw
@@ -530,11 +529,11 @@ This is necessary to get the result in the correct order.
     \begin{adjustwidth}{-1cm}{-1cm}
         \[
         \Qcircuit @C=0.7em @R=0.5em @!R {
-            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_1}} & \gate{H} & \gate{R_2} & \qw & \dots & & \gate{R_{n-1}} & \gate{R_n} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[4] & \qw & \qw \\
-            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_2}} & \qw & \ctrl{-1} & \qw & \dots & & \qw & \qw & \gate{H} & \qw & \dots & & \gate{R_{n-2}} & \gate{R_{n-1}} & \qw & \dots & & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[2] & \qw \\
-            & \vdots & & & & \vdots & & & & & & & & & & & & & & & & & \vdots \\
-            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_{n - 1}}} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \dots & & \gate{H} & \gate{R_2} & \qw & \qw & \qw & \qswap & \qw \\
-            & \push{\rule{0em}{1em}} & & \lstick{\ket{j_n}} & \qw  & \qw & \qw & \qw & \qw & \qw & \ctrl{-4} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \dots & & \qw & \ctrl{-1} & \gate{H} & \qw & \qswap & \qw & \qw \\
+            & & \push{\rule{0em}{1em}} & & \lstick{\ket{j_1}} & \gate{H} & \gate{R_2} & \qw & \dots & & \gate{R_{n-1}} & \gate{R_n} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[4] & \qw & \qw \\
+            & & \push{\rule{0em}{1em}} & & \lstick{\ket{j_2}} & \qw & \ctrl{-1} & \qw & \dots & & \qw & \qw & \gate{H} & \qw & \dots & & \gate{R_{n-2}} & \gate{R_{n-1}} & \qw & \dots & & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[2] & \qw \\
+            & & \vdots & & & & \vdots & & & & & & & & & & & & & & & & & \vdots \\
+            & & \push{\rule{0em}{1em}} & & \lstick{\ket{j_{n - 1}}} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \qw & \qw & \qw & \qw & \ctrl{-2} & \qw & \qw & \dots & & \gate{H} & \gate{R_2} & \qw & \qw & \qw & \qswap & \qw \\
+            & & \push{\rule{0em}{1em}} & & \lstick{\ket{j_n}} & \qw  & \qw & \qw & \qw & \qw & \qw & \ctrl{-4} & \qw & \qw & \qw & \qw & \qw & \ctrl{-3} & \qw & \dots & & \qw & \ctrl{-1} & \gate{H} & \qw & \qswap & \qw & \qw \\
         }
         \]
     \end{adjustwidth}
@@ -573,7 +572,7 @@ f(x) =
 The goal is to find a $x$ so that $f(x) = 1$.
 On a classical computer, the best we can do is an exhaustive search of the entire search space, which takes $O(n)$ function calls.
 Using a quantum computer, this can be done with $O(\sqrt{n})$ function calls using Grover's algorithm~\cite{grover1996fast}.
-Grover's algorithm is asymptotically optimal: \textcite{zalka1999grover} show that $O(\sqrt{n})$ is the best we can do for unstructured database search.
+Grover's algorithm is asymptotically optimal: \textcite{zalka1999grover} showed that $O(\sqrt{n})$ is the best we can do for unstructured database search.
 
 A common problem in computer science is examining a large number of different possibilities to see which of them satisfy a given condition.
 This is the same problem that Grover's algorithm looks to solve.
@@ -619,8 +618,8 @@ To extract this solution, a procedure called amplitude amplification is used.
 
 \begin{figure}[ht]
     \[
-    \Large
-    \Qcircuit @C=1em @R=0.5em @!R {
+    \large
+    \Qcircuit @C=1em @R=0.6em @!R {
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_1} = \ket{0}} & \gate{H} & \multigate{3}{U_\omega} & \gate{H} & \multigate{2}{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
         & & \rstick{\,\vdots} & & & & & & & & \vdots \\
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_n} = \ket{0}} & \gate{H} & \ghost{U_\omega} & \gate{H} & \ghost{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
@@ -638,14 +637,14 @@ Consider a search space of $N = 4$ with two qubits where we are looking for $\om
 The amplitudes of the search space start out in an equal superposition:
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/aa_initial_equal.pdf}
+    \includegraphics[width=0.46\linewidth]{figures/aa_initial_equal.pdf}
 \end{figure}
 
 \noindent
 After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/aa_phase_flipped_mean.pdf}
+    \includegraphics[width=0.46\linewidth]{figures/aa_phase_flipped_mean.pdf}
 \end{figure}
 
 \noindent
@@ -653,13 +652,13 @@ Note that measuring this state will still give each state with equal probabiliti
 Using the diffusion operator $H^{\otimes n}\left(2\op{0^n}{0^n} - I\right)H^{\otimes n}$, the amplitudes are inverted about their mean (displayed as the dotted orange line):
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/aa_diffused.pdf}
+    \includegraphics[width=0.46\linewidth]{figures/aa_diffused.pdf}
 \end{figure}
 
 \noindent
 The application of the oracle and amplitude amplification is often referred to as a Grover iteration.
 For this example, one Grover iteration was enough to give a probability of 1 of measuring the correct solution.
-Generally, the upper bound on the number of iterations  $R$ required is as follows:
+Generally, the upper bound on the number of required iterations $R$ is as follows:
 \begin{equation}
 R \leq \left\lceil \dfrac{\pi}{4}\sqrt{\dfrac{M}{N}} \right\rceil,
 \end{equation}
