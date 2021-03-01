@@ -29,7 +29,7 @@ The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to so
 
 \subsection{Cost Function}
 In general, the cost function has the form
-\begin{equation}
+\begin{equation} \label{eqn:general-cost-function}
 C(\vec{\theta}) = \sum_k f_k\left(\bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}\right),
 \end{equation}
 where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the parameterized quantum circuit, $H_k$ is an observable, and $n$ is the number of qubits.
@@ -67,11 +67,25 @@ While gradient-free methods are straightforward to use for optimizing the quantu
 Consider a parameterized gate $G(\theta) = e^{-i\theta/2 H}$ from the general ansatz description in \Cref{eqn:ansatz-unitary}.
 Using the parameter-shift rule as described by \textcite{schuld2019evaluating}, the derivative of the gate $G$ with respect to a parameter $\theta$ can be described as follows:
 \begin{equation}
-\dfrac{\partial G}{\partial \theta} = \dfrac{1}{2}\left(G\left(\theta + \dfrac{\pi}{2}\right) - G\left(\theta - \dfrac{\pi}{2}\right)\right).
+\dfrac{\partial G}{\partial \theta} = \dfrac{1}{2}\left[G\left(\theta + \dfrac{\pi}{2}\right) - G\left(\theta - \dfrac{\pi}{2}\right)\right].
 \end{equation}
 That is, the derivative of $G$ with respect to a parameter $\theta$ can be computed analytically by evaluating the quantum circuit twice with shifted parameters $\theta \pm \pi/2$.
-The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates~\cite{mari2021estimating}.
+In term, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}$ with respect to a parameter $\theta_l$ can be estimated as follows:
+\begin{equation}
+\begin{aligned}
+\dfrac{\partial C}{\partial \theta_l} = \sum_k \dfrac{1}{2} \bigg[&\bra{0^n}U\left(\vec{\theta} + \dfrac{\pi}{2}\vec{e}_l\right)^\dagger H_k U\left(\vec{\theta} + \dfrac{\pi}{2}\vec{e}_l\right)\ket{0^n} \\
+- \; &\bra{0^n}U\left(\vec{\theta} - \dfrac{\pi}{2}\vec{e}_l\right)^\dagger H_k U\left(\vec{\theta} - \dfrac{\pi}{2}\vec{e}_l\right)\ket{0^n}\bigg],
+\end{aligned}
+\end{equation}
+where $\vec{e}_l$ is a vector with $1$ as its $l$-th element and $0$ for all other elements.
+The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates~\cite{mari2021estimating}, allowing the use of optimization methods that use higher-order derivates such as Newton's method.
 
 \section{Variational Quantum Eigensolver}
+The \gls{vqe} was the first proposed variational \gls{hqca}.
+It aims to solve the problem of finding eigenvalues of a Hamiltonian $H$.
+A previously known quantum algorithm called the \gls{qpe} algorithm solves this problem exponentially faster than the best known classical algorithm~\cite{abrams1999quantum}.
+However, the resource requirements to run the \gls{qpe} algorithm greatly exceed the resources available in the near term.
+\textcite{peruzzo2014variational} proposed the \gls{vqe} as alternative which can run on \gls{nisq} devices.
+This section will review its working and potential applications. 
 
 \section{Quantum Approximate Optimization Algorithm}

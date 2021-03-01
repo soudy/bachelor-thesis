@@ -52,6 +52,8 @@
 \titlespacing*{\chapter}{0pt}{0pt}{30pt}
 
 % ket and bra commands from qicrcuit have weird spacing
+\newcommand{\lbra}[1]{\ensuremath{\left\langle{#1}\right\vert}}
+\newcommand{\lket}[1]{\ensuremath{\left\vert{#1}\right\rangle}}
 \renewcommand{\ket}[1]{\ensuremath{\vert{#1}\rangle}}
 \renewcommand{\bra}[1]{\ensuremath{\langle{#1}\vert}}
 
@@ -132,10 +134,11 @@
 \newabbreviation{nisq}{NISQ}{noisy intermediate\--scale quantum}
 \newabbreviation{hqca}{HQCA}{hybrid quantum\--classical algorithm}
 \newabbreviation{hpc}{HPC}{high performance computing}
-\newabbreviation{vqe}{VQE}{Variational Quantum Eigensolver}
-\newabbreviation{qaoa}{QAOA}{Quantum Approximate Optimization Algorithm}
+\newabbreviation{vqe}{VQE}{variational quantum eigensolver}
+\newabbreviation{qaoa}{QAOA}{quantum approximate optimization algorithm}
 \newabbreviation{qft}{QFT}{quantum Fourier transform}
 \newabbreviation{dft}{DFT}{discrete Fourier transform}
+\newabbreviation{qpe}{QPE}{quantum phase estimation}
 
 \addbibresource{graduate-thesis.bib}
 
