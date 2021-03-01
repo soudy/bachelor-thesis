@@ -84,8 +84,21 @@ The parameter-shift rule can be further generalized to calculate higher-order de
 The \gls{vqe} was the first proposed variational \gls{hqca}.
 It aims to solve the problem of finding eigenvalues of a Hamiltonian $H$.
 The problem of finding eigenvalues for large matrices has applications in quantum chemistry, but potential applications range from determining the results of search engines~\cite{page1999pagerank} to designing new materials and drugs~\cite{golub2000eigenvalue}.
-A previously known quantum algorithm called the \gls{qpe} algorithm solves this problem exponentially faster than the best known classical algorithm~\cite{abrams1999quantum}.
-However, the quantum resources required to run the \gls{qpe} algorithm greatly exceed the resources available in the near term.
+A previously known quantum algorithm called the \gls{qpea} solves this problem exponentially faster than the best known classical algorithm~\cite{abrams1999quantum}.
+However, the quantum resources required to run the \gls{qpea} greatly exceed the resources available in the near term.
 \textcite{peruzzo2014variational} proposed the \gls{vqe} as alternative which can run on \gls{nisq} devices.
+
+Formally, the \gls{vqe} estimates the minimum eigenvalue $\lambda_{\textnormal{min}}$ associated with eigenstate $\ket{\lambda_{\textnormal{min}}}$ for a Hermitian operator $H$.
+The cost function is defined as the expectation value of $H$ over a trial state $\ket{\psi({\vec{\theta}})} = U(\vec{\theta})\ket{\psi_0}$ where $U(\vec{\theta})$ is the ansatz and $\ket{\psi_0}$ an initial guess state:
+\begin{equation}
+C(\vec{\theta}) = \bra{\psi(\vec{\theta})}H\ket{\psi(\vec{\theta})}.
+\end{equation}
+Minimizing this cost function estimates the minimum eigenvalue of $H$, as the Rayleigh-Ritz variational principle provides the following bound~\cite{ritz1909neue}:
+\begin{equation}
+\lambda_{\textnormal{min}} \leq \bra{\psi(\vec{\theta})}H\ket{\psi(\vec{\theta})}.
+\end{equation}
+That is, a trial state $\ket{\psi({\vec{\theta}})}$ will always give an expectation value larger than or equal to the minimum eigenvalue.
+In the context of quantum chemistry, where $H$ describes the Hamiltonian of a system, finding the lowest eigenvalue of the Hamiltonian translates to finding the ground state energy of that system.
+By selecting an initial guess state, calculating the expectation value of $H$, and optimizing the cost function $C(\vec{\theta})$, one can then approximate the ground state energy of a Hamiltonian to arbitrary precision.
 
 \section{Quantum Approximate Optimization Algorithm}
