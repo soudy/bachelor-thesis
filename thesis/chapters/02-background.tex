@@ -2,7 +2,7 @@
 This chapter is focused on making the reader familiar with concepts used throughout this report.
 First, an introduction to computational complexity is given to establish a mathematical framework to describe the efficiency of computer algorithms.
 Second, the basic ideas of quantum mechanics are presented.
-Finally, an overview of the quantum computational circuit model is given along with a description of two important quantum algorithms to demonstrate the computing power of quantum computers.
+Finally, an overview of the quantum circuit computational model is given along with a description of two important quantum algorithms to demonstrate the computing power of quantum computers.
 
 \section{Computational Complexity}
 In computer science, there seems to be a fundamental limit to what problems computers can solve.
@@ -312,10 +312,9 @@ With this definition of projective measurements, the expectation value of an obs
 \begin{equation}
 \begin{aligned}
 \expval{O}_\psi &= \bra{\psi}O\ket{\psi} \\
-&= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0O\ket{\lambda_0} + \ldots + \alpha_{N-1}O\ket{\lambda_{N-1}}\big) \\
-&= \big(\alpha_0^*\bra{\lambda_0} + \ldots + \alpha_{N-1}^*\bra{\lambda_{N-1}}\big) \big(\alpha_0\lambda_0\ket{\lambda_0} + \ldots + \alpha_{N-1}\lambda_{N-1}\ket{\lambda_{N-1}}\big) \\
-&=  \left\lvert \alpha_0\right\rvert^2\lambda_0 + \ldots + \left\lvert \alpha_{N-1}\right\rvert^2 \lambda_{N-1} \\
-&= \sum_{i=0}^{N-1} \left\lvert \alpha_i\right\rvert^2\lambda_i.
+&= \bra{\psi}\left(\sum_{i=0}^{N-1}\lambda_i \op{\lambda_i}{\lambda_i} \right)\ket{\psi} \\
+&= \sum_{i=0}^{N-1}\lambda_i \ip{\psi}{\lambda_i} \ip{\lambda_i}{\psi} \\
+&= \sum_{i=0}^{N-1}\lambda_i \left\lvert\ip{\lambda_i}{\psi}\right\rvert^2.
 \end{aligned}
 \end{equation}
 The expectation value is the sum of all possible outcomes (eigenvalues of $O$) weighted by their probability.
@@ -429,7 +428,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
              & $\czgate{}$ \\
         \end{tabular}
     }
-    \caption{Frequently used quantum gates and circuit symbols.}
+    \caption{Frequently used quantum gates with their circuit symbol and matrix representation.}
     \label{table:common-quantum-gates}
 \end{table}
 
