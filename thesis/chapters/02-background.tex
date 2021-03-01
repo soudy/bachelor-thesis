@@ -319,7 +319,7 @@ With this definition of projective measurements, the expectation value of an obs
 \end{aligned}
 \end{equation}
 The expectation value is the sum of all possible outcomes (eigenvalues of $O$) weighted by their probability.
-Calculating the expectation value experimentally means preparing and measuring the state multiple times and is a practically useful notation to describe the behavior and output of quantum computations.
+Calculating the expectation value experimentally means preparing and measuring the state multiple times and is a useful way of extracting a deterministic quantity from a non-deterministic model of computation.
 
 \section{Quantum Computation}
 This section combines the theory of computer science and quantum mechanics to introduce the fundamental model of quantum computation: the quantum circuit model.
@@ -589,7 +589,7 @@ U_\omega\ket{x} =
 \end{equation}
 where \ket{x} is any computational basis state, and $\omega$ is the bit string to find.
 That is, it marks the solution to the search problem by shifting the phase of the solution.
-An oracle \Cref{eqn:oracle} can be defined in terms of a black box function:
+An oracle from \Cref{eqn:oracle} can be defined in terms of a black box function:
 \begin{equation}
 U_\omega\ket{x} = (-1)^{f(x)}\ket{x},
 \end{equation}

@@ -23,7 +23,7 @@ The ansatz defines the operations of the quantum circuit which are parameterized
     \label{fig:vqa-general-structure}
 \end{figure}
 The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to solve the optimization problem
-\begin{equation}
+\begin{equation} \label{eqn:optimization-problem}
 \argmin_{\vec{\theta}} C(\vec{\theta}).
 \end{equation}
 
@@ -42,9 +42,35 @@ The ansatz defines the quantum circuit $U(\vec{\theta})$ that is used to prepare
 To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit (the ansatz) relatively shallow in depth.
 The challenge then is to choose an ansatz which is shallow in depth, but has high expressibility.
 \textcite{sim2019expressibility} define the expressibility of a quantum circuit as its ability to generate states that are well representative of the Hilbert space.
+The general form of an ansatz can be described as the product of sequentially applied unitaries:
+\begin{equation}
+U(\vec{\theta}) = U_L(\vec{\theta}_L) \ldots U_2(\vec{\theta}_2)U_1(\vec{\theta}_1),
+\end{equation}
+where
+\begin{equation} \label{eqn:ansatz-unitary}
+U_l(\vec{\theta}_l) = \prod_{m} e^{-i \tfrac{\theta_m}{2} H_m}W_m.
+\end{equation}
+Here $H_m$ is a Hermitian operator and $W_m$ is a non-parameterized unitary.
+\Cref{eqn:ansatz-unitary} can simply be thought of as alternating between parameterized and non-parameterized unitaries.
 
-\subsection{Optimizers}
+The specific structure of the ansatz usually depends on the problem, as one can sometimes employ information about the problem to tailor an ansatz~\cite{cerezo2020variational}.
+Such ans{\"a}tze are referred to as problem-inspired ans{\"a}tze.
+On the other hand, there are problem-agnostic ans{\"a}tze that are used when no information is available for tailoring a specific ansatz.
 
+\subsection{Optimization}
+With the cost function and ansatz defined, the next step in a variational \gls{hqca} is to train the parameters $\vec{\theta}$ using a classical optimization algorithm to solve the optimization problem from \Cref{eqn:optimization-problem}.
+The two main types of optimization methods to consider are gradient-based methods and gradient-free methods.
+The former methods involve calculating first- or higher-order derivatives of the cost function, while the latter methods use only function evaluations.
+In general, the computational cost of gradient-based methods is larger, but the rate of convergence is significantly improved.
+
+While gradient-free methods are straightforward to use for optimizing the quantum circuit parameters, gradient-based methods are more involved.
+Consider a parameterized gate $G(\theta) = e^{-i\theta/2 H}$ from the general ansatz description in \Cref{eqn:ansatz-unitary}.
+Using the parameter-shift rule as described by \textcite{schuld2019evaluating}, the derivative of the gate $G$ with respect to a parameter $\theta$ can be described as follows:
+\begin{equation}
+\dfrac{\partial G}{\partial \theta} = \dfrac{1}{2}\left(G\left(\theta + \dfrac{\pi}{2}\right) - G\left(\theta - \dfrac{\pi}{2}\right)\right).
+\end{equation}
+That is, the derivative of $G$ with respect to a parameter $\theta$ can be computed analytically by evaluating the quantum circuit twice with shifted parameters $\theta \pm \pi/2$.
+The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates~\cite{mari2021estimating}.
 
 \section{Variational Quantum Eigensolver}
 
