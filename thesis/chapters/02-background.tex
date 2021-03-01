@@ -242,12 +242,12 @@ R_y(\theta) = e^{-i\tfrac{\theta}{2} Y} &= \rygate{}, \\
 R_z(\theta) = e^{-i\tfrac{\theta}{2} Z} &= \rzgate{}.
 \end{align}
 These operators can be thought of as rotating a qubit's state among its relative axis by an angle $\theta$.
-Note that any single-qubit operator $U$ can be decomposed into these gates, for example $U = R_Z(\gamma)R_Y(\beta)R_Z(\alpha)$ where $\alpha, \beta, \gamma \in \mathbb{R}$.
+Note that any single-qubit operator $U$ can be decomposed into these operators, for example $U = R_Z(\gamma)R_Y(\beta)R_Z(\alpha)$ where $\alpha, \beta, \gamma \in \mathbb{R}$.
 
 Multi-qubit operators act on two or more qubits and are required for creating entangled states.
 Two common two-qubit operators are the $\textnormal{CNOT}$ and $CZ$ operators.
-The $\textnormal{CNOT}$ operator can be thought of as a controlled-$X$ operator, which applies an $X$ operation on the target qubit if the control qubit is in the \ket{1} state.
-Equivalently, the $CZ$ operator applies a $Z$ operation on the target qubit if the control qubit is \ket{1}.
+The $\textnormal{CNOT}$ operator can be thought of as a controlled-$X$ operator, which applies a Pauli-$X$ operation on the target qubit if the control qubit is in the \ket{1} state.
+Equivalently, the $CZ$ operator applies a Pauli-$Z$ operation on the target qubit if the control qubit is \ket{1}.
 Their matrix representations are as follows:
 \begin{equation}
 \textnormal{CNOT} = \cnotgate{}, \hspace*{5mm}
@@ -484,7 +484,7 @@ For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffo
 \end{figure}
 
 \subsection{Quantum Algorithms}
-To demonstrate the quantum circuit computational model's ability to solve certain problems more efficiently than classical computers, two quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the \acrfull{qft} and Grover's algorithm.
+To demonstrate the quantum circuit computational model's ability to solve certain problems more efficiently than classical computers, two important quantum algorithms which provide a speedup over their classical counterparts are now reviewed: the \acrfull{qft} and Grover's algorithm.
 
 \subsubsection{Quantum Fourier Transform}
 The \gls{qft} is the quantum analogue of the \emph{inverse} \gls{dft}.
@@ -548,7 +548,8 @@ Using these definitions, the \gls{qft} can be represented as follows:
 \textnormal{QFT}\ket{j_1 \ldots j_n} = \dfrac{1}{\sqrt{N}}\left(\ket{0} + e^{2\pi i [0.j_n]}\ket{1}\right)\left(\ket{0} + e^{2\pi i [0.j_{n-1}j_n]}\ket{1}\right)\cdots\left(\ket{0} + e^{2\pi i [0.j_1j_2\ldots j_n]}\ket{1}\right).
 \end{equation}
 The transformed values end up in the relative phases of the amplitudes.
-Again, these relative phases cannot be extracted, but the \gls{qft} is an essential part of many important quantum algorithms.
+Again, these relative phases cannot be extracted.
+However, the \gls{qft} is an essential part of many important quantum algorithms.
 
 \subsubsection{Grover's Algorithm}
 Grover's algorithm is a quantum algorithm for unstructured database search.
@@ -566,7 +567,7 @@ f(x) =
 The goal is to find a $x$ so that $f(x) = 1$.
 On a classical computer, the best we can do is an exhaustive search of the entire search space, which takes $O(n)$ function calls.
 Using a quantum computer, this can be done with $O(\sqrt{n})$ function calls using Grover's algorithm~\cite{grover1996fast}.
-Grover's algorithm is asymptotically optimal: \textcite{zalka1999grover} showed that $O(\sqrt{n})$ is the best we can do for unstructured database search.
+Grover's algorithm is also asymptotically optimal: \textcite{zalka1999grover} showed that $O(\sqrt{n})$ is the best we can do for unstructured database search.
 
 A common problem in computer science is examining a large number of different possibilities to see which of them satisfy a given condition.
 This is the same problem that Grover's algorithm looks to solve.

@@ -9,7 +9,7 @@ This chapter will first introduce the basic concepts of an important family of \
 \Acrlongpl{hqca} account for the limited number of qubits, limited connectivity of qubits, and limited coherence times of \gls{nisq} devices.
 These algorithms often make use of the variational method which consists of preparing an initial trial state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$, and finding the parameters for which the expectation value of some observable is the lowest.
 This family of \glspl{hqca} is sometimes also referred to as variational quantum algorithm, as it uses the variational method of quantum mechanics.
-The rest of this chapter will be focused on variational \glspl{hqca}.
+The rest of this chapter will be focused on variational \glspl{hqca}, as this is the main focus of research regarding \glspl{hqca}.
 
 The general structure of a variational \gls{hqca} is shown in \Cref{fig:vqa-general-structure}.
 While the specific implementation differs between algorithms, they all share some basic elements.
@@ -19,7 +19,7 @@ The ansatz defines the operations of the quantum circuit which are parameterized
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{figures/vqa-general-structure.pdf}
-    \caption[The general structure of a variational \acrshort{hqca}.]{The general structure of a variational \gls{hqca}. A parameterized quantum state $\ket{\psi(\vec{\theta})}$ is prepared through a set of parameterized quantum gates $U_L(\vec{\theta}_L) \ldots U_2(\vec{\theta}_2)U_1(\vec{\theta}_1)$. These parameters classically optimized according to a cost function $C(\vec{\theta})$. This quantum-classical loop is repeated until convergence.}
+    \caption[The general structure of a variational \acrshort{hqca}.]{The general structure of a variational \gls{hqca}. A parameterized quantum state $\ket{\psi(\vec{\theta})}$ is prepared through a set of parameterized quantum gates $U_L(\vec{\theta}_L) \ldots U_2(\vec{\theta}_2)U_1(\vec{\theta}_1)$. These parameters are classically optimized according to a cost function $C(\vec{\theta})$. This quantum-classical loop is repeated until convergence.}
     \label{fig:vqa-general-structure}
 \end{figure}
 The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to solve the optimization problem
@@ -38,8 +38,10 @@ Furthermore, the cost function $C(\vec{\theta})$ should be efficient to estimate
 For the variational \gls{hqca} to have a quantum advantage, the cost should also not be efficiently computable with a classical computer.
 
 \subsection{Ans{\"a}tze}
-To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit (the ansatz) relatively shallow in depth.
 The ansatz defines the quantum circuit $U(\vec{\theta})$ that is used to prepare the quantum state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$.
+To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit (the ansatz) relatively shallow in depth.
+The challenge then is to choose an ansatz which is shallow in depth, but has high expressibility.
+\textcite{sim2019expressibility} define the expressibility of a quantum circuit as its ability to generate states that are well representative of the Hilbert space.
 
 \subsection{Optimizers}
 
