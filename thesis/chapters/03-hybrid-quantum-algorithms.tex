@@ -80,6 +80,24 @@ In term, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^n}U(
 where $\vec{e}_l$ is a vector with $1$ as its $l$-th element and $0$ for all other elements.
 The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates~\cite{mari2021estimating}, allowing the use of optimization methods that use higher-order derivates such as Newton's method.
 
+A common way to perform optimization is through gradient descent based algorithms.
+Gradient descent uses first-order derivatives for finding a local minimum of a differentiable function.
+Intuitively, it takes repeated steps in the opposite direction of the gradient of the function until the gradient is zero~(\Cref{fig:gradient_descent}).
+Formally, for a set of parameters $\vec{\theta}_t$ and a cost function $C(\vec{\theta})$, the updated parameters $\vec{\theta}_{t+1}$ after one iteration of gradient descent is as follows:
+\begin{equation}
+\vec{\theta}_{t+1} = \vec{\theta}_t - \eta\nabla C(\vec{\theta}_t),
+\end{equation}
+where $\eta$ is the step size which determines how big of a step the algorithm makes each iteration.
+The step size impacts the performance of the algorithm: if it is too large the optimization algorithm will diverge, and if it is too small it will take a long time to converge.
+The gradient descent based optimization algorithm Adam adapts the step size during optimization to increase the efficiency and accuracy of solutions~\cite{kingma2014adam}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\linewidth]{figures/gradient_descent.png}
+    \caption[Visualization of gradient descent finding a local minimum of a function.]{Visualization of gradient descent finding a local minimum of a two-dimensional function. The two parameters start at the top of the function landscape and gradually find a local minimum by moving in the opposite direction of the gradient.}
+    \label{fig:gradient_descent}
+\end{figure}
+
 \section{Variational Quantum Eigensolver}
 The \gls{vqe} was the first proposed variational \gls{hqca}.
 It aims to solve the problem of finding eigenvalues of a Hamiltonian $H$.
