@@ -1,12 +1,12 @@
 \chapter[Hybrid Quantum-Classical Algorithms]{Hybrid Quantum-Classical\\Algorithms} \label{chap:hybrid-quantum-classical-algorithms}
 At the end of the previous chapter, two important quantum algorithms were reviewed: the \gls{qft} and Grover's algorithm.
 These quantum algorithms and the family of algorithms built on them require large-scale quantum computers with low error rates and high coherence.
-The \gls{nisq} devices that are being built now and in the near future will not be able to run these algorithms.
+The \gls{nisq} devices that are being built now and in the near future will not be able to run these algorithms due to their limited qubit count, limited coherence times, and high error rates.
 To this end, \acrfullpl{hqca} that utilize both classical and quantum resources are being researched and developed.
 This chapter will first introduce the basic concepts of an important family of \glspl{hqca} followed by a review of well-known and promising \glspl{hqca}.
 
 \section{Variational Hybrid Quantum-Classical Algorithms}
-\Acrlongpl{hqca} account for the limited number of qubits, limited connectivity of qubits, and limited coherence times of \gls{nisq} devices.
+\Acrlongpl{hqca} take into account the limited number of qubits, limited connectivity of qubits, high error rates, and limited coherence times of \gls{nisq} devices.
 These algorithms often make use of the variational method which consists of preparing an initial trial state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$, and finding the parameters for which the expectation value of some observable is the lowest.
 This family of \glspl{hqca} is sometimes also referred to as variational quantum algorithm, as it uses the variational method of quantum mechanics.
 The rest of this chapter will be focused on variational \glspl{hqca}, as this is the main focus of research regarding \glspl{hqca}.
@@ -32,7 +32,7 @@ In general, the cost function has the form
 \begin{equation} \label{eqn:general-cost-function}
 C(\vec{\theta}) = \sum_k f_k\left(\bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}\right),
 \end{equation}
-where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the parameterized quantum circuit, $H_k$ is an observable, and $n$ is the number of qubits.
+where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the quantum circuit parameterized by real values $\vec{\theta}$, $H_k$ is an observable, and $n$ is the number of qubits.
 A key point of variational \glspl{hqca} is that a quantum computer is used to estimate $C(\vec{\theta})$ while using a classical computer to optimize the parameters $\vec{\theta}$.
 Furthermore, the cost function $C(\vec{\theta})$ should be efficient to estimate by performing measurements on a quantum computer.
 For the variational \gls{hqca} to have a quantum advantage, the cost should also not be efficiently computable with a classical computer.
@@ -40,7 +40,7 @@ For the variational \gls{hqca} to have a quantum advantage, the cost should also
 \subsection{Ans{\"a}tze}
 The ansatz defines the quantum circuit $U(\vec{\theta})$ that is used to prepare the quantum state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$.
 To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit (the ansatz) relatively shallow in depth.
-The challenge then is to choose an ansatz which is shallow in depth, but has high expressibility.
+The challenge then is to choose an ansatz that is shallow in depth but has high expressibility.
 \textcite{sim2019expressibility} define the expressibility of a quantum circuit as its ability to generate states that are well representative of the Hilbert space.
 The general form of an ansatz can be described as the product of sequentially applied unitaries:
 \begin{equation}

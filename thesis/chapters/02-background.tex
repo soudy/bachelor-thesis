@@ -164,7 +164,7 @@ Simplifying then, the state of a qubit can be written as
 \begin{equation}
 \ket{\psi} = \cos\dfrac{\theta}{2}\ket{0} + e^{i\varphi}\sin\dfrac{\theta}{2}\ket{1}.
 \end{equation}
-Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
+Here, $\theta$ and $\varphi$ define a point on the surface of a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.35\linewidth]{figures/bloch-sphere.pdf}
@@ -172,7 +172,7 @@ Here, $\theta$ and $\varphi$ define a point on a three-dimensional sphere referr
     \label{fig:bloch-sphere}
 \end{figure}
 While this visualization is limited to a single qubit, it can be a useful visual to build intuition.
-For example, the \ket{+} state described in \Cref{eqn:plus-state} can be thought of as being exactly between \ket{0} and \ket{1} on the $x$-axis of the Bloch sphere.
+For example, the \ket{+} state described in \Cref{eqn:plus-state} can be thought of as being exactly between \ket{0} and \ket{1} on the Bloch sphere.
 
 The amount of probability amplitudes grows exponentially with the number of qubits: a $n$-qubit state has $N = 2^n$ amplitudes.
 Consider a two-qubit system which lives in a $2^2=4$-dimensional Hilbert space spanned by the computational basis states $\left\{\ket{00}, \ket{01}, \ket{10}, \ket{11}\right\}$.
@@ -627,7 +627,7 @@ To extract this solution, a procedure called amplitude amplification is used.
 
 \noindent
 Amplitude amplification can be thought of as inversion about the mean.
-Consider a search space of $N = 4$ with two qubits where we are looking for $\omega = 10$.
+Consider a search space of $N = 4$ with two qubits where we are looking for $\ket{\omega} = \ket{10}$.
 The amplitudes of the search space start out in an equal superposition:
 \begin{figure}[ht]
     \centering
