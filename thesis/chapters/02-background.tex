@@ -232,8 +232,9 @@ Single-qubit operators can be represented as $2 \times 2$ complex-valued unitary
 A common single-qubit operator is the Pauli-$X$ operator which transforms a state $\alpha_0\ket{0} + \alpha_1\ket{1}$ to $\alpha_1\ket{0} + \alpha_0\ket{1}$.
 It is part of the set of Pauli matrices:
 \begin{equation}
-X = \xgate{}, \hspace*{5mm}
-Y = \ygate{}, \hspace*{5mm}
+I = \igate{}, \hspace*{3mm}
+X = \xgate{}, \hspace*{3mm}
+Y = \ygate{}, \hspace*{3mm}
 Z = \zgate{}.
 \end{equation}
 These matrices are ubiquitous in the study of quantum computation and information.
@@ -243,7 +244,7 @@ H = \hgate{},
 \end{equation}
 which maps the computational basis states to an equal superposition state.
 
-The Pauli operators give rise to the rotation operators about the $\hat{x}$, $\hat{y}$, and $\hat{z}$ axes when exponentiated:
+The Pauli $X$, $Y$ and $Z$ operators give rise to the rotation operators about the $\hat{x}$, $\hat{y}$, and $\hat{z}$ axes when exponentiated:
 \begin{align}
 R_x(\theta) = e^{-i\tfrac{\theta}{2} X} &= \rxgate{}, \\
 R_y(\theta) = e^{-i\tfrac{\theta}{2} Y} &= \rygate{}, \\

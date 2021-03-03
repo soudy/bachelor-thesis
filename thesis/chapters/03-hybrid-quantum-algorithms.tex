@@ -78,9 +78,10 @@ In term, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^n}U(
 \end{aligned}
 \end{equation}
 where $\vec{e}_l$ is a vector with $1$ as its $l$-th element and $0$ for all other elements.
+Note that calculating $\partial C$ requires you to evaluate the quantum circuit twice for every parameter $\theta_l$, for a total of $2m$ quantum circuit evaluations for $m$ parameters per gradient evaluation.
 The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates~\cite{mari2021estimating}, allowing the use of optimization methods that use higher-order derivates such as Newton's method.
 
-A common way to perform optimization is through gradient descent based algorithms.
+A common way to perform gradient-based optimization is through gradient descent based algorithms.
 Gradient descent uses first-order derivatives for finding a local minimum of a differentiable function.
 Intuitively, it takes repeated steps in the opposite direction of the gradient of the function until the gradient is zero~(\Cref{fig:gradient_descent}).
 Formally, for a set of parameters $\vec{\theta}_t$ and a cost function $C(\vec{\theta})$, the updated parameters $\vec{\theta}_{t+1}$ after one iteration of gradient descent are as follows:
@@ -119,6 +120,19 @@ That is, a trial state $\ket{\psi({\vec{\theta}})}$ will always give an expectat
 In the context of quantum chemistry, where $H$ describes the Hamiltonian of a system, finding the lowest eigenvalue of the Hamiltonian translates to finding the ground state $\ket{\psi_G} = \ket{\lambda_{\textnormal{min}}}$ and ground state energy $E_G = \lambda_{\textnormal{min}}$ of that system.
 By selecting an initial guess state, calculating the expectation value of $H$, and optimizing the cost function $C(\vec{\theta})$, one can then approximate the ground state energy of a Hamiltonian to arbitrary precision.
 
-% efficient on quantum computer - hard on classical - measuring of <H>
+The problem of estimating the ground state energy is a specific instance of the $k$-local Hamiltonian problem, which looks to find the ground state energy of a $k$-local Hamiltonian.
+A $k$-local Hamiltonian is a Hamiltonian that can be expressed as a sum of Hamiltonians $H = \sum_{i}H_i$ where each $H_i$ is a Hermitian operator acting non-trivially on at most $k$ qubits~\cite{bookatz2012qma}.
+This problem was shown to be $\QMA$-complete for $k \geq 2$ \cite{kempe2006complexity}.
+However, quantum computers can still offer an advantage above classical computers for this problem.
+Any Hamiltonian $H$ can be represented as a linear combination of Pauli operators:
+\begin{equation}
+H = \sum_\alpha h_\alpha P_\alpha,
+\end{equation} 
+where $P_\alpha$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ and $h_\alpha$ is a real constant.
+From the linearity of quantum observables, it follows that
+\begin{equation}
+\expval{H} = \sum_\alpha h_\alpha \expval{P_\alpha}.
+\end{equation} 
+The problem of estimating $\expval{H}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational}.
 
 \section{Quantum Approximate Optimization Algorithm}
