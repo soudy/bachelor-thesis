@@ -100,6 +100,11 @@ It is clear that $\P \subseteq \NP$, because if you can solve a problem in polyn
 A still unsolved and important question in computer science is whether $\P = \NP$?
 That is, can all problems that can be verified in polynomial time also be solved in polynomial time?
 
+A problem is said to be $\NP$-hard when everything in $\NP$ can be reduced into it in polynomial time, even if it is outside of $\NP$.
+In term, if a problem is both $\NP$-hard and in $\NP$, the problem is $\NP$-complete.
+$\NP$-complete problems are considered to be the hardest problems in $\NP$.
+By definition of $\NP$-hardness, if a polynomial-time algorithm can be found for any $\NP$-complete algorithm, then all problems in $\NP$ can be solved in polynomial time and $\P = \NP$.
+
 In computer science, it is sometimes possible to speed up computation using randomness.
 These kinds of algorithms are referred to as probabilistic algorithms and are defined in terms of a probabilistic Turing machine.
 A probabilistic Turing machine is a non-deterministic Turing machine that can choose from a set of possible transitions according to some probability distribution when transitioning.
@@ -114,11 +119,14 @@ It is known that there are $\NP$ problems that can be efficiently solved on a qu
 As mentioned in the previous section, quantum computers can also solve all problems in $\P$ efficiently, so $\P \subseteq \BQP$.
 Furthermore, quantum computers are more powerful than classical probabilistic computers~\cite{bernstein1997quantum}, giving $\BPP \subseteq \BQP$.
 How $\BQP$ relates to $\P$ and $\NP$ exactly is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
+The quantum analog of $\NP$ goes by the name of $\QMA$ (Quantum Merlin Arthur), and is related to $\BQP$ in the same way that $\NP$ is related to $\P$.
+Similarly then, a problem is said to be $\QMA$-hard when every problem in $\QMA$ can be reduced to it, and a problem is said to be $\QMA$-complete if it is both $\QMA$-hard and in $\QMA$.
+Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subseteq \NP \subseteq \QMA$.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.365\linewidth]{figures/complexity-classes-hierarchy.pdf}
-    \caption[An overview of the hierarchy of the complexity classes discussed.]{An overview of the hierarchy of the complexity classes discussed. This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$. $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.}
+    \includegraphics[width=0.375\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \caption[An overview of the hierarchy of some of the complexity classes discussed.]{An overview of the hierarchy of some of the complexity classes discussed. This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$. $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.}
     \label{fig:complexity-classes-hierarchy}
 \end{figure}
 
@@ -167,7 +175,7 @@ Simplifying then, the state of a qubit can be written as
 Here, $\theta$ and $\varphi$ define a point on the surface of a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.35\linewidth]{figures/bloch-sphere.pdf}
+    \includegraphics[width=0.33\linewidth]{figures/bloch-sphere.pdf}
     \caption[Bloch sphere representation of a qubit's state.]{Bloch sphere representation of a qubit's state.}
     \label{fig:bloch-sphere}
 \end{figure}
@@ -242,7 +250,7 @@ R_y(\theta) = e^{-i\tfrac{\theta}{2} Y} &= \rygate{}, \\
 R_z(\theta) = e^{-i\tfrac{\theta}{2} Z} &= \rzgate{}.
 \end{align}
 These operators can be thought of as rotating a qubit's state among its relative axis by an angle $\theta$.
-Note that any single-qubit operator $U$ can be decomposed into these operators, for example $U = R_Z(\gamma)R_Y(\beta)R_Z(\alpha)$ where $\alpha, \beta, \gamma \in \mathbb{R}$.
+Note that any single-qubit operator $U$ can be decomposed into these operators, for example $U = R_z(\gamma)R_y(\beta)R_z(\alpha)$ where $\alpha, \beta, \gamma \in \mathbb{R}$.
 
 Multi-qubit operators act on two or more qubits and are required for creating entangled states.
 Two common two-qubit operators are the $\textnormal{CNOT}$ and $CZ$ operators.
@@ -609,11 +617,10 @@ When the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ a
 However, if the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
 After the oracle is applied, the solution is marked with a negative phase.
 To extract this solution, a procedure called amplitude amplification is used.
-
 \begin{figure}[ht]
     \[
     \large
-    \Qcircuit @C=1em @R=0.6em @!R {
+    \Qcircuit @C=1em @R=0.5em @!R {
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_1} = \ket{0}} & \gate{H} & \multigate{3}{U_\omega} & \gate{H} & \multigate{2}{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
         & & \rstick{\,\vdots} & & & & & & & & \vdots \\
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_n} = \ket{0}} & \gate{H} & \ghost{U_\omega} & \gate{H} & \ghost{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
@@ -624,21 +631,19 @@ To extract this solution, a procedure called amplitude amplification is used.
     \caption{Quantum circuit representation of Grover's algorithm.}
     \label{fig:grover-circuit}
 \end{figure}
-
-\noindent
 Amplitude amplification can be thought of as inversion about the mean.
 Consider a search space of $N = 4$ with two qubits where we are looking for $\ket{\omega} = \ket{10}$.
 The amplitudes of the search space start out in an equal superposition:
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.46\linewidth]{figures/aa_initial_equal.pdf}
+    \includegraphics[width=0.45\linewidth]{figures/aa_initial_equal.pdf}
 \end{figure}
 
 \noindent
 After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.46\linewidth]{figures/aa_phase_flipped_mean.pdf}
+    \includegraphics[width=0.45\linewidth]{figures/aa_phase_flipped_mean.pdf}
 \end{figure}
 
 \noindent
@@ -646,7 +651,7 @@ Note that measuring this state will still give each state with equal probabiliti
 Using the diffusion operator $H^{\otimes n}\left(2\op{0^n}{0^n} - I\right)H^{\otimes n}$, the amplitudes are inverted about their mean (displayed as the dotted orange line):
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.46\linewidth]{figures/aa_diffused.pdf}
+    \includegraphics[width=0.45\linewidth]{figures/aa_diffused.pdf}
 \end{figure}
 
 \noindent

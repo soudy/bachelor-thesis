@@ -88,12 +88,12 @@ Formally, for a set of parameters $\vec{\theta}_t$ and a cost function $C(\vec{\
 \vec{\theta}_{t+1} = \vec{\theta}_t - \eta\nabla C(\vec{\theta}_t),
 \end{equation}
 where $\eta$ is the step size which determines how big of a step the algorithm makes each iteration.
-The step size impacts the performance of the algorithm: if it is too large the optimization algorithm will diverge, and if it is too small it will take a long time to converge.
+Finding the optimal step size is a practical challenge: if it is too large the optimization algorithm will diverge, and if it is too small it will take a long time to converge.
 The gradient descent based optimization algorithm Adam adapts the step size during optimization to increase the efficiency and accuracy of solutions~\cite{kingma2014adam}.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.6\linewidth]{figures/gradient_descent.png}
+    \includegraphics[width=0.45\linewidth]{figures/gradient_descent.png}
     \caption[Visualization of gradient descent finding a local minimum of a function.]{Visualization of gradient descent finding a local minimum of a two-dimensional function. The red dots represent the value of the cost function at a given iteration. The gradient descent algorithm gradually finds a local minimum by moving in the opposite direction of the gradient of the cost function.}
     \label{fig:gradient_descent}
 \end{figure}
