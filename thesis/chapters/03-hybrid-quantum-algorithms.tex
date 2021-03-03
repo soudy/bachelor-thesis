@@ -117,7 +117,7 @@ Minimizing this cost function estimates the minimum eigenvalue of $H$, as the Ra
 \lambda_{\textnormal{min}} \leq \bra{\psi(\vec{\theta})}H\ket{\psi(\vec{\theta})}.
 \end{equation}
 That is, a trial state $\ket{\psi({\vec{\theta}})}$ will always give an expectation value larger than or equal to the minimum eigenvalue.
-In the context of quantum chemistry, where $H$ describes the Hamiltonian of a system, finding the lowest eigenvalue of the Hamiltonian translates to finding the ground state $\ket{\psi_G} = \ket{\lambda_{\textnormal{min}}}$ and ground state energy $E_G = \lambda_{\textnormal{min}}$ of that system.
+In the context of quantum chemistry, where $H$ describes the Hamiltonian of a system, finding the lowest eigenvalue of the Hamiltonian translates to finding the ground state and ground state energy of that system.
 By selecting an initial guess state, calculating the expectation value of $H$, and optimizing the cost function $C(\vec{\theta})$, one can then approximate the ground state energy of a Hamiltonian to arbitrary precision.
 
 The problem of estimating the ground state energy is a specific instance of the $k$-local Hamiltonian problem, which looks to find the ground state energy of a $k$-local Hamiltonian.
@@ -133,6 +133,6 @@ From the linearity of quantum observables, it follows that
 \begin{equation}
 \expval{H} = \sum_\alpha h_\alpha \expval{P_\alpha}.
 \end{equation} 
-The problem of estimating $\expval{H}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational}.
+The problem of estimating $\expval{H}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational, kandala2017hardware}.
 
 \section{Quantum Approximate Optimization Algorithm}
