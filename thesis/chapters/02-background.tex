@@ -352,7 +352,7 @@ This state is one of four maximally entangled two-qubit states referred to as a 
 \begin{figure}[ht]
     \Large
     \[
-    \Qcircuit @C=1em @R=0.7em @!R {
+    \Qcircuit @C=1em @R=1em @!R {
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \meter & \cw  \\
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \qw & \targ & \meter & \cw \\
     }
@@ -375,7 +375,7 @@ This state is then measured, which will measure 00 or 11 with equal probability.
 
 \begin{table}[ht]
     \centering
-    {\renewcommand{\arraystretch}{1.1}
+    {\renewcommand{\arraystretch}{1.2}
         \begin{tabular}{ c|c|c }
             Gate name & Circuit symbol & Matrix representation \\
             \hline
@@ -447,7 +447,7 @@ If a qubit is in a computational basic state, that state can be copied by a $\te
 \begin{figure}[ht]
     \Large
     \[
-    \Qcircuit @C=1em @R=0.7em @!R {
+    \Qcircuit @C=1em @R=1em @!R {
         \push{\rule{0em}{1em}} & & \lstick{\ket{j}} & \ctrl{1} & \qw & \ket{j}  \\
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \targ & \qw & \ket{j} \\
     }
@@ -530,7 +530,7 @@ This is necessary to get the result in the correct order.
 \begin{figure}[ht]
     \begin{adjustwidth}{-1cm}{-1cm}
         \[
-        \Qcircuit @C=0.7em @R=0.5em @!R {
+        \Qcircuit @C=0.7em @R=0.8em @!R {
             & & \push{\rule{0em}{1em}} & & \lstick{\ket{j_1}} & \gate{H} & \gate{R_2} & \qw & \dots & & \gate{R_{n-1}} & \gate{R_n} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[4] & \qw & \qw \\
             & & \push{\rule{0em}{1em}} & & \lstick{\ket{j_2}} & \qw & \ctrl{-1} & \qw & \dots & & \qw & \qw & \gate{H} & \qw & \dots & & \gate{R_{n-2}} & \gate{R_{n-1}} & \qw & \dots & & \qw & \qw & \qw & \qw & \qw & \qswap \qwx[2] & \qw \\
             & & \vdots & & & & \vdots & & & & & & & & & & & & & & & & & \vdots \\
@@ -611,17 +611,12 @@ U_\omega =
 0 & 0 & \cdots & (-1)^{f(2^n-1)}
 \end{pmatrix}.
 \end{equation}
+
 With the oracle defined, the quantum circuit of Grover's algorithm is shown in \Cref{fig:grover-circuit}.
-The qubits can be thought of as being in two registers: the target qubits $\ket{q1\ldots q_n}$ and the oracle qubit \ket{y}.
-The oracle qubit \ket{y} starts in the state $H\ket{1} = (\ket{0} - \ket{1})/\sqrt{2}$.
-When the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
-However, if the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
-After the oracle is applied, the solution is marked with a negative phase.
-To extract this solution, a procedure called amplitude amplification is used.
 \begin{figure}[ht]
     \[
     \large
-    \Qcircuit @C=1em @R=0.5em @!R {
+    \Qcircuit @C=1em @R=1em @!R {
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_1} = \ket{0}} & \gate{H} & \multigate{3}{U_\omega} & \gate{H} & \multigate{2}{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
         & & \rstick{\,\vdots} & & & & & & & & \vdots \\
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_n} = \ket{0}} & \gate{H} & \ghost{U_\omega} & \gate{H} & \ghost{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
@@ -632,17 +627,23 @@ To extract this solution, a procedure called amplitude amplification is used.
     \caption{Quantum circuit representation of Grover's algorithm.}
     \label{fig:grover-circuit}
 \end{figure}
+The quantum state can be thought of as having two registers: the target qubits $\ket{q1\ldots q_n}$ and the oracle qubit \ket{y}.
+The oracle qubit \ket{y} starts in the state $H\ket{1} = (\ket{0} - \ket{1})/\sqrt{2}$.
+When the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
+However, if the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
+After the oracle is applied, the solution is marked with a negative phase.
+To extract this solution, a procedure called amplitude amplification is used.
 Amplitude amplification can be thought of as inversion about the mean.
 Consider a search space of $N = 4$ with two qubits where we are looking for $\ket{\omega} = \ket{10}$.
 The amplitudes of the search space start out in an equal superposition:
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.45\linewidth]{figures/aa_initial_equal.pdf}
 \end{figure}
 
 \noindent
 After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.45\linewidth]{figures/aa_phase_flipped_mean.pdf}
 \end{figure}
@@ -650,7 +651,7 @@ After applying the oracle $U_\omega$ the solution state \ket{10} has its phase f
 \noindent
 Note that measuring this state will still give each state with equal probabilities.
 Using the diffusion operator $H^{\otimes n}\left(2\op{0^n}{0^n} - I\right)H^{\otimes n}$, the amplitudes are inverted about their mean (displayed as the dotted orange line):
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.45\linewidth]{figures/aa_diffused.pdf}
 \end{figure}
