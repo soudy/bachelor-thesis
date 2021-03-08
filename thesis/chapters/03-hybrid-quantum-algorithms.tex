@@ -8,7 +8,7 @@ This chapter will first introduce the basic concepts of an important family of \
 \section{Variational Hybrid Quantum-Classical Algorithms}
 \Acrlongpl{hqca} take into account the limited number of qubits, limited connectivity of qubits, high error rates, and limited coherence times of \gls{nisq} devices.
 These algorithms often make use of the variational method which consists of preparing an initial trial state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$, and finding the parameters for which the expectation value of some observable is the lowest.
-This family of \glspl{hqca} is sometimes also referred to as variational quantum algorithm, as it uses the variational method of quantum mechanics.
+This family of \glspl{hqca} is sometimes also referred to as variational quantum algorithm.
 The rest of this chapter will be focused on variational \glspl{hqca}, as this is the main focus of research regarding \glspl{hqca}.
 
 The general structure of a variational \gls{hqca} is shown in \Cref{fig:vqa-general-structure}.
@@ -19,7 +19,12 @@ The ansatz defines the operations of the quantum circuit which are parameterized
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{figures/vqa-general-structure.pdf}
-    \caption[The general structure of a variational \acrshort{hqca}.]{The general structure of a variational \gls{hqca}. A parameterized quantum state $\ket{\psi(\vec{\theta})}$ is prepared through a set of parameterized quantum gates $U_L(\vec{\theta}_L) \ldots U_2(\vec{\theta}_2)U_1(\vec{\theta}_1)$. These parameters are classically optimized according to a cost function $C(\vec{\theta})$. This quantum-classical loop is repeated until convergence.}
+    \caption[The general structure of a variational \acrshort{hqca}.]{
+        The general structure of a variational \gls{hqca}.
+        A parameterized quantum state $\ket{\psi(\vec{\theta})}$ is prepared through a set of parameterized quantum gates $U_L(\vec{\theta}_L) \ldots U_2(\vec{\theta}_2)U_1(\vec{\theta}_1)$.
+        These parameters are classically optimized according to a cost function $C(\vec{\theta})$.
+        This quantum-classical loop is repeated until convergence.
+    }
     \label{fig:vqa-general-structure}
 \end{figure}
 The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to solve the optimization problem
@@ -64,13 +69,14 @@ The former methods involve calculating first- or higher-order derivatives of the
 In general, the computational cost of gradient-based methods is larger, but the rate of convergence is significantly improved.
 
 While gradient-free methods are straightforward to use for optimizing the quantum circuit parameters, gradient-based methods are more involved.
-Consider a parameterized gate $G(\theta) = e^{-i\theta/2 H}$ from the general ansatz description in \Cref{eqn:ansatz-unitary}.
+Consider a parameterized gate of the form $G(\theta) = e^{-i\theta/2 H}$ from the general ansatz description in \Cref{eqn:ansatz-unitary}.
 Using the parameter-shift rule as described by \textcite{schuld2019evaluating}, the derivative of the gate $G$ with respect to a parameter $\theta$ can be described as follows:
 \begin{equation}
 \dfrac{\partial G}{\partial \theta} = \dfrac{1}{2}\left[G\left(\theta + \dfrac{\pi}{2}\right) - G\left(\theta - \dfrac{\pi}{2}\right)\right].
 \end{equation}
 That is, the derivative of $G$ with respect to a parameter $\theta$ can be computed analytically by evaluating the quantum circuit twice with shifted parameters $\theta \pm \pi/2$.
-In term, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}$ with respect to a parameter $\theta_l$ can be estimated as follows:
+
+For example, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}$ with respect to a parameter $\theta_l$ can be estimated as follows:
 \begin{equation}
 \begin{aligned}
 \dfrac{\partial C}{\partial \theta_l} = \sum_k \dfrac{1}{2} \bigg[&\bra{0^n}U\left(\vec{\theta} + \dfrac{\pi}{2}\vec{e}_l\right)^\dagger H_k U\left(\vec{\theta} + \dfrac{\pi}{2}\vec{e}_l\right)\ket{0^n} \\
@@ -78,8 +84,8 @@ In term, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^n}U(
 \end{aligned}
 \end{equation}
 where $\vec{e}_l$ is a vector with $1$ as its $l$-th element and $0$ for all other elements.
-Note that calculating $\partial C$ requires you to evaluate the quantum circuit twice for every parameter $\theta_l$, for a total of $2m$ quantum circuit evaluations for $m$ parameters per gradient evaluation.
-The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates~\cite{mari2021estimating}, allowing the use of optimization methods that use higher-order derivates such as Newton's method.
+Note that calculating $\partial C$ with $m$ parameters $\vec{\theta}$ requires you to evaluate the quantum circuit twice for every parameter, for a total of $2m$ quantum circuit evaluations per gradient evaluation.
+The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates as demonstrated by \textcite{mari2021estimating}, allowing the use of optimization methods that use higher-order derivates such as Newton's method.
 
 A common way to perform gradient-based optimization is through gradient descent based algorithms.
 Gradient descent uses first-order derivatives for finding a local minimum of a differentiable function.
@@ -90,12 +96,16 @@ Formally, for a set of parameters $\vec{\theta}_t$ and a cost function $C(\vec{\
 \end{equation}
 where $\eta$ is the step size which determines how big of a step the algorithm makes each iteration.
 Finding the optimal step size is a practical challenge: if it is too large the optimization algorithm will diverge, and if it is too small it will take a long time to converge.
-The gradient descent based optimization algorithm Adam adapts the step size during optimization to increase the efficiency and accuracy of solutions~\cite{kingma2014adam}.
+Methods have been developed to improve the gradient descent algorithm --- for example, the gradient descent based optimization algorithm Adam adapts the step size during optimization to increase the efficiency and accuracy of solutions~\cite{kingma2014adam}.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.45\linewidth]{figures/gradient_descent.png}
-    \caption[Visualization of gradient descent finding a local minimum of a function.]{Visualization of gradient descent finding a local minimum of a two-dimensional function. The red dots represent the value of the cost function at a given iteration. The gradient descent algorithm gradually finds a local minimum by moving in the opposite direction of the gradient of the cost function.}
+    \caption[Visualization of gradient descent finding a local minimum of a function.]{
+        Visualization of gradient descent finding a local minimum of a two-dimensional function.
+        The red dots represent the value of the cost function at a given iteration.
+        The gradient descent algorithm gradually finds a local minimum by moving in the opposite direction of the gradient of the cost function.
+    }
     \label{fig:gradient_descent}
 \end{figure}
 
@@ -122,7 +132,7 @@ By selecting an initial guess state, calculating the expectation value of $H$, a
 
 The problem of estimating the ground state energy is a specific instance of the $k$-local Hamiltonian problem, which looks to find the ground state energy of a $k$-local Hamiltonian.
 A $k$-local Hamiltonian is a Hamiltonian that can be expressed as a sum of Hamiltonians $H = \sum_{i}H_i$ where each $H_i$ is a Hermitian operator acting non-trivially on at most $k$ qubits~\cite{bookatz2012qma}.
-This problem was shown to be $\QMA$-complete for $k \geq 2$ \cite{kempe2006complexity}.
+This problem was shown to be $\QMA$-complete for $k \geq 2$, while the 1-local Hamiltonian problem is in $\P$ \cite{kempe2006complexity}.
 However, quantum computers can still offer an advantage above classical computers for this problem.
 Any Hamiltonian $H$ can be represented as a linear combination of Pauli operators:
 \begin{equation}
@@ -135,7 +145,11 @@ From the linearity of quantum observables, it follows that
 \end{equation} 
 The problem of estimating $\expval{H}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational, kandala2017hardware}.
 
-% UCC, hardware efficient ansatz
-% more ansatz
+Implementations of the \gls{vqe} can often benefit from using a problem-inspired ansatz.
+A popular choice is the \gls{ucc} ansatz, which is a cousin of the coupled-cluster method used in quantum chemistry for describing many-body systems~\cite{shavitt2009many}.
+The \gls{ucc} ansatz is parameterized by a polynomial number of parameters, while there is no known efficient classical implementation~\cite{taube2006new}.
+Furthermore, the \gls{ucc} ansatz is believed to provide better accuracy than classical coupled cluster methods~\cite{cooper2010benchmark, evangelista2011alternative}.
+Despite these advantages, the amount of parameters required by the \gls{ucc} ansatz might be too large to allow for practical calculations of large molecules~\cite{wecker2015progress}.
+Alternative ans{\"a}tze are being proposed to reduce the quantum resources required for running the \gls{vqe} on larger molecules~\cite{romero2018strategies, kandala2017hardware, grimsley2019adaptive}.
 
 \section{Quantum Approximate Optimization Algorithm}

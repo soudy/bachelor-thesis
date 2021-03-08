@@ -72,7 +72,10 @@ These states as described in \Cref{eqn:turing-state} can be read as ``in state $
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.5\linewidth]{figures/single-tape-turing-machine.pdf}
-    \caption[The tape of a single-tape Turing machine in an arbitrary state.]{The tape of a single-tape Turing machine in an arbitrary state. Note that any multi-tape Turing machines can be efficiently simulated by a single-tape Turing machine~\cite{hartmanis1965computational}, so complexity classes are not affected by changing between single-tape and multi-tape machines.}
+    \caption[The tape of a single-tape Turing machine in an arbitrary state.]{
+        The tape of a single-tape Turing machine in an arbitrary state.
+        Note that any multi-tape Turing machines can be efficiently simulated by a single-tape Turing machine~\cite{hartmanis1965computational}, so complexity classes are not affected by changing between single-tape and multi-tape machines.
+    }
     \label{fig:single-tape-turing-machine}
 \end{figure}
 
@@ -127,7 +130,11 @@ Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subse
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.375\linewidth]{figures/complexity-classes-hierarchy.pdf}
-    \caption[An overview of the hierarchy of some of the complexity classes discussed.]{An overview of the hierarchy of some of the complexity classes discussed. This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$. $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.}
+    \caption[An overview of the hierarchy of some of the complexity classes discussed.]{
+        An overview of the hierarchy of some of the complexity classes discussed.
+        This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$.
+        $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.
+    }
     \label{fig:complexity-classes-hierarchy}
 \end{figure}
 
@@ -177,7 +184,9 @@ Here, $\theta$ and $\varphi$ define a point on the surface of a three-dimensiona
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.33\linewidth]{figures/bloch-sphere.pdf}
-    \caption[Bloch sphere representation of a qubit's state.]{Bloch sphere representation of a qubit's state.}
+    \caption[Bloch sphere representation of a qubit's state.]{
+        Bloch sphere representation of a qubit's state.
+    }
     \label{fig:bloch-sphere}
 \end{figure}
 While this visualization is limited to a single qubit, it can be a useful visual to build intuition.
@@ -363,10 +372,10 @@ This state is one of four maximally entangled two-qubit states referred to as a 
 \end{figure}
 This circuit does the following.
 The system starts in state $\ket{\psi} = \ket{00}$.
-A Hadamard gate is applied on the first (using least-significant bit order) qubit:
+A Hadamard gate is applied on the first qubit:
 \begin{align}
-\ket{\psi} &= \ket{0}\dfrac{1}{\sqrt{2}}\left(\ket{0} + \ket{1}\right) \\
-&= \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{01}\right).
+\ket{\psi} &= \dfrac{1}{\sqrt{2}}\left(\ket{0} + \ket{1}\right)\ket{0} \\
+&= \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{10}\right).
 \end{align}
 Then, a $\textnormal{CNOT}$ is applied with the first qubit as control and the second qubit as target, giving the final state
 \begin{equation}
@@ -482,7 +491,7 @@ Any quantum operation can be reduced to a combination of $\textnormal{CNOT}, H, 
 For example, the three-qubit equivalent of the \textnormal{CNOT} gate, the Toffoli gate, can be decomposed into these gates as shown in~\Cref{fig:decomposition-toffoli}.
 \begin{figure}[H]
     \[
-    \Qcircuit @C=0.8em @R=1em @!R {
+    \Qcircuit @C=1em @R=1em @!R {
         & \ctrl{1} & \qw   & &   & \qw      & \qw      & \qw              & \ctrl{2} & \qw & \qw & \qw & \ctrl{2} & \qw & \ctrl{1} & \qw & \ctrl{1} & \gate{T} & \qw \\
         & \ctrl{1} & \qw   & = & & \qw      & \ctrl{1} & \qw              & \qw   & \qw &        \ctrl{1} & \qw & \qw & \gate{T^\dagger} & \targ & \gate{T^\dagger} & \targ & \gate{S} & \qw \\
         & \targ \qwx & \qw & & & \gate{H} & \targ      & \gate{T^\dagger} & \targ & \gate{T} & \targ & \gate{T^\dagger} & \targ & \gate{T} & \gate{H} & \qw & \qw & \qw & \qw
@@ -551,14 +560,14 @@ Furthermore, the following notation is used to represent fractional binary numbe
 \begin{equation}
 [0.j_1\ldots j_m] = \sum_{k=1}^{m} j_k2^{-k}.
 \end{equation}
-For example, $j_1/2 + j_2/2^2$ is written as $[0.j_1j_2]$ in fractional binary notation.
+For example, binary $[0.101]$ is $1 \cdot 2^{-1} + 0 \cdot 2^{-2} + 1 \cdot 2^{-3} = 5/8$.
 Using these definitions, the \gls{qft} can be represented as follows:
 \begin{equation}
 \textnormal{QFT}\ket{j_1 \ldots j_n} = \dfrac{1}{\sqrt{N}}\left(\ket{0} + e^{2\pi i [0.j_n]}\ket{1}\right)\left(\ket{0} + e^{2\pi i [0.j_{n-1}j_n]}\ket{1}\right)\cdots\left(\ket{0} + e^{2\pi i [0.j_1j_2\ldots j_n]}\ket{1}\right).
 \end{equation}
 The transformed values end up in the relative phases of the amplitudes.
 Again, these relative phases cannot be extracted.
-However, the \gls{qft} is an essential part of many important quantum algorithms.
+However, the \gls{qft} is an essential part of important quantum algorithms: it is as the heart of the \gls{qpea}, which can be used to factor integers~\cite{shor1999polynomial}, solve linear systems of equations~\cite{harrow2009quantum}, and more~\cite{nielsen2002quantum}. 
 
 \subsubsection{Grover's Algorithm}
 Grover's algorithm is a quantum algorithm for unstructured database search.

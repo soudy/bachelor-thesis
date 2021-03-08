@@ -24,7 +24,10 @@ These \glspl{hqca} combine classical and quantum computations as visualized in~\
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/hybrid-quantum-algorithm.pdf}
-    \caption[General structure of a \acrshort{hqca}.]{General structure of a \gls{hqca}. The data interchange between the classical and quantum part is repeated many times.}
+    \caption[General structure of a \acrshort{hqca}.]{
+        General structure of a \gls{hqca}.
+        The data interchange between the classical and quantum part is repeated many times.
+    }
     \label{fig:hybrid-quantum-classical}
 \end{figure}
 \Acrlongpl{hqca} typically involve a small quantum computation inside of a classical optimization loop, greatly reducing the amount of quantum resources needed.
@@ -39,7 +42,7 @@ This is especially challenging given that both quantum and classical resources a
 
 \section{Objective}
 The purpose of this thesis is to propose an infrastructure for the efficient execution of \acrlongpl{hqca}.
-This work is in collaboration with TNO, QuTech, and SURF, and is focused on the efficient execution of \glspl{hqca} using QuTech's quantum computing platform Quantum Inspire~\cite{last2020quantum} and SURF's \gls{hpc} center~\cite{surf}.
+This work is in collaboration with TNO, QuTech, and SURF, and is focused on the efficient execution of \glspl{hqca} using QuTech's quantum computing platform Quantum Inspire~\cite{quantuminspire} and SURF's \gls{hpc} center~\cite{surf}.
 To allow for the efficient execution of \glspl{hqca}, the SURF \gls{hpc} and Quantum Inspire job schedulers should be synchronized to minimize the execution of the algorithm.
 A key part in this is figuring out sources of overhead and current bottlenecks.
 In a hybrid setup like this, overheads such as quantum and classic scheduling wait times, data transfers, and resource initialization can quickly increase the run time of \glspl{hqca}.
