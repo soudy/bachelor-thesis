@@ -175,7 +175,7 @@ A helpful geometric interpretation of a qubit's state can be obtained by rewriti
 \ket{\psi} = e^{i\delta} \left(\cos\dfrac{\theta}{2}\ket{0} + e^{i\varphi}\sin\dfrac{\theta}{2}\ket{1}\right),
 \end{equation}
 where $\delta, \theta, \varphi \in \mathbb{R}$.
-The global phase $e^{i\delta}$ can often be ignored, as $\forall \delta \in \mathbb{R} : |e^{i\delta}| = 1$, so it does not impact measurement outcome~\cite{nielsen2002quantum}.
+The global phase $e^{i\delta}$ can often be ignored, as $\forall \delta \in \mathbb{R} : |e^{i\delta}| = 1$, so it does not impact measurement outcome.
 Simplifying then, the state of a qubit can be written as
 \begin{equation}
 \ket{\psi} = \cos\dfrac{\theta}{2}\ket{0} + e^{i\varphi}\sin\dfrac{\theta}{2}\ket{1}.
@@ -232,7 +232,7 @@ For example, when measuring the state $\ket{\Phi^+}$ from \Cref{eqn:bell-state},
 So by measuring one qubit, one also knows the state of the other qubit.
 
 \subsection{State Evolution} \label{sec:state-evolution}
-The evolution of a closed quantum system is described by a unitary transformation~\cite{nielsen2002quantum}.\footnote{In this report, a perfectly closed system is assumed, even though in reality all systems interact somewhat with other systems.}
+The evolution of a closed quantum system is described by a unitary transformation~\cite[Section 2.2]{nielsen2002quantum}.\footnote{In this report, a perfectly closed system is assumed, even though in reality all systems interact somewhat with other systems.}
 A state \ket{\psi} at time $t_1$ is related to state \ket{\psi'} at time $t_2$ by a unitary operator $U$:
 \begin{equation}
 \ket{\psi'} = U\ket{\psi}.
@@ -532,7 +532,7 @@ R_k = \begin{pmatrix}
 0 & e^{\tfrac{2\pi i}{2^k}}
 \end{pmatrix}.
 \end{equation}
-Some useful identities are $R_2 = S$ and $R_3 = T$.
+Some useful identities are $R_1 = Z$, $R_2 = S$, and $R_3 = T$.
 Using this gate, the general quantum circuit for the \gls{qft} is shown in \Cref{fig:qft-general-circuit}.
 The gates at the end of the circuit are swap gates, which swaps two qubits.
 This is necessary to get the result in the correct order.
@@ -567,7 +567,7 @@ Using these definitions, the \gls{qft} can be represented as follows:
 \end{equation}
 The transformed values end up in the relative phases of the amplitudes.
 Again, these relative phases cannot be extracted.
-However, the \gls{qft} is an essential part of important quantum algorithms: it is as the heart of the \gls{qpea}, which can be used to factor integers~\cite{shor1999polynomial}, solve linear systems of equations~\cite{harrow2009quantum}, and more~\cite{nielsen2002quantum}. 
+However, the \gls{qft} is an essential part of important quantum algorithms: it is as the heart of the \gls{qpea}, which can be used to factor integers~\cite{shor1999polynomial}, solve linear systems of equations~\cite{harrow2009quantum}, and more~\cite[Section 5.4]{nielsen2002quantum}. 
 
 \subsubsection{Grover's Algorithm}
 Grover's algorithm is a quantum algorithm for unstructured database search.
