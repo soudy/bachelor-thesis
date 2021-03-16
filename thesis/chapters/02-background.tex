@@ -16,7 +16,7 @@ The time and space required by an algorithm generally grows as the size of the i
 Because of this, it is traditional to describe the efficiency of an algorithm as a function of the size of its input~\cite{cormen2009introduction}.
 This function describes the number of primitive operations it performs for a given input size.
 The notion of input size here depends on the context of the problem.
-For example, when computing the discrete Fourier transform, the input size refers to the dimension of the input vector.
+For example, when computing the discrete Fourier transform, the input size likely refers to the dimension of the input vector.
 When talking about a problem like integer multiplication, however, it is more fitting to talk about the input size as the number of bits needed to represent the input in binary.
 
 When analyzing the efficiency of algorithms, we look at the asymptotic growth for a given input size.
@@ -24,7 +24,7 @@ Consider an algorithm that given input size $n$ takes $n^2$ primitive operations
 In big-O notation, both these algorithms are said to run in $O(n^2)$ time.
 That is, the number of primitive operations it performs scales quadratically with the input size.
 Constant factors are ignored as they become negligible as $n \to \infty$.
-While they are practically significant --- an algorithm that runs in $O(n/2)$ performs half as many primitive operations as an algorithm that runs in $O(n)$ --- they are not relevant to asymptotic analysis. 
+While they are practically significant --- an algorithm that runs in $O(n/2)$ performs half as many primitive operations as an algorithm that runs in $O(n)$ --- they are not relevant to asymptotic analysis, as both functions grow linearly with $n$. 
 
 Formally, if we have functions $f(n)$ and $g(n)$ such that $f$ eventually grows slower than some multiple of $g$ as $n \to \infty$, we say $f(n) = O(g(n))$.
 For example, given $f(n) = 200n^2$ and $g(n) = n^3$, $f$ begins to grow slower than $g$ when $n > 200$.
@@ -139,14 +139,16 @@ Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subse
 \end{figure}
 
 \section{Quantum Mechanics}
+Quantum mechanics is the most complete description of the physical properties of nature on the atomic scale.
+It is also at the core of quantum computation and information.
+This section describes the necessary background of quantum mechanics required for understanding quantum computing.
+
+\subsection{Qubits} \label{sec:quantum-states}
 In classic information theory, the smallest unit of information is the bit.
-A bit can be in one of two states: 0 or 1.
 Quantum information is built upon an analogous concept: the quantum bit, or qubit.
 Qubits are physical objects that appear in nature on the scale of atoms and subatomic particles.
 A qubit can be any two-state quantum-mechanical system such as the spin of an electron, which can be spin up or down, or the polarization of a photon, which can be horizontally of vertically polarized.
 In this report, qubits will be treated as abstract mathematical objects as the physical realization of qubits is beyond the scope of this work.
-
-\subsection{Qubits} \label{sec:quantum-states}
 The state of a qubit is denoted as follows:
 \begin{equation} \label{eqn:qubit-state}
 \ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}.

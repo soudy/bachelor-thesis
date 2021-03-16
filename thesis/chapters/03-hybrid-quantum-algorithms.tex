@@ -8,7 +8,7 @@ This chapter will first introduce the basic concepts of an important family of \
 \section{Variational Hybrid Quantum-Classical Algorithms}
 \Acrlongpl{hqca} take into account the limited number of qubits, limited connectivity of qubits, high error rates, and limited coherence times of \gls{nisq} devices.
 These algorithms often make use of the variational method which consists of preparing an initial trial state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$, and finding the parameters for which the expectation value of some observable is the lowest.
-This family of \glspl{hqca} is sometimes also referred to as variational quantum algorithm.
+This family of \glspl{hqca} is sometimes also referred to as variational quantum algorithms.
 The rest of this chapter will be focused on variational \glspl{hqca}, as this is the main focus of research regarding \glspl{hqca}.
 
 The general structure of a variational \gls{hqca} is shown in \Cref{fig:vqa-general-structure}.
@@ -40,7 +40,7 @@ C(\vec{\theta}) = \sum_k f_k\left(\bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\t
 where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the quantum circuit parameterized by real values $\vec{\theta}$, $H_k$ is an observable, and $n$ is the number of qubits.
 A key point of variational \glspl{hqca} is that a quantum computer is used to estimate $C(\vec{\theta})$ while using a classical computer to optimize the parameters $\vec{\theta}$.
 Furthermore, the cost function $C(\vec{\theta})$ should be efficient to estimate by performing measurements on a quantum computer.
-For the variational \gls{hqca} to have a quantum advantage, the cost should also not be efficiently computable with a classical computer.
+For the variational \gls{hqca} to have a quantum advantage, the cost function should also not be efficiently computable with a classical computer.
 
 \subsection{Ans{\"a}tze}
 The ansatz defines the quantum circuit $U(\vec{\theta})$ that is used to prepare the quantum state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$.
@@ -131,25 +131,49 @@ In the context of quantum chemistry, where $H$ describes the Hamiltonian of a sy
 By selecting an initial guess state, calculating the expectation value of $H$, and optimizing the cost function $C(\vec{\theta})$, one can then approximate the ground state energy of a Hamiltonian to arbitrary precision.
 
 The problem of estimating the ground state energy is a specific instance of the $k$-local Hamiltonian problem, which looks to find the ground state energy of a $k$-local Hamiltonian.
-A $k$-local Hamiltonian is a Hamiltonian that can be expressed as a sum of Hamiltonians $H = \sum_{i}H_i$ where each $H_i$ is a Hermitian operator acting non-trivially on at most $k$ qubits~\cite{bookatz2012qma}.
+A $k$-local Hamiltonian is a Hamiltonian that can be expressed as a sum of Hamiltonians $H = \sum_{j}H_j$ where each $H_j$ is a Hermitian operator acting non-trivially on at most $k$ qubits~\cite{bookatz2012qma}.
 This problem was shown to be $\QMA$-complete for $k \geq 2$, while the 1-local Hamiltonian problem is in $\P$ \cite{kempe2006complexity}.
 However, quantum computers can still offer an advantage above classical computers for this problem.
 Any Hamiltonian $H$ can be represented as a linear combination of Pauli operators:
 \begin{equation}
-H = \sum_\alpha h_\alpha P_\alpha,
+H = \sum_j h_j P_j = \sum_j h_j \prod_k P_j^k,
 \end{equation} 
-where $P_\alpha$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ and $h_\alpha$ is a real constant.
+where $P_j^k$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ and $k$ denotes which qubit the operator acts on, and $h_j$ is a real constant.
 From the linearity of quantum observables, it follows that
 \begin{equation}
-\expval{H} = \sum_\alpha h_\alpha \expval{P_\alpha}.
+\expval{H} = \sum_j h_j \langle P_j \rangle.
 \end{equation} 
 The problem of estimating $\expval{H}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational, kandala2017hardware}.
+
+In order to use the \gls{vqe} to estimate ground state energies of molecules, the energy of the electrons and nuclei in a molecule need to be encoded as a Hamiltonian.
+The standard form of such Hamiltonian is as follows:
+\begin{equation}
+H = - \sum_i \frac{\nabla_{\vec{R}_i}^2}{2M_i}
+    - \sum_i \frac{\nabla_{\vec{r}_i}^2}{2}
+    - \sum_{i,j} \frac{Z_i}{\lvert\vec{R}_i - \vec{r}_j\rvert}
+    + \sum_{i,j>i} \frac{Z_iZ_j}{|\vec{R}_i - \vec{R}_j|}
+    + \sum_{i,j>i} \frac{1}{|\vec{r}_i - \vec{r}_j|},
+\end{equation}
+where $M_i$, $Z_i$, and $\vec{R}_i$ denote the mass, atomic number, and position of nucleus $i$, and $\vec{r}_i$ is the position of electron $i$~\cite{mcardle2018quantum}.
+Given the fact that the nuclei are much heavier than the electrons, we can apply the Born-Oppenheimer approximation~\cite{born1927quantentheorie} to separate the Hamiltonian into electronic and nuclear terms.
+We are mostly interested in the electronic structure of the molecule, so we can use the Born-Oppenheimer approximation write the electronic Hamiltonian as
+\begin{equation} 
+H = - \sum_i \frac{\nabla_{\vec{r}_i}^2}{2}
+- \sum_{i,j} \frac{Z_i}{|\vec{R}_i - \vec{r}_j|}
++ \sum_{i,j>i} \frac{1}{|\vec{r}_i - \vec{r}_j|}.
+\end{equation}
+This form of Hamiltonian is often referred to as the first quantized formulation of quantum chemistry~\cite[Appendix A]{o2016scalable}.
+In order to represent electronic Hamiltonians on a quantum computer, it needs to be mapped from operators acting on indistinguishable fermions to operators acting on distinguishable qubits.
+There are several approaches to this~\cite{kassal2011simulating}, but the most widely used approach in quantum chemistry uses the second quantized formulation~\cite{mcardle2018quantum}.
+The second quantized Hamiltonian must then be mapped into qubits in order to be implemented on a quantum computer.
+The most common mappings for this are the Jordan-Wigner~\cite{somma2002simulating} and Bravyi-Kitaev~\cite{seeley2012bravyi} transformations.
+The exact details on the different approaches are beyond the scope of this work, but a detailed overview can be found in~\cite{mcardle2018quantum}.
 
 Implementations of the \gls{vqe} can often benefit from using a problem-inspired ansatz.
 A popular choice is the \gls{ucc} ansatz, which is a cousin of the coupled-cluster method used in quantum chemistry for describing many-body systems~\cite{shavitt2009many}.
 The \gls{ucc} ansatz is parameterized by a polynomial number of parameters, while there is no known efficient classical implementation~\cite{taube2006new}.
 Furthermore, the \gls{ucc} ansatz is believed to provide better accuracy than classical coupled cluster methods~\cite{cooper2010benchmark, evangelista2011alternative}.
-Despite these advantages, the amount of parameters required by the \gls{ucc} ansatz might be too large to allow for practical calculations of large molecules~\cite{wecker2015progress}.
-Alternative ans{\"a}tze are being proposed to reduce the quantum resources required for running the \gls{vqe} on larger molecules~\cite{romero2018strategies, kandala2017hardware, grimsley2019adaptive}.
+Despite these advantages, the number of parameters required by the \gls{ucc} ansatz might be too large to allow for practical calculations of large molecules~\cite{wecker2015progress}.
+Alternative ans{\"a}tze have been proposed to reduce the quantum resources required for running the \gls{vqe} on larger molecules~\cite{romero2018strategies, kandala2017hardware, grimsley2019adaptive}.
 
 \section{Quantum Approximate Optimization Algorithm}
