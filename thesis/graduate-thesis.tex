@@ -25,6 +25,11 @@
 \usepackage{changepage}
 \usepackage{float}
 \usepackage{microtype}
+\usepackage{bm}
+\usepackage{tocloft}
+
+\setlength{\cftfigindent}{0pt}  % remove indentation from figures in lof
+\setlength{\cfttabindent}{0pt}  % remove indentation from tables in lot
 
 \pagestyle{fancy}
 \cfoot{\thepage}
@@ -41,6 +46,9 @@
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 \MFUhyphentrue
+
+% bold vectors
+\let\vec\bm
 
 % break long urls in bibliography
 \setcounter{biburllcpenalty}{7000}
@@ -60,11 +68,12 @@
 \renewcommand{\ket}[1]{\ensuremath{\vert{#1}\rangle}}
 \renewcommand{\bra}[1]{\ensuremath{\langle{#1}\vert}}
 
-% argmin operator
+% argmin/max operator
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 % Variables
-\newcommand{\thesistitle}{A High Performance Computing Infrastructure for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
+\newcommand{\thesistitle}{A High Performance Computing Workflow for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
 \newcommand{\authorname}{Steven Oud}
 \newcommand{\igate}{
     \begin{pmatrix}
@@ -143,6 +152,7 @@
 \newabbreviation{nisq}{NISQ}{noisy intermediate\--scale quantum}
 \newabbreviation{hqca}{HQCA}{hybrid quantum\--classical algorithm}
 \newabbreviation{hpc}{HPC}{high performance computing}
+\newabbreviation{sat}{SAT}{boolean satisfiability}
 \newabbreviation{vqe}{VQE}{variational quantum eigensolver}
 \newabbreviation{qaoa}{QAOA}{quantum approximate optimization algorithm}
 \newabbreviation{qft}{QFT}{quantum Fourier transform}

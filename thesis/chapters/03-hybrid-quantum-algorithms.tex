@@ -35,9 +35,9 @@ The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to so
 \subsection{Cost Function}
 In general, the cost function has the form
 \begin{equation} \label{eqn:general-cost-function}
-C(\vec{\theta}) = \sum_k f_k\left(\bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}\right),
+C(\vec{\theta}) = \sum_k f_k\left(\bra{0\ldots 0}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0\ldots 0}\right),
 \end{equation}
-where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the quantum circuit parameterized by real values $\vec{\theta}$, $H_k$ is an observable, and $n$ is the number of qubits.
+where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the quantum circuit parameterized by real values $\vec{\theta}$, and $H_k$ is an observable.
 A key point of variational \glspl{hqca} is that a quantum computer is used to estimate $C(\vec{\theta})$ while using a classical computer to optimize the parameters $\vec{\theta}$.
 Furthermore, the cost function $C(\vec{\theta})$ should be efficient to estimate by performing measurements on a quantum computer.
 For the variational \gls{hqca} to have a quantum advantage, the cost function should also not be efficiently computable with a classical computer.
@@ -135,15 +135,17 @@ A $k$-local Hamiltonian is a Hamiltonian that can be expressed as a sum of Hamil
 This problem was shown to be $\QMA$-complete for $k \geq 2$, while the 1-local Hamiltonian problem is in $\P$ \cite{kempe2006complexity}.
 However, quantum computers can still offer an advantage above classical computers for this problem.
 Any Hamiltonian $H$ can be represented as a linear combination of Pauli operators:
-\begin{equation}
-H = \sum_j h_j P_j = \sum_j h_j \prod_k P_j^k,
-\end{equation} 
-where $P_j^k$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ and $k$ denotes which qubit the operator acts on, and $h_j$ is a real constant.
-From the linearity of quantum observables, it follows that
-\begin{equation}
-\expval{H} = \sum_j h_j \langle P_j \rangle.
-\end{equation} 
-The problem of estimating $\expval{H}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational, kandala2017hardware}.
+\begin{align}
+H &= \sum_j h_j P_j \\
+  &= \sum_j h_j \prod_k P_j^{(k)},
+\end{align} 
+where $P_j^{(k)}$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ and $k$ denotes which qubit the operator acts on, and $h_j$ is a real constant.
+From the linearity of quantum observables, it follows that for some state \ket{\psi}
+\begin{align}
+\melem{\psi}{H}{\psi} &= \sum_j h_j \bra{\psi}P_j\ket{\psi} \\
+&= \sum_j h_j \bra{\psi}\prod_k P_j^{(k)}\ket{\psi}.
+\end{align} 
+The problem of estimating $\melem{\psi}{H}{\psi}$ can be done efficiently on a quantum computer, while being a hard problem to solve classically~\cite{ortiz2001quantum, peruzzo2014variational, kandala2017hardware}.
 
 In order to use the \gls{vqe} to estimate ground state energies of molecules, the energy of the electrons and nuclei in a molecule need to be encoded as a Hamiltonian.
 The standard form of such Hamiltonian is as follows:
@@ -156,7 +158,7 @@ H = - \sum_i \frac{\nabla_{\vec{R}_i}^2}{2M_i}
 \end{equation}
 where $M_i$, $Z_i$, and $\vec{R}_i$ denote the mass, atomic number, and position of nucleus $i$, and $\vec{r}_i$ is the position of electron $i$~\cite{mcardle2018quantum}.
 Given the fact that the nuclei are much heavier than the electrons, we can apply the Born-Oppenheimer approximation~\cite{born1927quantentheorie} to separate the Hamiltonian into electronic and nuclear terms.
-We are mostly interested in the electronic structure of the molecule, so we can use the Born-Oppenheimer approximation write the electronic Hamiltonian as
+We are mostly interested in the electronic structure of the molecule, so we can use the Born-Oppenheimer approximation to write the electronic Hamiltonian as
 \begin{equation} 
 H = - \sum_i \frac{\nabla_{\vec{r}_i}^2}{2}
 - \sum_{i,j} \frac{Z_i}{|\vec{R}_i - \vec{r}_j|}
@@ -177,3 +179,80 @@ Despite these advantages, the number of parameters required by the \gls{ucc} ans
 Alternative ans{\"a}tze have been proposed to reduce the quantum resources required for running the \gls{vqe} on larger molecules~\cite{romero2018strategies, kandala2017hardware, grimsley2019adaptive}.
 
 \section{Quantum Approximate Optimization Algorithm}
+The \gls{qaoa} is a variational \gls{hqca} that produces approximate solutions for combinatorial optimization problems~\cite{farhi2014quantum}.
+Combinatorial optimization is focused on finding an optimal solution in a finite set of potential solutions.
+The number of potential solutions is often too large to scan one by one and select the best option, so more efficient methods are required.
+Most combinatorial optimization problems are known be in $\NP$~\cite{schrijver2003combinatorial}.
+The \gls{qaoa} depends on an integer $p \ge 1$, for which the quality of the approximation improves as $p$ increases.
+Even for $p = 1$, the \gls{qaoa} is not efficiently simulatable by classical computers~\cite{farhi2016quantum}.
+It was also briefly believed to guarantee better approximation ratios than any known polynomial time classical algorithm~\cite{farhi2014quantum}, but \textcite{barak2015beating} proposed a more effective classical algorithm.
+Nevertheless, the \gls{qaoa} has received attention from the scientific community in the last few years because of its classical intractability and wide range of applications.
+
+The \gls{qaoa} looks to solve combinatorial optimization problems, which are specified by $n$ bits and $m$ clauses.
+A clause is a constraint on a subset of the bits which is satisfied for certain assignment of those bits, and not satisfied for other assignments.
+The goal is to find a $n$-bit string $z = \{0,1\}^n$ that maximizes the classical objective function
+\begin{equation} \label{eqn:objective-function}
+L(z) = \sum_{\alpha=1}^m L_\alpha(z),
+\end{equation}
+where $L_\alpha(z) = 1$ if $z$ satisfies clause $\alpha$ and $L_\alpha(z) = 0$ if $z$ does not satisfy clause $\alpha$.
+The \gls{qaoa} finds a bit string $z'$ for which the approximation ratio $L(z')/L_{\text{max}}$ is large.
+The objective function $L$ can be mapped to a Hamiltonian that is diagonal in the computational basis:
+\begin{equation}
+H_L = \sum_{\alpha=1}^m H_{L_\alpha},
+\end{equation}
+where
+\begin{align}
+H_{L_\alpha} &= \sum_{z \in \{0, 1\}^n} L_\alpha(z) \op{z}{z} \\
+&=
+\begin{pmatrix}
+L_\alpha(0,\ldots,0) & 0 & \cdots & 0 \\
+0 & L_\alpha(0,\ldots,1) & \cdots & 0 \\
+\vdots & 0 & \ddots & \vdots \\
+0 & 0 & \cdots & L_\alpha(1,\ldots,1)
+\end{pmatrix}.
+\end{align}
+The operator $H_L$ encodes the objective function and is referred to as the problem Hamiltonian.
+
+The \gls{qaoa} uses a problem-inspired ansatz which is defined in terms of two alternating unitaries, inspired by the quantum adiabatic algorithm~\cite{farhi2014quantum}.
+First, we define a unitary parameterized by $\gamma \in [0, 2\pi)$ using the problem Hamiltonian:
+\begin{equation}
+U(H_L, \gamma) = e^{-i\gamma H_L} = \prod_{\alpha=1}^{m} e^{-i\gamma H_{L_\alpha}}.
+\end{equation}
+Next, we define a mixer Hamiltonian $H_B$:
+\begin{equation}
+H_B = \sum_{j=0}^{n-1} X^{(j)},
+\end{equation}
+where $X^{(j)}$ is the Pauli-X gate acting on qubit $j$.
+Then, we define a mixer unitary parameterized by $\beta \in [0, 2\pi)$:
+\begin{equation}
+U(H_B, \beta) = e^{-i\beta H_B} = \prod_{j=0}^{n-1} e^{-i\gamma X^{(j)}}.
+\end{equation}
+Note that $e^{-i\gamma X}$ is just the $R_x$ operator as defined in \Cref{sec:state-evolution}.
+Using these unitaries, the ansatz can be described as alternating applications of the problem and mixer Hamiltonian $p$ times using different parameters:
+\begin{equation}
+U(\vec{\gamma}, \vec{\beta}) = \underbrace{U(H_B, \beta_p)U(H_L, \gamma_p) \ldots U(H_B, \beta_1)U(H_L, \gamma_1)}_{p \:\, \text{layers}}.
+\end{equation}
+Note that not all quantum hardware can prepare this ansatz efficiently, so specific hardware-efficient ans{\"a}tze are being proposed \cite{kandala2017hardware, farhi2017quantum}.
+
+Given these definitions, the \gls{qaoa} works as follows.
+The system starts in the equal superposition state
+\begin{equation}
+\ket{s} = H^{\otimes n}\ket{0}^{\otimes n} = \frac{1}{\sqrt{N}} \sum_{j=0}^{N-1} \ket{j}.
+\end{equation}
+A trial state $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ is then obtained by applying the ansatz to \ket{s}:
+\begin{align}
+\ket{\psi(\vec{\gamma}, \vec{\beta})} &= U(\vec{\gamma}, \vec{\beta})\ket{s} \\
+&= U(H_B, \beta_p)U(H_L, \gamma_p) \ldots U(H_B, \beta_1)U(H_L, \gamma_1)\ket{s},
+\end{align}
+and the cost function to optimize is as follows:
+\begin{equation} 
+C_p(\vec{\gamma}, \vec{\beta}) = \bra{\psi(\vec{\gamma}, \vec{\beta})}H_L\ket{\psi(\vec{\gamma}, \vec{\beta})}.
+\end{equation}
+The subscript $p$ is added to the cost function's definition to indicate the number of layers.
+Unlike the \gls{vqe} which minimizes the cost function, we are interested in maximizing $C_p$ to find the bit string which satisfies the most clauses.
+We look to solve the optimization problem
+\begin{equation}
+M_p = \max_{\vec{\gamma}, \, \vec{\beta}} C_p(\vec{\gamma}, \vec{\beta}).
+\end{equation}
+By measuring $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ in the computational basis we get a bit string $z$ with high probability such that the approximation ratio $M_p/L_{\text{max}}$ is large. 
+The approximation ratio gets better as $p$ increases, and as $p \to \infty$, $M_p = L_{\text{max}}$.
