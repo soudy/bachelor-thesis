@@ -195,7 +195,7 @@ The goal is to find a $n$-bit string $z = \{0,1\}^n$ that maximizes the classica
 L(z) = \sum_{\alpha=1}^m L_\alpha(z),
 \end{equation}
 where $L_\alpha(z) = 1$ if $z$ satisfies clause $\alpha$ and $L_\alpha(z) = 0$ if $z$ does not satisfy clause $\alpha$.
-The \gls{qaoa} finds a bit string $z'$ for which the approximation ratio $L(z')/L_{\text{max}}$ is large.
+The \gls{qaoa} finds a bit string $z'$ for which the approximation ratio $L(z')/L_{\text{max}}$ is large, where $L_{\text{max}} = \max_z L(z)$.
 The objective function $L$ can be mapped to a Hamiltonian that is diagonal in the computational basis:
 \begin{equation}
 H_L = \sum_{\alpha=1}^m H_{L_\alpha},
@@ -232,6 +232,7 @@ Using these unitaries, the ansatz can be described as alternating applications o
 \begin{equation}
 U(\vec{\gamma}, \vec{\beta}) = \underbrace{U(H_B, \beta_p)U(H_L, \gamma_p) \ldots U(H_B, \beta_1)U(H_L, \gamma_1)}_{p \:\, \text{layers}}.
 \end{equation}
+This unitary depends on $2p$ parameters. 
 Note that not all quantum hardware can prepare this ansatz efficiently, so specific hardware-efficient ans{\"a}tze are being proposed \cite{kandala2017hardware, farhi2017quantum}.
 
 Given these definitions, the \gls{qaoa} works as follows.
@@ -254,5 +255,5 @@ We look to solve the optimization problem
 \begin{equation}
 M_p = \max_{\vec{\gamma}, \, \vec{\beta}} C_p(\vec{\gamma}, \vec{\beta}).
 \end{equation}
-By measuring $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ in the computational basis we get a bit string $z$ with high probability such that the approximation ratio $M_p/L_{\text{max}}$ is large. 
+By measuring $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ multiple times in the computational basis we get a bit string $z$ with high probability for which $L(z)$ is near or greater than $M_p$.
 The approximation ratio gets better as $p$ increases, and as $p \to \infty$, $M_p = L_{\text{max}}$.
