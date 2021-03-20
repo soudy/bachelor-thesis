@@ -29,7 +29,7 @@ The ansatz defines the operations of the quantum circuit which are parameterized
 \end{figure}
 The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to solve the optimization problem
 \begin{equation} \label{eqn:optimization-problem}
-\argmin_{\vec{\theta}} C(\vec{\theta}).
+\vec{\theta}^* = \argmin_{\vec{\theta}} C(\vec{\theta}).
 \end{equation}
 
 \subsection{Cost Function}
@@ -139,7 +139,7 @@ Any Hamiltonian $H$ can be represented as a linear combination of Pauli operator
 H &= \sum_j h_j P_j \\
   &= \sum_j h_j \prod_k P_j^{(k)},
 \end{align} 
-where $P_j^{(k)}$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ and $k$ denotes which qubit the operator acts on, and $h_j$ is a real constant.
+where $P_j^{(k)}$ is a Pauli operator $\left\{I, X, Y, Z\right\}$ which acts on qubit $k$, and $h_j$ is a real constant.
 From the linearity of quantum observables, it follows that for some state \ket{\psi}
 \begin{align}
 \melem{\psi}{H}{\psi} &= \sum_j h_j \bra{\psi}P_j\ket{\psi} \\
@@ -165,7 +165,7 @@ H = - \sum_i \frac{\nabla_{\vec{r}_i}^2}{2}
 + \sum_{i,j>i} \frac{1}{|\vec{r}_i - \vec{r}_j|}.
 \end{equation}
 This form of Hamiltonian is often referred to as the first quantized formulation of quantum chemistry~\cite[Appendix A]{o2016scalable}.
-In order to represent electronic Hamiltonians on a quantum computer, it needs to be mapped from operators acting on indistinguishable fermions to operators acting on distinguishable qubits.
+In order to represent electronic Hamiltonians on a quantum computer, it needs to be mapped from an operator acting on indistinguishable fermions to an operator acting on distinguishable qubits.
 There are several approaches to this~\cite{kassal2011simulating}, but the most widely used approach in quantum chemistry uses the second quantized formulation~\cite{mcardle2018quantum}.
 The second quantized Hamiltonian must then be mapped into qubits in order to be implemented on a quantum computer.
 The most common mappings for this are the Jordan-Wigner~\cite{somma2002simulating} and Bravyi-Kitaev~\cite{seeley2012bravyi} transformations.
@@ -178,7 +178,7 @@ Furthermore, the \gls{ucc} ansatz is believed to provide better accuracy than cl
 Despite these advantages, the number of parameters required by the \gls{ucc} ansatz might be too large to allow for practical calculations of large molecules~\cite{wecker2015progress}.
 Alternative ans{\"a}tze have been proposed to reduce the quantum resources required for running the \gls{vqe} on larger molecules~\cite{romero2018strategies, kandala2017hardware, grimsley2019adaptive}.
 
-\section{Quantum Approximate Optimization Algorithm}
+\section{Quantum Approximate Optimization Algorithm} \label{sec:qaoa}
 The \gls{qaoa} is a variational \gls{hqca} that produces approximate solutions for combinatorial optimization problems~\cite{farhi2014quantum}.
 Combinatorial optimization is focused on finding an optimal solution in a finite set of potential solutions.
 The number of potential solutions is often too large to scan one by one and select the best option, so more efficient methods are required.
@@ -186,7 +186,7 @@ Most combinatorial optimization problems are known be in $\NP$~\cite{schrijver20
 The \gls{qaoa} depends on an integer $p \ge 1$, for which the quality of the approximation improves as $p$ increases.
 Even for $p = 1$, the \gls{qaoa} is not efficiently simulatable by classical computers~\cite{farhi2016quantum}.
 It was also briefly believed to guarantee better approximation ratios than any known polynomial time classical algorithm~\cite{farhi2014quantum}, but \textcite{barak2015beating} proposed a more effective classical algorithm.
-Nevertheless, the \gls{qaoa} has received attention from the scientific community in the last few years because of its classical intractability and wide range of applications.
+Nevertheless, the \gls{qaoa} has received attention from the scientific community in the last few years because of its classical intractability, wide range of applications, and promising performance guarantees.
 
 The \gls{qaoa} looks to solve combinatorial optimization problems, which are specified by $n$ bits and $m$ clauses.
 A clause is a constraint on a subset of the bits which is satisfied for certain assignment of those bits, and not satisfied for other assignments.
@@ -225,9 +225,9 @@ H_B = \sum_{j=0}^{n-1} X^{(j)},
 where $X^{(j)}$ is the Pauli-X gate acting on qubit $j$.
 Then, we define a mixer unitary parameterized by $\beta \in [0, 2\pi)$:
 \begin{equation}
-U(H_B, \beta) = e^{-i\beta H_B} = \prod_{j=0}^{n-1} e^{-i\gamma X^{(j)}}.
+U(H_B, \beta) = e^{-i\beta H_B} = \prod_{j=0}^{n-1} e^{-i\beta X^{(j)}}.
 \end{equation}
-Note that $e^{-i\gamma X}$ is just the $R_x$ operator as defined in \Cref{sec:state-evolution}.
+Note that $e^{-i\beta X}$ is just the $R_x$ operator as defined in \Cref{sec:state-evolution}.
 Using these unitaries, the ansatz can be described as alternating applications of the problem and mixer Hamiltonian $p$ times using different parameters:
 \begin{equation}
 U(\vec{\gamma}, \vec{\beta}) = \underbrace{U(H_B, \beta_p)U(H_L, \gamma_p) \ldots U(H_B, \beta_1)U(H_L, \gamma_1)}_{p \:\, \text{layers}}.

@@ -27,6 +27,7 @@
 \usepackage{microtype}
 \usepackage{bm}
 \usepackage{tocloft}
+\usepackage{array}
 
 \setlength{\cftfigindent}{0pt}  % remove indentation from figures in lof
 \setlength{\cfttabindent}{0pt}  % remove indentation from tables in lot
@@ -248,5 +249,10 @@
 
 \cleardoublepage
 \printnoidxglossaries
+
+\begin{appendices}
+\appendix
+\input{chapters/a-qaoa-maxcut.tex}
+\end{appendices}
 
 \end{document}

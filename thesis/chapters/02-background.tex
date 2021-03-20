@@ -227,7 +227,7 @@ Consider the following state:
 \begin{equation} \label{eqn:bell-state}
 \ket{\Phi^+} = \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right).
 \end{equation}
-This state cannot be expressed as a tensor product of two individual states, as that would imply $\big(\alpha_0\beta_0 = \alpha_1\beta_1 = 1/\sqrt2\,\big) \wedge \big(\alpha_0\beta_1 = \alpha_1\beta_0 = 0\big)$, which is a contradiction.
+This state cannot be expressed as a tensor product of two individual states, as that would imply $\Big(\alpha_0\beta_0 = \alpha_1\beta_1 = 1/\sqrt2\,\Big) \wedge \Big(\alpha_0\beta_1 = \alpha_1\beta_0 = 0\Big)$, which is a contradiction.
 States like $\ket{\Phi^+}$ are referred to as entangled states.
 Entanglement is the quantum phenomena of correlation in measurement outcomes.
 For example, when measuring the state $\ket{\Phi^+}$ from \Cref{eqn:bell-state}, the only two possible measurement outcomes are 00 and 11.
@@ -320,15 +320,15 @@ A special class of measurements called projective measurements can sometimes be 
 A projective measurement is defined by an observable $O$, which is a Hermitian operator on the state space of the system.
 This observable has a spectral decomposition
 \begin{equation}
-O = \sum_{\lambda}\lambda P_\lambda,
+O = \sum_{j}\lambda_j \ket{\lambda_j}\bra{\lambda_j},
 \end{equation}
-where $P_\lambda$ is the projector onto the eigenspace of $O$ with eigenvalue $\lambda$.
+where $\lambda_j$ are eigenvalues of $O$ and $\ket{\lambda_j}$ are the respective eigenstates.
 For example, the Pauli-$Z$ operator can be thought of as an observable with the spectral decomposition
 \begin{equation}
 Z = 1\op{0}{0} - 1\op{1}{1},
 \end{equation}
-which has eigenvectors $\{\ket{0}, \ket{1}\}$ with respective eigenvalues $\{1, -1\}$.
-As the observable $Z$ has the computational basis states as eigenvectors, a measurement of $Z$ can also be thought of a measuring in the computational basis.
+which has eigenstates $\{\ket{0}, \ket{1}\}$ with respective eigenvalues $\{1, -1\}$.
+As the observable $Z$ has the computational basis states as eigenstates, a measurement of $Z$ can also be thought of a measuring in the computational basis.
 With this definition of projective measurements, the expectation value of an observable $O$ for state \ket{\psi} can be defined as
 \begin{equation}
 \begin{aligned}
