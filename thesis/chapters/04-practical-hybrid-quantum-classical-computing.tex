@@ -28,17 +28,46 @@ Regardless of the limitations of these quantum chips, they are an essential part
 
 In the absence of large-scale and fault-tolerant quantum computers, quantum computer simulation is critical for developing and testing quantum algorithms.
 Quantum Inspire offers two simulator back-ends which use QX~\cite{khammassi2017qx} as quantum computer simulator.
-One of the simulator back-ends is hosted by QuTech on a commodity cloud-based server with 4GB of RAM, which can run simulations up to 26 qubits.
+One of the simulator back-ends is hosted by QuTech on a commodity cloud-based server with 4 GB of memory, which can run simulations up to 26 qubits.
 The other simulator back-end is hosted on SURF's computer cluster Lisa which consists of several hundreds of multi-core nodes.
-The largest node available on Lisa has 256GB of RAM, which supports simulations up to 31 qubits.
+The largest node available on Lisa has 256 GB of memory, which supports simulations up to 31 qubits.
 
 When quantum circuits are submitted to Quantum Inspire, they are handed to a job scheduler which will attempt to schedule the job as quickly as possible when the requested resources are available.
 For the quantum chips and QuTech simulator back-ends, the jobs are simply placed in a queue which are executed in first-in-first-out order.
 The wait time for these back-ends ranges from seconds to minutes.
-For the SURF simulator back-end, the jobs are handled by the Slurm workload manager~\cite{yoo2003slurm}.
+For the SURF simulator back-end, the jobs are handled by a batch system.
 Because SURF's infrastructure is shared with many other users, wait times can vary from minutes to hours.
 Especially large simulations which require a large amount of resources may take a long time to schedule.
 
 \section{SURF High Performance Computing}
+SURF offers an integrated ICT research infrastructure and provides services in the areas of computing, data storage, visualization, networking, and cloud.
+This report is mainly interested in the computing services, and more precisely the Lisa and Cartesius cluster computers.
+These cluster computers can be thought of as a network of computers (nodes).
+Each node has its own CPU, memory, disk space, and a shared file system.
+Cluster computers are often used for \acrfull{hpc}, where a large amount of resources (CPU's, GPU's, memory etc.) is used to solve computationally expensive problems.
+Interacting with a cluster computer works different than a regular computer: instead of submitting a script or command (job) and immediately being run, cluster computers use a batch system that runs your job as soon as sufficient resources are available.
+Lisa and Cartesius use the Slurm workload manager~\cite{yoo2003slurm} as job scheduler.
+
+The specifications of the Lisa and Cartesius cluster computers are described in \Cref{table:surf-cluster-computers}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{ c|c|c }
+        Resource & Lisa & Cartesius \\
+        \hline
+        CPU's & 5304 & 47,776   \\
+        Memory & 41.7 TB & 130 TB \\
+        GPU's & 216 & 132 \\
+        Flop/s (64-bit floating point) & 367.9 Tflop/s & 1.843 Pflop/s  \\
+        Disk space & 400 TB home & 180 TB home, 7.7 PB project + scratch \\
+    \end{tabular}
+    \caption[Specification of the Lisa and Cartesius cluster computers.]{
+        Specification of the Lisa and Cartesius cluster computers.
+        Here Flop/s refers to floating point operations per second, or the theoretical peak performance.
+    }
+    \label{table:surf-cluster-computers}
+\end{table}
 
 \section{Hybrid Quantum-Classical Workflow}
+% mostly research towards HQCA's, not really practical applications/no speedups to be gained yet
+% most research towards HQCA's doesnt need supercomputers - can still be useful for running multiple experiments
