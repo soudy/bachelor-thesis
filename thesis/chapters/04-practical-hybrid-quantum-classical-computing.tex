@@ -69,5 +69,29 @@ The specifications of the Lisa and Cartesius cluster computers are described in 
 \end{table}
 
 \section{Hybrid Quantum-Classical Workflow}
+\begin{table}[ht]
+    \centering
+    {\renewcommand{\arraystretch}{1.35}
+        \begin{tabular}{ c|c|c|>{\centering\arraybackslash}m{4.9cm} }
+            Name & Classical part & Quantum part & Use case(s) \\
+            \hline
+            Local-Local & Local & Simulation (Local) & Small experimentation/prototyping \\
+            \hline
+            Local-Hardware & Local & Hardware & Small experimentation/exploration of hardware \\
+            \hline
+            Local-\gls{hpc} & Local & Simulation (\gls{hpc}) & Large quantum simulations that can not be run locally \\
+            \hline
+            \gls{hpc}-Hardware & \gls{hpc} & Hardware & Well-defined/multiple experiments, hybrid computation with expensive classical part \\
+            \hline
+            \gls{hpc}-\gls{hpc} & \gls{hpc} & Simulation (\gls{hpc}) & Multiple experiments, expensive classical and/or quantum part, high performance simulations \\
+        \end{tabular}
+    }
+    \caption[Relevant hybrid quantum-classical workflows and their use cases.]{
+        Relevant hybrid quantum-classical workflows and their use cases.
+        In the classical part column the platform on which the classical computation runs: locally on a laptop or personal computer, or on SURF's \gls{hpc} center.
+        Equivalently, the quantum part columns refers to the platform the quantum computation runs: local simulation, real hardware, or simulation on SURF's \gls{hpc} center.
+    }
+    \label{table:hqca-workflows}
+\end{table}
 % mostly research towards HQCA's, not really practical applications/no speedups to be gained yet
 % most research towards HQCA's doesnt need supercomputers - can still be useful for running multiple experiments

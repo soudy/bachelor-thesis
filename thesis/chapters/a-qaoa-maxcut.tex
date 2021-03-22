@@ -31,7 +31,7 @@ H_L = \frac{1}{2} \sum_{(j, k) \in E} w_{j, k}(I - Z^{(j)}Z^{(k)}).
 \end{equation}
 This gives the problem unitary
 \begin{equation} \label{eqn:problem-unitary}
-U(H_L, \gamma) = e^{-i\gamma H_L} = \prod_{(j, k) \in E} e^{-i\tfrac{\gamma}{2}w_{j, k}(I - Z^{(j)}Z^{(k)})},
+U(H_L, \gamma) = e^{-i\gamma H_L} = \prod_{(j, k) \in E} e^{-i\gamma w_{j, k}(I - Z^{(j)}Z^{(k)})/2},
 \end{equation}
 and the standard mixer unitary as defined in \Cref{sec:qaoa}:
 \begin{equation} \label{eqn:mixer-unitary}
@@ -49,12 +49,12 @@ The optimal solutions for this graph are $z = 0101$ and $z = 1010$ with $L(z) = 
     }
     \label{fig:maxcut-4-graph}
 \end{figure}
-A $ZZ$ interaction $e^{-i\gamma/2(I - Z^{(j)}Z^{(k)})}$ from the problem unitary $U(H_L, \gamma)$ (\Cref{eqn:problem-unitary}) is implemented as follows:
+A $ZZ$ interaction $e^{-i\gamma w_{j, k}(I - Z^{(j)}Z^{(k)})/2}$ from the problem unitary $U(H_L, \gamma)$ (\Cref{eqn:problem-unitary}) is implemented as follows:
 \begin{figure}[H]
     \[
     \Qcircuit @C=1em @R=1em @!R {
         & \lstick{\ket{q_j}} & \ctrl{1} & \qw & \ctrl{1} & \qw \\
-        & \lstick{\ket{q_k}} & \targ & \gate{Rz(-\gamma)} & \targ & \qw
+        & \lstick{\ket{q_k}} & \targ & \gate{R_z(\gamma w_{j, k})} & \targ & \qw
     }
     \]
 \end{figure}
@@ -71,7 +71,7 @@ The $X$ interaction $e^{-i\beta X^{(j)}}$ from the mixer unitary $U(H_B, \beta)$
 The complete quantum circuit for the \gls{qaoa} for Max-Cut on this graph is shown in \Cref{fig:qaoa-circuit}.
 
 The quantum circuit is implemented using the ProjectQ quantum computing library.
-To find the optimal parameters $\vec{\gamma}^*, \vec{\beta}^*$ the Nelder-Mead optimization algorithm~\cite{nelder1965simplex} provided by SciPy is used.
+To find the optimal parameters $\vec{\gamma}^*, \vec{\beta}^*$ the \gls{cobyla} optimization algorithm~\cite{powell1994direct} provided by SciPy is used.
 The relevant cost function is
 \begin{equation}
 C_p(\vec{\gamma}, \vec{\beta}) = \bra{\psi(\vec{\gamma}, \vec{\beta})}H_L\ket{\psi(\vec{\gamma}, \vec{\beta})},
@@ -85,12 +85,12 @@ We then prepare the state $\ket{\psi(\vec{\gamma}^*, \vec{\beta}^*)}$ and measur
 \begin{figure}
     \begin{adjustwidth}{-1cm}{-1cm}
     \[
-    \Qcircuit @C=0.4em @R=0.8em @!R {
-        & & & & & \lstick{\ket{q_0}} & \gate{H} & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \ctrl{3} & \qw & \ctrl{3} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \gate{R_x(2\beta)} & \qw & \qw & \meter & \cw \\
-        & & & & & \lstick{\ket{q_1}} & \gate{H} & \qw & \targ & \gate{R_z(-\gamma)} & \targ & \qw & \qw & \qw & \qw & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw & \gate{R_x(2\beta)} & \qw & \qw & \meter & \cw \\
-        & & & & & \lstick{\ket{q_2}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{R_z(-\gamma)} & \targ & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \gate{R_x(2\beta)} & \qw & \qw & \meter & \cw \\
-        & & & & & \lstick{\ket{q_3}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \targ & \gate{R_z(-\gamma)} & \targ & \qw & \qw & \qw & \qw & \qw & \targ & \gate{R_z(-\gamma)} & \targ & \qw & \gate{R_x(2\beta)} \gategroup{1}{9}{4}{25}{1em}{--} & \qw & \qw & \meter & \cw \\
-        & & & & & & & & & & & & & \hspace{5cm} p \mbox{ times}
+    \Qcircuit @C=0.35em @R=0.8em @!R {
+        & & & & \lstick{\ket{q_0}} & \gate{H} & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \ctrl{3} & \qw & \ctrl{3} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \gate{R_x(2\beta)} & \qw & \qw & \meter & \cw \\
+        & & & & \lstick{\ket{q_1}} & \gate{H} & \qw & \targ & \gate{R_z(\gamma w_{0, 1})} & \targ & \qw & \qw & \qw & \qw & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \qw & \qw & \qw & \qw & \gate{R_x(2\beta)} & \qw & \qw & \meter & \cw \\
+        & & & & \lstick{\ket{q_2}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \targ & \gate{R_z(\gamma w_{1, 2})} & \targ & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \gate{R_x(2\beta)} & \qw & \qw & \meter & \cw \\
+        & & & & \lstick{\ket{q_3}} & \gate{H} & \qw & \qw & \qw & \qw & \qw & \targ & \gate{R_z(\gamma w_{0, 3})} & \targ & \qw & \qw & \qw & \qw & \qw & \targ & \gate{R_z(\gamma w_{2, 3})} & \targ & \qw & \gate{R_x(2\beta)} \gategroup{1}{8}{4}{24}{1em}{--} & \qw & \qw & \meter & \cw \\
+        & & & & & & & & & & & & \hspace{5cm} p \mbox{ times}
     }
     \]
     \end{adjustwidth}
