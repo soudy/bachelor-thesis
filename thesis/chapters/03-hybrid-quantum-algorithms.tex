@@ -35,7 +35,7 @@ The parameters $\vec{\theta}$ are then trained in a quantum-classical loop to so
 \subsection{Cost Function}
 In general, the cost function has the form
 \begin{equation} \label{eqn:general-cost-function}
-C(\vec{\theta}) = \sum_k f_k\left(\bra{0\ldots 0}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0\ldots 0}\right),
+C(\vec{\theta}) = \sum_k f_k\left(\bra{0^n}U(\vec{\theta})^\dagger H_k U(\vec{\theta})\ket{0^n}\right),
 \end{equation}
 where $f_k$ is a function encoding the problem at hand, $U(\vec{\theta})$ is the quantum circuit parameterized by real values $\vec{\theta}$, and $H_k$ is an observable.
 A key point of variational \glspl{hqca} is that a quantum computer is used to estimate $C(\vec{\theta})$ while using a classical computer to optimize the parameters $\vec{\theta}$.
