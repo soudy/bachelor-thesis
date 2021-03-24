@@ -21,6 +21,9 @@ from scipy.optimize import minimize
 from typing import Optional, Dict, Any, List
 
 
+DEFAULT_QI_API_URL = "https://api.quantum-inspire.com"
+
+
 class QAOA:
     DEFAULT_SHOTS: int = 1024
 
@@ -279,11 +282,10 @@ def grid_search_best_cuts(G: nx.Graph, n: int):
     return max_cut, results[max_cut]
 
 
-def set_qi_authentication(api_key: str, project_name: str = ""):
+def set_qi_authentication(api_key: str, api_url: str, project_name: str = ""):
     enable_account(api_key)
     auth = get_token_authentication()
-    server_url = "https://api.quantum-inspire.com"
-    QI.set_authentication(auth, server_url)
+    QI.set_authentication(auth, api_url)
 
 
 def init_params(p: int) -> List[float]:
@@ -326,7 +328,9 @@ def main(args):
     configurable_kwargs = {"p": args["layers"]}
     qaoa = None
     if args["qi_backend_type"]:
-        set_qi_authentication("c15a7bdafcb71f7a3462c8515b23d64b7c3392d3", project_name="qaoa-maxcut")
+        set_qi_authentication("c15a7bdafcb71f7a3462c8515b23d64b7c3392d3",
+                              args["qi_api_url"],
+                              project_name="qaoa-maxcut")
         qaoa = QAOA(G, n, use_qi=True, **configurable_kwargs,
                     qi_backend_type=args["qi_backend_type"])
     else:
@@ -350,18 +354,22 @@ def main(args):
              G=G, max_cuts=(max_cut, cuts))
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="QAOA on Max-Cut")
+    parser = argparse.ArgumentParser(description="QAOA on Max-Cut",
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument(
+        "--output-file", type=str, default="./qaoa_maxcut_out.npz",
+        help="file to write results to")
     parser.add_argument(
         "--layers", type=int, default=1,
-        help="number of QAOA layers (default: 1)")
+        help="number of QAOA layers")
     parser.add_argument(
         "--random-graph", action="store_true",
-        help="generate a d-regular random graph with n nodes (requires "
-             "--random-graph-d and --random-graph-n to be set)")
+        help="generate a d-regular random graph with n nodes. requires "
+             "--random-graph-d and --random-graph-n to be set")
     parser.add_argument(
         "--random-graph-unit-weights", action="store_true",
-        help="use unit weights for random graph (generates random weights "
-             "between 0 and 4 by default)")
+        help="use unit weights for random graph. generates random weights "
+             "between 0 and 4 by default")
     parser.add_argument(
         "--random-graph-d", type=int, required=False,
         help="regularity d of random graph")
@@ -373,25 +381,26 @@ if __name__ == "__main__":
         help="skip classical grid search for optimal cut(s)")
     parser.add_argument(
         "--optimizer", type=str, default="COBYLA",
-        help="optimizer used (default: COBYLA)")
+        help="optimizer used")
     parser.add_argument(
         "--max-iter", type=int, default=30,
-        help="max number of optimizer iterations (default: 30)")
+        help="max number of optimizer iterations")
     parser.add_argument(
         "--seed", type=int, default=0xc0ffee,
-        help="seed for initializing parameters (default: 0xC0FFEE)")
+        help="seed for initializing parameters")
     parser.add_argument(
         "--shots", type=int, default=1024,
-        help="number of shots used in quantum circuit execution (default: 1024)")
+        help="number of shots used in quantum circuit execution")
     parser.add_argument(
         "--solution-shots", type=int, default=4096,
-        help="number of shots used for measuring final solution (default: 4096)")
+        help="number of shots used for measuring final solution")
     parser.add_argument(
         "--qi-backend-type", type=str, default="",
         help="Quantum Inspire back-end to use with Qiskit. if not provided, "
              "the Qiskit qasm_simulator back-end is used")
     parser.add_argument(
-        "--output-file", type=str, required=True, help="file to write results to")
+        "--qi-api-url", type=str, default=DEFAULT_QI_API_URL,
+        help=f"Quantum Inspire API URL")
     args = parser.parse_args()
 
     if args.random_graph and (args.random_graph_d is None or args.random_graph_n is None):

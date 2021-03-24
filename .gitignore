@@ -194,3 +194,5 @@ docs/_build/
 
 # PyBuilder
 target/
+
+qaoa_maxcut_out.npz
