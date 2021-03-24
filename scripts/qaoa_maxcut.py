@@ -338,7 +338,7 @@ def main(args):
 
     cost_fn = partial(qaoa.record_cost_step, shots=args["shots"])
     res = minimize(cost_fn, params, method=args["optimizer"],
-                   options={"disp": True, "tol": 1e-2, "maxiter": args["max_iter"]})
+                   options={"disp": True, "tol": 1e-6, "maxiter": args["max_iter"]})
 
     print(res)
 
