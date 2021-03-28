@@ -2,7 +2,7 @@
 The aim of Max-Cut is to find a set of vertices that maximizes the sum of the weights of the edges that are cut.
 Formally, given an undirected graph $G = (V, E)$ with $n = |V|$ vertices and non-negative weights $w_{j, k} = w_{k, j}$ on the edges $(j, k) \in E$, one looks to bipartition $V$ into two sets $S \subseteq V$ and $\bar{S} = V \setminus S \subseteq V$ such that the objective function $L$ is maximized:
 \begin{equation} \label{eqn:max-cut-objective}
-L(z) = \sum_{(j, k) \in E} w_{j, k}z_j(1 - z_k) + w_{j, k} z_k(1 - z_j).
+L(z) = \sum_{(j, k) \in E} w_{j, k}[z_j(1 - z_k) + z_k(1 - z_j)].
 \end{equation}
 Here $z \in \{0, 1\}^n$ is a bit string that describes the bipartition as follows: if a vertex $j$ is in partition $S$, then $z_j = 0$, and if a vertex $j$ is in partition $\bar{S}$ then $z_j = 1$.
 For example, \Cref{fig:maxcut-5-example} shows an example of a maximum cut on a graph with five vertices.
@@ -25,7 +25,7 @@ To encode the objective function from \Cref{eqn:max-cut-objective}, note that th
 L(z) = \frac{1}{2} \sum_{(j, k) \in E} w_{j, k}(1 - z_jz_k),
 \end{equation}
 where $z_j \in \{-1, 1\}$ for $j \in V$.
-This objective function can be represented by the following cost Hamiltonian:
+This objective function can be represented by the following problem Hamiltonian:
 \begin{equation} \label{eqn:problem-hamiltonian}
 H_L = \frac{1}{2} \sum_{(j, k) \in E} w_{j, k}(I - Z^{(j)}Z^{(k)}).
 \end{equation}
@@ -71,7 +71,7 @@ The $X$ interaction $e^{-i\beta X^{(j)}}$ from the mixer unitary $U(H_B, \beta)$
 The complete quantum circuit for the \gls{qaoa} for Max-Cut on this graph is shown in \Cref{fig:qaoa-circuit}.
 
 The quantum circuit is implemented using the Qiskit quantum computing library.
-To find the optimal parameters $\vec{\gamma}^*, \vec{\beta}^*$ the \gls{cobyla} optimization algorithm~\cite{powell1994direct} provided by SciPy is used.
+To find the optimal parameters $\vec{\gamma}^*, \vec{\beta}^*$ a classical optimizer provided by SciPy is used.
 The relevant cost function is
 \begin{equation}
 C_p(\vec{\gamma}, \vec{\beta}) = \bra{\psi(\vec{\gamma}, \vec{\beta})}H_L\ket{\psi(\vec{\gamma}, \vec{\beta})},
@@ -104,4 +104,43 @@ We then prepare the state $\ket{\psi(\vec{\gamma}^*, \vec{\beta}^*)}$ and measur
 \end{figure}
 
 \section{Results}
-% TODO: results (simulation, hardware, different p)
+The implementation from the previous section is run on two different Quantum Inspire back-ends: the QX simulator back-end and the Starmon-5 hardware back-end.
+The cost function is optimized for 30 iterations using the \gls{cobyla} algorithm.
+For the quantum circuit executions during optimization 1024 shots were used, and for the final measurement 4096 shots were used.
+The results from the experiments are shown in \Cref{fig:qaoa-results}.
+The QX simulator back-end manages to find a local minimum with a final approximation ratio of $0.76$ and high probabilities of measuring the optimal solutions $z = 1010$ and $z = 0101$.
+The Starmon-5 hardware back-end reaches a final approximation ratio of $0.63$ and manages to reach a final state which measures an optimal solution $z = 0101$ with high probability.
+The performance difference between the simulator and hardware back-end was expected: while \glspl{hqca} have some robustness against noise, their performance on real hardware will still be significantly worse from idealized noise-free simulations.
+Further performance improvement could be achieved on real hardware by choosing a classical optimizer that is more robust against noise~\cite{lavrijsen2020classical}, but such work is beyond the scope of this report.
+Nonetheless, these experiments demonstrate the potential of quantum computers and even \gls{nisq} devices to solve practical problems in the near future.
+While being far away from being more efficient than classical methods, such demonstration is an important step in the development of larger and better quantum computers.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/qaoa_maxcut_n4_p1_qx_optimization.pdf}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/qaoa_maxcut_n4_p1_qx_probs.pdf}
+    \end{subfigure}
+
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/qaoa_maxcut_n4_p1_starmon_optimization.pdf}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/qaoa_maxcut_n4_p1_starmon_probs.pdf}
+    \end{subfigure}
+
+    \caption[Experimental results of the \gls{qaoa} on the graph from \Cref{fig:maxcut-4-graph}.]{
+        Experimental results of the \gls{qaoa} on the graph from \Cref{fig:maxcut-4-graph}.
+        The left column plots the approximation ratio $C_p(\vec{\gamma}, \vec{\beta})/L_\text{max}$ over 30 iterations, and the right column plots the final probabilities of measuring the possible solution bit strings after optimization.
+        The top row contains results from the QX simulator back-end, and the bottom row contains the results from the Starmon-5 hardware back-end.
+    }
+    \label{fig:qaoa-results}
+\end{figure}

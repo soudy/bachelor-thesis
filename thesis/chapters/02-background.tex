@@ -92,7 +92,7 @@ This gives us good reasons to believe that classical computers cannot efficientl
 Complexity classes are sets of computational problems that share some common feature with regard to the computational resources they need to solve some problem~\cite{arora2009computational}.
 They are defined in terms of a type of computational problem, computational model, and a bounded resource such as time or space.
 In general, most complexity classes describe decision problems solvable by deterministic Turing machines --- though many complexity classes are defined in terms of other types of problems and computational models.
-This report mainly focuses on complexity classes involving Turing machines and quantum Turing machines.
+This report mainly focuses on complexity classes involving Turing machines and quantum computers.
 
 The class $\P$ contains all decision problems solvable by a deterministic Turing machine in polynomial time.
 Problems that fall under this class are often referred to as tractable or easy problems~\cite{cormen2009introduction}.
@@ -358,11 +358,80 @@ The inverse of a gate $U$ is denoted as the conjugate transpose $U^\dagger$.
 By the definition of unitary $UU^\dagger = U^\dagger U = I$, applying the inverse $U^\dagger$ after $U$ essentially uncomputes $U$ and vice versa.
 Gates whose conjugate transpose are equal to themselves are referred to as Hermitian.
 For example, $H$ is Hermitian as $H^\dagger = H$ and thus $H^2 = I$.
+
+
+\begin{table}[ht]
+    \centering
+    {\renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{ c|c|c }
+            Gate name & Circuit symbol & Matrix representation \\
+            \hline
+            Hadamard &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{H} & \qw
+            }
+            & $\hgate{}$ \\
+            Pauli-$X$ &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{X} & \qw
+            }
+            & $\xgate{}$ \\
+            Pauli-$Y$ &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{Y} & \qw
+            }
+            & $\ygate{}$ \\
+            Pauli-$Z$ &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{Z} & \qw
+            }
+            & $\zgate{}$ \\
+            Phase ($S$) &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{S} & \qw
+            }
+            &
+            $\begin{pmatrix}1 & 0 \\ 0 & i\end{pmatrix}$ \\
+            $T$ &
+            \Large
+            \Qcircuit @C=1em @R=1em @!R {
+                & \gate{T} & \qw
+            }
+            &
+            $\begin{pmatrix}1 & 0 \\ 0 & e^{i\pi/4}\end{pmatrix}$ \\
+            $\textnormal{CNOT}$ &
+            $
+            \Large
+            \Qcircuit @C=1em @R=1em {
+                & \ctrl{1} & \qw \\
+                & \targ & \qw
+            }
+            $
+            & $\cnotgate{}$ \\
+            $CZ$ &
+            $
+            \Large
+            \Qcircuit @C=1em @R=1em {
+                & \ctrl{1} & \qw \\
+                & \control \qw & \qw
+            }
+            $
+            & $\czgate{}$ \\
+        \end{tabular}
+    }
+    \caption{Frequently used quantum gates with their circuit symbol and matrix representation.}
+    \label{table:common-quantum-gates}
+\end{table}
  
 \Cref{fig:bell-state-circuit} demonstrates a simple quantum circuit which creates the maximally entangled state $\ket{\Phi^+} = \left(\ket{00} + \ket{11}\right)/\sqrt{2}$ from \Cref{eqn:bell-state} and measures both qubits.
 This state is one of four maximally entangled two-qubit states referred to as a Bell state.
 \begin{figure}[ht]
-    \Large
+    \large
     \[
     \Qcircuit @C=1em @R=1em @!R {
         \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \meter & \cw  \\
@@ -385,79 +454,11 @@ Then, a $\textnormal{CNOT}$ is applied with the first qubit as control and the s
 \end{equation}
 This state is then measured, which will measure 00 or 11 with equal probability.
 
-\begin{table}[ht]
-    \centering
-    {\renewcommand{\arraystretch}{1.2}
-        \begin{tabular}{ c|c|c }
-            Gate name & Circuit symbol & Matrix representation \\
-            \hline
-            Hadamard &
-            \Large
-            \Qcircuit @C=1em @R=1em @!R {
-                & \gate{H} & \qw
-            }
-             & $\hgate{}$ \\
-             Pauli-$X$ &
-             \Large
-             \Qcircuit @C=1em @R=1em @!R {
-                 & \gate{X} & \qw
-             }
-             & $\xgate{}$ \\
-             Pauli-$Y$ &
-             \Large
-             \Qcircuit @C=1em @R=1em @!R {
-                 & \gate{Y} & \qw
-             }
-             & $\ygate{}$ \\
-             Pauli-$Z$ &
-             \Large
-             \Qcircuit @C=1em @R=1em @!R {
-                 & \gate{Z} & \qw
-             }
-             & $\zgate{}$ \\
-             Phase ($S$) &
-             \Large
-             \Qcircuit @C=1em @R=1em @!R {
-                 & \gate{S} & \qw
-             }
-             &
-             $\begin{pmatrix}1 & 0 \\ 0 & i\end{pmatrix}$ \\
-             $T$ &
-             \Large
-             \Qcircuit @C=1em @R=1em @!R {
-                 & \gate{T} & \qw
-             }
-             &
-             $\begin{pmatrix}1 & 0 \\ 0 & e^{i\pi/4}\end{pmatrix}$ \\
-             $\textnormal{CNOT}$ &
-             $
-             \Large
-             \Qcircuit @C=1em @R=1em {
-                 & \ctrl{1} & \qw \\
-                 & \targ & \qw
-             }
-             $
-             & $\cnotgate{}$ \\
-             $CZ$ &
-             $
-             \Large
-             \Qcircuit @C=1em @R=1em {
-                 & \ctrl{1} & \qw \\
-                 & \control \qw & \qw
-             }
-             $
-             & $\czgate{}$ \\
-        \end{tabular}
-    }
-    \caption{Frequently used quantum gates with their circuit symbol and matrix representation.}
-    \label{table:common-quantum-gates}
-\end{table}
-
 In classical computations, copying bits is a common operation.
 However, in quantum computing the data one can copy is much more restricted.
 If a qubit is in a computational basic state, that state can be copied by a $\textnormal{CNOT}$ gate~(\Cref{fig:copy-basis-state}).
 \begin{figure}[ht]
-    \Large
+    \large
     \[
     \Qcircuit @C=1em @R=1em @!R {
         \push{\rule{0em}{1em}} & & \lstick{\ket{j}} & \ctrl{1} & \qw & \ket{j}  \\
@@ -628,7 +629,7 @@ With the oracle defined, the quantum circuit of Grover's algorithm is shown in \
 \begin{figure}[ht]
     \[
     \large
-    \Qcircuit @C=1em @R=1em @!R {
+    \Qcircuit @C=1em @R=0.7em @!R {
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_1} = \ket{0}} & \gate{H} & \multigate{3}{U_\omega} & \gate{H} & \multigate{2}{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
         & & \rstick{\,\vdots} & & & & & & & & \vdots \\
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_n} = \ket{0}} & \gate{H} & \ghost{U_\omega} & \gate{H} & \ghost{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\

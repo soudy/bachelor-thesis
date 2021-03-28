@@ -239,7 +239,7 @@ def L(G: nx.Graph, z: List[int]) -> float:
     cost = 0
 
     for i, j in G.edges:
-        w = G[i][j]['weight']
+        w = G[i][j]["weight"]
         cost += w*z[i]*(1 - z[j]) + w*z[j]*(1 - z[i])
 
     return cost
@@ -262,10 +262,10 @@ def init_random_graph(d: int, n: int, seed: int, unit_weights: bool = False) -> 
 
     for j, k in G.edges():
         if unit_weights:
-            G[j][k]['weight'] = 1.0
+            G[j][k]["weight"] = 1.0
         else:
             # set weight to random 2 decimal floating point between 0 and 4
-            G[j][k]['weight'] = np.random.randint(0, 400) / 100
+            G[j][k]["weight"] = np.random.randint(0, 400) / 100
 
     return G
 
@@ -400,7 +400,7 @@ if __name__ == "__main__":
              "the Qiskit qasm_simulator back-end is used")
     parser.add_argument(
         "--qi-api-url", type=str, default=DEFAULT_QI_API_URL,
-        help=f"Quantum Inspire API URL")
+        help="Quantum Inspire API URL")
     args = parser.parse_args()
 
     if args.random_graph and (args.random_graph_d is None or args.random_graph_n is None):
