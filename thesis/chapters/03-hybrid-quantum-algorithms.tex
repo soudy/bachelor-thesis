@@ -216,7 +216,7 @@ The operator $H_L$ encodes the objective function and is referred to as the prob
 The \gls{qaoa} uses a problem-inspired ansatz which is defined in terms of two alternating unitaries, inspired by the quantum adiabatic algorithm~\cite{farhi2014quantum}.
 First, we define a unitary parameterized by $\gamma \in [0, 2\pi)$ using the problem Hamiltonian:
 \begin{equation}
-U(H_L, \gamma) = e^{-i\gamma H_L} = \prod_{\alpha=1}^{m} e^{-i\gamma H_{L_\alpha}}.
+U_L(\gamma) = e^{-i\gamma H_L} = \prod_{\alpha=1}^{m} e^{-i\gamma H_{L_\alpha}}.
 \end{equation}
 Next, we define a mixer Hamiltonian $H_B$:
 \begin{equation}
@@ -225,14 +225,14 @@ H_B = \sum_{j=0}^{n-1} X^{(j)},
 where $X^{(j)}$ is the Pauli-X gate acting on qubit $j$.
 Then, we define a mixer unitary parameterized by $\beta \in [0, 2\pi)$:
 \begin{equation}
-U(H_B, \beta) = e^{-i\beta H_B} = \prod_{j=0}^{n-1} e^{-i\beta X^{(j)}}.
+U_B(\beta) = e^{-i\beta H_B} = \prod_{j=0}^{n-1} e^{-i\beta X^{(j)}}.
 \end{equation}
 Note that $e^{-i\beta X}$ is just the $R_x$ operator as defined in \Cref{sec:state-evolution}.
 Using these unitaries, the ansatz can be described as alternating applications of the problem and mixer Hamiltonian $p$ times using different parameters:
 \begin{equation}
-U(\vec{\gamma}, \vec{\beta}) = \underbrace{U(H_B, \beta_p)U(H_L, \gamma_p) \ldots U(H_B, \beta_1)U(H_L, \gamma_1)}_{p \:\, \text{layers}}.
+U(\vec{\gamma}, \vec{\beta}) = \underbrace{U_B(\beta_p)U_L(\gamma_p) \ldots U_B(\beta_1)U_L(\gamma_1)}_{p \:\, \text{layers}}.
 \end{equation}
-This unitary depends on $2p$ parameters. 
+This unitary depends on $2p$ real parameters $\vec{\gamma} = ( \gamma_1,\ldots,\gamma_p )$ and $\vec{\beta} = ( \beta_1,\ldots,\beta_p )$. 
 Note that not all quantum hardware can prepare this ansatz efficiently, so specific hardware-efficient ans{\"a}tze are being proposed \cite{kandala2017hardware, farhi2017quantum}.
 
 Given these definitions, the \gls{qaoa} works as follows.
@@ -243,7 +243,7 @@ The system starts in the equal superposition state
 A trial state $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ is then obtained by applying the ansatz to \ket{s}:
 \begin{align}
 \ket{\psi(\vec{\gamma}, \vec{\beta})} &= U(\vec{\gamma}, \vec{\beta})\ket{s} \\
-&= U(H_B, \beta_p)U(H_L, \gamma_p) \ldots U(H_B, \beta_1)U(H_L, \gamma_1)\ket{s},
+&= U_B(\beta_p)U_L(\gamma_p) \ldots U_B(\beta_1)U_L(\gamma_1)\ket{s},
 \end{align}
 and the cost function to optimize is as follows:
 \begin{equation} 
