@@ -81,7 +81,7 @@ class QAOA:
             # problem unitary
             for j, k in self.G.edges:
                 circ.cnot(j, k)
-                circ.rz(params[i]*self.G[j][k]["weight"], k)
+                circ.rz(-params[i]*self.G[j][k]["weight"], k)
                 circ.cnot(j, k)
 
             # mixer unitary
