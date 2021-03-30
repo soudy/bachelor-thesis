@@ -17,6 +17,7 @@ from quantuminspire.api import QuantumInspireAPI
 from quantuminspire.qiskit import QI
 
 from scipy.optimize import minimize
+from noisyopt import minimizeSPSA, minimizeCompass
 
 from typing import Optional, Dict, Any, List
 
@@ -337,8 +338,13 @@ def main(args):
         qaoa = QAOA(G, n, **configurable_kwargs)
 
     cost_fn = partial(qaoa.record_cost_step, shots=args["shots"])
-    res = minimize(cost_fn, params, method=args["optimizer"],
-                   options={"disp": True, "tol": 1e-6, "maxiter": args["max_iter"]})
+    if args["optimizer"].lower() == "spsa":
+        res = minimizeSPSA(cost_fn, bounds=[(0, 2*np.pi) for _ in params],
+                           x0=params, niter=args["max_iter"],
+                           paired=False)
+    else:
+        res = minimize(cost_fn, params, method=args["optimizer"],
+                       options={"disp": True, "tol": 1e-6, "maxiter": args["max_iter"]})
 
     print(res)
 
