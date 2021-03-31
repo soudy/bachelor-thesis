@@ -1,6 +1,6 @@
 \chapter[Practical Hybrid Quantum-Classical Computing]{Practical Hybrid Quantum-Classical\\Computing} \label{chap:practical-hybrid-quantum-classical-computing}
 This chapter is focused on the practical execution of \glspl{hqca} using the Quantum Inspire quantum computing platform and SURF's \gls{hpc} center.
-% TODO: expand
+It will start with describing the relevant platforms.
 
 \section{Quantum Inspire}
 Quantum Inspire is a full-stack quantum computing platform that QuTech launched last year to make quantum systems available to the general public for exploratory research~\cite{last2020quantum}.
@@ -27,7 +27,22 @@ Regardless of the limitations of these \glspl{qpu}, they are an essential part i
 \end{figure}
 
 In the absence of large-scale and fault-tolerant quantum computers, quantum computer simulation is critical for developing and testing quantum algorithms.
+Quantum computer simulators often use one of three classical algorithms to simulate quantum circuits.
+These algorithms have different trade-offs in the resources that they use.
+First, there is the naive Schr{\"o}dinger simulation algorithm in which the complex amplitudes of a quantum state are represented in a state-vector, gates are represented as matrices, and state evolution is done by matrix-vector multiplication.
+This algorithm uses $O(2^n)$ time and space, where $n$ is the amount of qubits~\cite{aaronson2016complexity}.
+Second, there is the Feynman simulation algorithm which makes use of the path integral formulation of quantum mechanics~\cite{feynman2005space}.
+This approach uses $O(m+n)$ space, but takes $O(4^m)$ time, where $m$ is the amount of gates~\cite{aaronson2016complexity}.
+So while using a linear amount of space, the time it takes grows exponential with the number of gates.
+The number of gates even for small computations can reach the order of thousands.
+Supercomputers may be able to simulate quantum circuits with a thousand gates using the Schr{\"o}dinger  algorithm, but not even the most powerful supercomputer could simulate such circuit using the Feynman algorithm.
+On the other hand, the Feynman algorithm can simulate a quantum circuit with a few gates and 100 qubits, while the Schr{\"o}dinger algorithm is greatly limited in the amount of qubits it can simulate due to its exponential space requirement.
+Finally, \textcite{aaronson2016complexity} described an algorithm that offers best of both worlds: the Schr{\"o}dinger-Feynman algorithm.
+This algorithm uses $O(d^n)$ time and $O(d \cdot n \log n)$ space, where $d$ is the depth of the circuit.
+These different simulation algorithms allow you to trade time for space efficiency and vice versa, but all of them require exponential time and/or space, greatly limiting the size of simulations we can do.
+
 Quantum Inspire offers two simulator back-ends which use QX~\cite{khammassi2017qx} as quantum computer simulator.
+The QX simulator uses the Schr{\"o}dinger simulation algorithm focused on efficiently using sparse operators.
 One of the simulator back-ends is hosted by QuTech on a commodity cloud-based server with 4 GB of memory, which can run simulations up to 26 qubits.
 The other simulator back-end is hosted on SURF's computer cluster Lisa which consists of several hundreds of multi-core nodes.
 The largest node available on Lisa has 256 GB of memory, which supports simulations up to 31 qubits.
@@ -48,7 +63,6 @@ Cluster computers are often used for \acrfull{hpc}, where a large amount of reso
 Interacting with a cluster computer works different than a regular computer: instead of submitting a script or command (job) and immediately being run, cluster computers use a batch system that runs your job as soon as sufficient resources are available.
 Lisa and Cartesius use the Slurm workload manager~\cite{yoo2003slurm} as job scheduler.
 The specifications of the Lisa and Cartesius cluster computers are described in \Cref{table:surf-cluster-computers}.
-
 \begin{table}[ht]
     \centering
     \begin{tabular}{ c|c|c }

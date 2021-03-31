@@ -114,7 +114,7 @@ These kinds of algorithms are referred to as probabilistic algorithms and are de
 A probabilistic Turing machine is a non-deterministic Turing machine that can choose from a set of possible transitions according to some probability distribution when transitioning.
 The probabilistic equivalent of $\P$ is $\BPP$ (bounded-error probabilistic polynomial time) and contains all decision problems solvable by a probabilistic Turing machine in polynomial time where a bounded error rate of $1/3$ is allowed.
 Since a non-deterministic Turing machine can efficiently simulate a deterministic Turing machine, $\P \subseteq \BPP$.
-There are problems to be known in $\BPP$ and not in $\P$, but the number of such problems is decreasing, and \textcite{goldreich2011world, nisan1994hardness} even argue that $\P = \BPP$.
+There are problems to be known in $\BPP$ and not in $\P$, but the number of such problems is decreasing, and over the last decades a lot of evidence has been found towards $\P = \BPP$~\cite{aaronson2013quantum, goldreich2011world, nisan1994hardness}.
 
 How do quantum computers relate to these complexity classes?
 Quantum computers are probabilistic computational devices, and its complexity class equivalent to $\P$ can be defined by replacing the probabilistic Turing machine from $\BPP$ with a quantum computer.\footnote{Note that quantum computers are not simply probabilistic Turing machines as will be shown in the following sections.}
@@ -434,8 +434,8 @@ This state is one of four maximally entangled two-qubit states referred to as a 
     \large
     \[
     \Qcircuit @C=1em @R=1em @!R {
-        \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \meter & \cw  \\
-        \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \qw & \targ & \meter & \cw \\
+        & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \meter & \cw  \\
+        & \lstick{\ket{0}} & \qw & \targ & \meter & \cw \\
     }
     \]
     \caption{Quantum circuit for creating and measuring a Bell state \ket{\Phi^+}.}
@@ -461,8 +461,8 @@ If a qubit is in a computational basic state, that state can be copied by a $\te
     \large
     \[
     \Qcircuit @C=1em @R=1em @!R {
-        \push{\rule{0em}{1em}} & & \lstick{\ket{j}} & \ctrl{1} & \qw & \ket{j}  \\
-        \push{\rule{0em}{1em}} & & \lstick{\ket{0}} & \targ & \qw & \ket{j} \\
+        \lstick{\ket{j}} & \ctrl{1} & \qw & \ket{j}  \\
+        \lstick{\ket{0}} & \targ & \qw & \ket{j} \\
     }
     \]
     \caption{Copying a computational basis state using $\textnormal{CNOT}$ where $j \in \{0, 1\}$.}
