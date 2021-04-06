@@ -91,6 +91,12 @@ Through this script you can load the required modules, handle input and output d
 The job script is submitted to the job scheduler and will be run on a batch node as soon as the requested resources are available.
 
 \section{Hybrid Quantum-Classical Workflows}
+When researching and running \glspl{hqca}, different problems require different workflows.
+For example, small simulation experiments do not require \gls{hpc} facilities, unless one wants to run the experiment many times in parallel with varying parameters.
+In \Cref{table:hqca-workflows} the five different workflows which are considered in this report are described.
+The order in which the workflows are displayed can be thought of as progressing from small experimentation and prototyping to (large) well-defined experiments.
+%First, Local-Local hybrid quantum-classical computation covers a large part of use cases. 
+
 \begin{table}[ht]
     \centering
     {\renewcommand{\arraystretch}{1.35}
@@ -117,3 +123,9 @@ The job script is submitted to the job scheduler and will be run on a batch node
 \end{table}
 % mostly research towards HQCA's, not really practical applications/no speedups to be gained yet
 % most research towards HQCA's doesnt need supercomputers - can still be useful for running multiple experiments
+
+\section{Hybrid Quantum-Classical Workflow Analysis}
+% A wait time of several days is not uncommon for cluster computers. As cluster computers aim to perform calculations that would take months or even years on a regular PC, a couple of days waiting is generally considered acceptable.
+% Ultimately, one is interested in minimizing the amount of  time  it  takes  to  run  a  complete  experiment
+% maximum running time of an experiment is defined as max_iter*T_{iter}
+%   where T_{iter} = T_{latency} + T_{quantum} + T_{classical}
