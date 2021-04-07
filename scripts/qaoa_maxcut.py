@@ -9,12 +9,14 @@ from collections import defaultdict
 from functools import partial
 
 from qiskit import QuantumCircuit, Aer, execute
+from qiskit.compiler import transpile, assemble
 
 from projectq.ops import QubitOperator
 
 from quantuminspire.credentials import enable_account, get_token_authentication
 from quantuminspire.api import QuantumInspireAPI
 from quantuminspire.qiskit import QI
+from quantuminspire.qiskit.backend_qx import QuantumInspireBackend
 
 from scipy.optimize import minimize
 from noisyopt import minimizeSPSA, minimizeCompass
@@ -77,6 +79,8 @@ class QAOA:
         for i in range(self.n):
             circ.h(i)
 
+        circ.barrier()
+
         for i in range(self.p):
             # problem unitary
             for j, k in self.G.edges:
@@ -84,11 +88,26 @@ class QAOA:
                 circ.rz(-params[i]*self.G[j][k]["weight"], k)
                 circ.cnot(j, k)
 
+            circ.barrier()
+
             # mixer unitary
             for j in range(self.n):
                 circ.rx(2*params[i+1], j)
 
+            circ.barrier()
+
         return circ
+
+    def get_circuit_cqasm(self, params: List[float]) -> str:
+        circ = self.qaoa_circuit(params)
+        circ.measure(range(self.n), range(self.n))
+        (experiment,) = assemble(transpile(circ, backend=self.backend),
+                                 backend=self.backend).experiments
+
+        return QuantumInspireBackend._generate_cqasm(
+            experiment,
+            full_state_projection=False
+        )
 
     @staticmethod
     def _even_ones(binary: str, relevant_idxs: List[int]) -> int:
