@@ -4,12 +4,16 @@ import subprocess
 import argparse
 import resource
 import os
+import time
 
 import numpy as np
 
 def main(args):
     env = os.environ.copy()
     env["OMP_NUM_THREADS"] = str(args["omp_threads"])
+    env["KMP_AFFINITY"] = "granularity=fine,scatter"
+    # env["OMP_PLACES"] = "cores"
+    # env["OMP_PROC_BIND"] = "spread"
 
     result = {
         "cpu_times": [],
@@ -18,14 +22,16 @@ def main(args):
     }
 
     for _ in range(args["reps"]):
-        call_args = ["qx-simulator", args["cqasm"]]
+        call_args = ["qx-simulator", args["cqasm"], "1", str(args["omp_threads"])]
         print(f"Running {call_args}")
 
         usage_start = resource.getrusage(resource.RUSAGE_CHILDREN)
+        start_time = time.time()
         subprocess.call(call_args, env=env)
+        end_time = time.time()
         usage_end = resource.getrusage(resource.RUSAGE_CHILDREN)
 
-        result["cpu_times"].append(usage_end.ru_utime - usage_start.ru_utime)
+        result["cpu_times"].append(end_time - start_time)
         result["shared_mems"].append(usage_end.ru_ixrss - usage_start.ru_ixrss)
         result["unshared_mems"].append(usage_end.ru_idrss - usage_start.ru_idrss)
 
