@@ -1,6 +1,6 @@
 \chapter[Practical Hybrid Quantum-Classical Computing]{Practical Hybrid Quantum-Classical\\Computing} \label{chap:practical-hybrid-quantum-classical-computing}
 This chapter is focused on the practical execution of \glspl{hqca} using the Quantum Inspire quantum computing platform and SURF's \gls{hpc} center.
-It will start with describing the relevant platforms, followed by reviewing how these platforms are used to execute \glspl{hqca} in different workflows.
+It will start with describing the relevant platforms, followed by reviewing and analyzing how these platforms are used to execute \glspl{hqca} in different workflows.
 
 \section{Quantum Inspire}
 Quantum Inspire is a full-stack quantum computing platform that QuTech launched last year to make quantum systems available to the general public for exploratory research~\cite{last2020quantum}.
@@ -95,7 +95,7 @@ When researching and running \glspl{hqca}, different problems require different 
 For example, small simulation experiments do not require \gls{hpc} facilities, unless one wants to run the experiment many times in parallel with varying parameters.
 In \Cref{table:hqca-workflows} the five different workflows which are considered in this report are described.
 The order in which the workflows are displayed can be thought of as progressing from small experimentation and prototyping to (large) well-defined experiments.
-%First, Local-Local hybrid quantum-classical computation covers a large part of use cases. 
+First, the Local-Local hybrid quantum-classical workflow is often enough for most use cases as most research towards \glspl{hqca} does not require \gls{hpc} facilities or access to a \gls{qpu}.
 
 \begin{table}[ht]
     \centering
@@ -125,7 +125,20 @@ The order in which the workflows are displayed can be thought of as progressing 
 % most research towards HQCA's doesnt need supercomputers - can still be useful for running multiple experiments
 
 \section{Hybrid Quantum-Classical Workflow Analysis}
+In this section we define and analyze the efficiency of executing \glspl{hqca} using the workflows defined in the previous section.
+There are many variables to be considered when talking about the efficiency of a hybrid quantum-classical workflow: network latency, circuit optimization, scheduler wait times, optimizer choice, etc.
+In the end, the aim is to reduce the amount of time it takes to run a full experiment.
+The variables we consider to describe the efficiency of a hybrid quantum-classical experiment in this report are as follows:
+\begin{itemize}
+    \item $T_Q(n, d, s)$ describes the quantum circuit execution time where $n$ is the number of qubits, $d$ the depth of the quantum circuit, and $s$ the number of shots.
+    \item $T_L$ describes the latency between the classical and quantum computation. This includes latencies such as network overhead, scheduler wait time, resource initialization, etc.
+    \item $T_C(p)$ describes the time taken by the classical optimization algorithm for $p$ parameters.
+\end{itemize}
+The efficiency of a hybrid quantum-classical experiment is then defined by the sum of these variables:
+\begin{equation}
+T_\text{total} = T_Q(n, d, s) + T_L + T_C(p),
+\end{equation}
+and a lower value is considered more efficient.
+%Nearly all near-term applications of executing \glspl{hqca} are focused on researching these algorithms --- experimenting with different parameters, evaluating how well they scale, analyzing performance of different ans{\"a}tze and optimizers, etc.
 % A wait time of several days is not uncommon for cluster computers. As cluster computers aim to perform calculations that would take months or even years on a regular PC, a couple of days waiting is generally considered acceptable.
-% Ultimately, one is interested in minimizing the amount of  time  it  takes  to  run  a  complete  experiment
-% maximum running time of an experiment is defined as max_iter*T_{iter}
-%   where T_{iter} = T_{latency} + T_{quantum} + T_{classical}
+\subsection{QX Simulator Batch Parameters}

@@ -197,7 +197,7 @@ This state is defined by the linear combination
 \ket{\psi} = \alpha_0\ket{00} + \alpha_1\ket{01} + \alpha_2\ket{10} + \alpha_3\ket{11}.
 \end{equation}
 Again, unlike classical bits who can only be in one state at a time, this state can be in a superposition of all four states.
-The normalization condition still applies for \Cref{eqn:two-qubit-state}: $\sum_{i=0}|\alpha_i|^2 = 1$.
+The normalization condition still applies for \Cref{eqn:two-qubit-state}: $\sum_{j=0}|\alpha_j|^2 = 1$.
 Single-qubit states can be combined to form multi-qubit states by taking the tensor product of the two states.
 Given states $\ket{\psi} = \alpha_0\ket{0} + \alpha_1\ket{1}$ and $\ket{\varphi} = \beta_0\ket{0} + \beta_1\ket{1}$:
 \begin{equation} \label{eqn:tensor-product-states}
@@ -329,9 +329,9 @@ With this definition of projective measurements, the expectation value of an obs
 \begin{equation}
 \begin{aligned}
 \expval{O}_\psi &= \bra{\psi}O\ket{\psi} \\
-&= \bra{\psi}\left(\sum_{i=0}^{N-1}\lambda_i \op{\lambda_i}{\lambda_i} \right)\ket{\psi} \\
-&= \sum_{i=0}^{N-1}\lambda_i \ip{\psi}{\lambda_i} \ip{\lambda_i}{\psi} \\
-&= \sum_{i=0}^{N-1}\lambda_i \left\lvert\ip{\lambda_i}{\psi}\right\rvert^2.
+&= \bra{\psi}\left(\sum_{j=0}^{N-1}\lambda_j \vert\lambda_j\rangle \langle\lambda_j\vert \right)\ket{\psi} \\
+&= \sum_{j=0}^{N-1}\lambda_j \langle \psi | \lambda_j\rangle \langle \lambda_j \vert \psi \rangle \\
+&= \sum_{j=0}^{N-1}\lambda_j \vert\langle\lambda_j \vert \psi\rangle \rvert^2.
 \end{aligned}
 \end{equation}
 The expectation value is the sum of all possible outcomes (eigenvalues of $O$) weighted by their probability.
