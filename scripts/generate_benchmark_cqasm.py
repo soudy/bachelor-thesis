@@ -21,7 +21,7 @@ if __name__ == "__main__":
     set_qi_authentication("c15a7bdafcb71f7a3462c8515b23d64b7c3392d3",
                           DEFAULT_QI_API_URL)
 
-    ns = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30]
+    ns = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 31]
 
     for n in ns:
         G = init_random_graph(d, n, seed)
@@ -29,5 +29,5 @@ if __name__ == "__main__":
         qaoa = QAOA(G, n, p=p, use_qi=True, qi_backend_type="QX single-node simulator")
         cqasm = qaoa.get_circuit_cqasm(params)
 
-        with open(OUT_PATH / f"qaoa_n{n}_p{p}_d{d}.cqasm", "w") as f:
+        with open(OUT_PATH / f"qaoa_n{n}_p{p}_d{d}.qc", "w") as f:
             f.write(cqasm)
