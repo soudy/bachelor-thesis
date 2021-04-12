@@ -120,16 +120,17 @@ As mentioned in the previous section, quantum computers can also solve all probl
 Furthermore, quantum computers are more powerful than classical probabilistic computers~\cite{bernstein1997quantum}, giving $\BPP \subseteq \BQP$.
 How $\BQP$ relates to $\P$ and $\NP$ exactly is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
 The quantum analog of $\NP$ goes by the name of $\QMA$ (Quantum Merlin Arthur), and is related to $\BQP$ in the same way that $\NP$ is related to $\P$.
+That is, $\QMA$ is the set of all decision problems verifiable by a quantum computer in polynomial time where a bounded error rate of $1/3$ is allowed.
 Similarly then, a problem is said to be $\QMA$-hard when every problem in $\QMA$ can be reduced to it, and a problem is said to be $\QMA$-complete if it is both $\QMA$-hard and in $\QMA$.
 Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subseteq \NP \subseteq \QMA$.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.375\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \includegraphics[width=0.65\linewidth]{figures/complexity-classes-hierarchy.pdf}
     \caption[An overview of the hierarchy of some of the complexity classes discussed.]{
         An overview of the hierarchy of some of the complexity classes discussed.
         This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$.
-        $\PSPACE$ is the space equivalent of $\P$, containing all problems that can be solved in polynomial space by a deterministic Turing machine.
+        $\PSPACE$ is the space equivalent of $\P$ containing all problems that can be solved in polynomial space by a deterministic Turing machine, and $\EXP$ contains all problems that can be solved in exponential time by a deterministic Turing machine.
     }
     \label{fig:complexity-classes-hierarchy}
 \end{figure}
@@ -277,7 +278,7 @@ While the evolution of quantum states in a closed system is unitary, at some poi
 This is what measurement means: any interaction from an outside system with the quantum system.
 Formally, measurement is defined by a set of measurement operators  $\{M_m\}$, where the probability of measuring the state $m$ is given by
 \begin{equation}
-p(m) = \bra{\psi}M_m^\dagger M_m\ket{\psi}.
+P(m) = \bra{\psi}M_m^\dagger M_m\ket{\psi}.
 \end{equation}
 With $\bra{\psi} = \ket{\psi}^\dagger$, this equation can then be read as the inner product between $M_m\ket{\psi}$ and itself. 
 This is just a generalization of the definition of measurement given in \Cref{sec:quantum-states}.
@@ -285,7 +286,7 @@ For example, what is the probability of measuring 0 for an arbitrary state $\ket
 Using $M_0 = \op{0}{0}$:
 \begin{equation} \label{eqn:measurement}
 \begin{aligned} 
-p(0) &= \bra{\psi}M_0^\dagger M_0\ket{\psi} \\
+P(0) &= \bra{\psi}M_0^\dagger M_0\ket{\psi} \\
 &= \ip{\psi}{0}\ip{0}{0}\ip{0}{\psi} \\
 &= \ip{\psi}{0}\ip{0}{\psi} \\
 &= \begin{pmatrix}\alpha_0^* & \alpha_1^*\end{pmatrix}\begin{pmatrix}1 \\ 0\end{pmatrix}
@@ -294,14 +295,14 @@ p(0) &= \bra{\psi}M_0^\dagger M_0\ket{\psi} \\
 &= |\alpha_0|^2.
 \end{aligned}
 \end{equation}
-Similarly, using $M_1 = \op{1}{1}$ gives $p(1) = |\alpha_1|^2$.
+Similarly, using $M_1 = \op{1}{1}$ gives $P(1) = |\alpha_1|^2$.
 Measuring with the measurement operators $\left\{\op{0}{0}, \op{1}{1}\right\}$ is referred to as measuring in the computational basis.
 
 After measurement, the state of the system can be described as follows:
 \begin{equation}
-\ket{\psi} = \dfrac{M_m\ket{\psi}}{\sqrt{p(m)}}.
+\ket{\psi} = \dfrac{M_m\ket{\psi}}{\sqrt{P(m)}}.
 \end{equation}
-Following the example from \Cref{eqn:measurement} with $M_0 = \op{0}{0}$ and $p(0) = |\alpha_0|^2$, after measuring 0 the system is in the state
+Following the example from \Cref{eqn:measurement} with $M_0 = \op{0}{0}$ and $P(0) = |\alpha_0|^2$, after measuring 0 the system is in the state
 \begin{equation}
 \begin{aligned}
 \ket{\psi} &= \dfrac{\ket{0}\ip{0}{\psi}}{\sqrt{|\alpha_0|^2}} \\

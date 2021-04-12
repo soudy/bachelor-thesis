@@ -77,8 +77,11 @@
 % rename acronyms to glossary
 \renewcommand*{\acronymname}{Glossary}
 
+% center fixed width column type
+\newcolumntype{x}[1]{>{\centering\arraybackslash}p{#1}}
+
 % Variables
-\newcommand{\thesistitle}{A High Performance Computing Workflow for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
+\newcommand{\thesistitle}{High Performance Computing Workflows for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
 \newcommand{\authorname}{Steven Oud}
 \newcommand{\igate}{
     \begin{pmatrix}
