@@ -21,7 +21,10 @@ if __name__ == "__main__":
     set_qi_authentication("c15a7bdafcb71f7a3462c8515b23d64b7c3392d3",
                           DEFAULT_QI_API_URL)
 
-    ns = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 31]
+    ns = [
+        4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,
+        29, 30, 31, 32, 33, 34, 35, 36, 37
+    ]
 
     for n in ns:
         G = init_random_graph(d, n, seed)
