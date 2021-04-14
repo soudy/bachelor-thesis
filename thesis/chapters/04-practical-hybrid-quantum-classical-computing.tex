@@ -21,7 +21,7 @@ Regardless of the limitations of these \glspl{qpu}, they are an essential part i
         Users can submit quantum circuits written in \gls{cqasm} using the web editor or Python \gls{sdk}.
         After the program has been run, the results are returned to the user.
         The quantum circuit can be executed on one of the \glspl{qpu} or simulated using one of the QX simulator back-ends.
-        QuTech's simulator back-end supports simulations up to 26 qubits, while SURF's simulator back-end supports simulations up to 31 qubits.
+        QuTech's simulator back-end supports simulations up to 26 qubits, while SURF's simulator back-end supports simulations up to 35 qubits.
     }
     \label{fig:qi-workflow}
 \end{figure}
@@ -45,7 +45,7 @@ Quantum Inspire offers two simulator back-ends which use QX~\cite{khammassi2017q
 The QX simulator uses the Schr{\"o}dinger simulation algorithm focused on efficiently using sparse operators.
 One of the simulator back-ends is hosted by QuTech on a commodity cloud-based server with 4 GB of memory, which can run simulations up to 26 qubits.
 The other simulator back-end is hosted on SURF's computer cluster Lisa which consists of several hundreds of multi-core nodes.
-The largest node available on Lisa has 256 GB of memory, which supports simulations up to 31 qubits.
+The largest node available on Lisa has 1.5 TB of memory, which supports simulations up to 35 qubits.
 
 When quantum circuits are submitted to Quantum Inspire, they are handed to a job scheduler which will attempt to schedule the job as quickly as possible when the requested resources are available.
 For the \glspl{qpu} and QuTech simulator back-ends, the jobs are simply placed in a queue which are executed in first-in-first-out order.
@@ -163,6 +163,17 @@ For each number of qubits $n$, we generate a \gls{qaoa} \gls{maxcut} circuit on 
 These random graphs are generated with no self-loops or parallel edges according to the algorithm described by \textcite{steger1999generating}.
 The respective quantum circuit for a 2-regular graph with $n$ vertices has a depth $d$ of $4n$.
 
+% node 0 cpus: 0 4 8 12 16 20 24 28 32 36
+% node 0 size: 385618 MB
+% node 0 free: 384565 MB
+% node 1 cpus: 1 5 9 13 17 21 25 29 33 37
+% node 1 size: 387069 MB
+% node 1 free: 385858 MB
+% node 2 cpus: 2 6 10 14 18 22 26 30 34 38
+% node 2 size: 387050 MB
+% node 2 free: 385626 MB
+% node 3 cpus: 3 7 11 15 19 23 27 31 35 39
+
 \begin{table}[ht]
     \centering
     \begin{adjustwidth}{-0.35cm}{-0.35cm}
@@ -172,27 +183,27 @@ The respective quantum circuit for a 2-regular graph with $n$ vertices has a dep
         \begin{tabular}{ccccccccccc}
             $n$ & $d$ & $t = 1$ & $t = 2$ & $t = 4$ & $t = 6$ & $t = 8$ & $t = 10$ & $t = 12$ & $t = 14$ & $t = 16$ \\
             \hline
-            $4$ & $16$ & \underline{$\mathbf{0.017}$\textbf{s}} & $0.018$s & $0.017$s & $0.017$s & $0.019$s & $0.019$s & $0.019$s & $0.019$s & $0.036$s \\
-            $6$ & $24$ & $0.015$s & \underline{$\mathbf{0.015}$\textbf{s}} & $0.017$s & $0.016$s & $0.019$s & $0.017$s & $0.019$s & $0.019$s & $0.020$s \\
-            $8$ & $32$ & $0.015$s & $0.017$s & \underline{$\mathbf{0.015}$\textbf{s}} & $0.017$s & $0.018$s & $0.018$s & $0.018$s & $0.020$s & $0.018$s \\
-            $10$ & $40$ & $0.017$s & \underline{$\mathbf{0.017}$\textbf{s}} & $0.017$s & $0.018$s & $0.019$s & $0.020$s & $0.019$s & $0.020$s & $0.020$s \\
-            $12$ & $48$ & $0.019$s & $0.020$s & \underline{$\mathbf{0.019}$\textbf{s}} & $0.019$s & $0.020$s & $0.019$s & $0.019$s & $0.022$s & $0.019$s \\
-            $14$ & $56$ & $0.023$s & \underline{$\mathbf{0.020}$\textbf{s}} & $0.021$s & $0.020$s & $0.021$s & $0.022$s & $0.023$s & $0.022$s & $0.022$s \\
-            $16$ & $64$ & $0.033$s & $0.028$s & $0.027$s & $0.025$s & $0.028$s & $0.027$s & $0.026$s & $0.026$s & \underline{$\mathbf{0.023}$\textbf{s}} \\
-            $18$ & $72$ & $0.079$s & $0.052$s & $0.042$s & $0.040$s & $0.035$s & $0.032$s & $0.036$s & $0.033$s & \underline{$\mathbf{0.030}$\textbf{s}} \\
-            $20$ & $80$ & $0.243$s & $0.143$s & $0.096$s & $0.087$s & $0.077$s & $0.070$s & $0.066$s & $0.067$s & \underline{$\mathbf{0.061}$\textbf{s}} \\
-            $22$ & $88$ & $1.396$s & $0.752$s & $0.450$s & $0.374$s & $0.334$s & $0.314$s & $0.299$s & $0.295$s & \underline{$\mathbf{0.292}$\textbf{s}} \\
-            $24$ & $96$ & $6.251$s & $3.303$s & $1.980$s & $1.645$s & $1.511$s & $1.440$s & $1.407$s & $1.413$s & \underline{$\mathbf{1.402}$\textbf{s}} \\
-            $26$ & $104$ & $27.818$s & $14.777$s & $8.652$s & $7.282$s & $6.598$s & $6.307$s & \underline{$\mathbf{6.166}$\textbf{s}} & $6.176$s & $6.195$s \\
-            $28$ & $112$ & $117.788$s & $61.911$s & $36.347$s & $30.109$s & $27.255$s & $26.274$s & $25.758$s & \underline{$\mathbf{25.633}$\textbf{s}} & $26.889$s \\
-            $30$ & $120$ & $505.652$s & $265.621$s & $153.902$s & $126.825$s & $114.792$s & $110.343$s & $107.944$s & $107.166$s & \underline{$\mathbf{106.130}$\textbf{s}} \\
+            $4$ & $16$ & \underline{$\mathbf{0.018}$\textbf{s}} & $0.019$s & $0.019$s & $0.020$s & $0.032$s & $0.019$s & $0.028$s & $0.028$s & $0.022$s \\
+            $6$ & $24$ & \underline{$\mathbf{0.019}$\textbf{s}} & $0.019$s & $0.019$s & $0.020$s & $0.020$s & $0.021$s & $0.027$s & $0.027$s & $0.022$s \\
+            $8$ & $32$ & $0.019$s & \underline{$\mathbf{0.018}$\textbf{s}} & $0.019$s & $0.020$s & $0.021$s & $0.022$s & $0.027$s & $0.027$s & $0.022$s \\
+            $10$ & $40$ & \underline{$\mathbf{0.019}$\textbf{s}} & $0.019$s & $0.020$s & $0.020$s & $0.021$s & $0.022$s & $0.027$s & $0.028$s & $0.023$s \\
+            $12$ & $48$ & \underline{$\mathbf{0.020}$\textbf{s}} & $0.021$s & $0.021$s & $0.021$s & $0.022$s & $0.023$s & $0.028$s & $0.028$s & $0.023$s \\
+            $14$ & $56$ & $0.025$s & $0.024$s & $0.024$s & \underline{$\mathbf{0.023}$\textbf{s}} & $0.030$s & $0.024$s & $0.028$s & $0.029$s & $0.023$s \\
+            $16$ & $64$ & $0.035$s & $0.031$s & $0.029$s & $0.029$s & $0.028$s & $0.027$s & $0.033$s & $0.036$s & \underline{$\mathbf{0.024}$\textbf{s}} \\
+            $18$ & $72$ & $0.074$s & $0.053$s & $0.042$s & $0.040$s & $0.039$s & $0.035$s & $0.045$s & $0.043$s & \underline{$\mathbf{0.030}$\textbf{s}} \\
+            $20$ & $80$ & $0.244$s & $0.143$s & $0.099$s & $0.088$s & $0.077$s & $0.074$s & $0.094$s & $0.091$s & \underline{$\mathbf{0.060}$\textbf{s}} \\
+            $22$ & $88$ & $1.406$s & $0.759$s & $0.456$s & $0.373$s & $0.326$s & $0.341$s & $0.352$s & $0.335$s & \underline{$\mathbf{0.286}$\textbf{s}} \\
+            $24$ & $96$ & $6.341$s & $3.354$s & $1.978$s & $1.640$s & $1.486$s & $1.573$s & $1.395$s & \underline{$\mathbf{1.358}$\textbf{s}} & $1.406$s \\
+            $26$ & $104$ & $28.100$s & $14.854$s & $8.648$s & $7.191$s & $6.341$s & $6.940$s & $5.920$s & \underline{$\mathbf{5.800}$\textbf{s}} & $6.169$s \\
+            $28$ & $112$ & $119.658$s & $62.802$s & $36.158$s & $29.979$s & $27.100$s & $30.631$s & $30.652$s & $28.846$s & \underline{$\mathbf{25.654}$\textbf{s}} \\
+            $30$ & $120$ & $508.639$s & $265.831$s & $152.637$s & $126.327$s & $129.737$s & $138.614$s & $118.720$s & $116.125$s & \underline{$\mathbf{106.788}$\textbf{s}} \\
         \end{tabular}
     }
     \end{adjustwidth}
     \caption[Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.]{
         Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.
         Here $n$ is the number of qubits, $d$ is the depth of the circuit, and $t$ is the number of cores.
-        Execution times shown are the average of five repeated circuit executions.
+        Execution times shown are the average of fifty repeated circuit executions.
         The optimal amount of cores $t$ is highlighted for every $n$.
     }
 \end{table}
