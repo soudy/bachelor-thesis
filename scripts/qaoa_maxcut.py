@@ -348,9 +348,14 @@ def main(args):
     configurable_kwargs = {"p": args["layers"]}
     qaoa = None
     if args["qi_backend_type"]:
-        set_qi_authentication("c15a7bdafcb71f7a3462c8515b23d64b7c3392d3",
-                              args["qi_api_url"],
-                              project_name="qaoa-maxcut")
+        if args["qi_api_url"] == DEFAULT_QI_API_URL:
+            # prod token
+            token = "c15a7bdafcb71f7a3462c8515b23d64b7c3392d3"
+        else:
+            # staging token
+            token = "ac4cd7fa1ce2967749bc9ae8d2ca26e78c8e0640"
+
+        set_qi_authentication(token, args["qi_api_url"], project_name="qaoa-maxcut")
         qaoa = QAOA(G, n, use_qi=True, **configurable_kwargs,
                     qi_backend_type=args["qi_backend_type"])
     else:
