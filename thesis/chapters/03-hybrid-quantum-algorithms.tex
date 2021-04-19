@@ -46,7 +46,7 @@ For the variational \gls{hqca} to have a quantum advantage, the cost function sh
 The ansatz defines the quantum circuit $U(\vec{\theta})$ that is used to prepare the quantum state $\ket{\psi(\vec{\theta})}$ parameterized by real-valued parameters $\vec{\theta}$.
 To keep the algorithm realizable on \gls{nisq} devices, it is important to keep the parameterized quantum circuit (the ansatz) relatively shallow in depth.
 The challenge then is to choose an ansatz that is shallow in depth but has high expressibility.
-\textcite{sim2019expressibility} define the expressibility of a quantum circuit as its ability to generate states that are well representative of the Hilbert space.
+The expressibility of a quantum circuit is its ability to generate states that are well representative of the Hilbert space~\cite{sim2019expressibility}.
 The general form of an ansatz can be described as the product of sequentially applied unitaries:
 \begin{equation}
 U(\vec{\theta}) = U_L(\vec{\theta}_L) \ldots U_2(\vec{\theta}_2)U_1(\vec{\theta}_1),
@@ -227,7 +227,7 @@ Then, we define a mixer unitary parameterized by $\beta \in [0, 2\pi)$:
 \begin{equation}
 U_B(\beta) = e^{-i\beta H_B} = \prod_{j=0}^{n-1} e^{-i\beta X^{(j)}}.
 \end{equation}
-Note that $e^{-i\beta X}$ is just the $R_x$ operator as defined in \Cref{sec:state-evolution}.
+Note that $e^{-i\beta X}$ is just a $R_x(2\beta)$ operation as defined in \Cref{sec:state-evolution}.
 Using these unitaries, the ansatz can be described as alternating applications of the problem and mixer Hamiltonian $p$ times using different parameters:
 \begin{equation}
 U(\vec{\gamma}, \vec{\beta}) = \underbrace{U_B(\beta_p)U_L(\gamma_p) \ldots U_B(\beta_1)U_L(\gamma_1)}_{p \:\, \text{layers}}.

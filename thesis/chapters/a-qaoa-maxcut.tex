@@ -3,7 +3,7 @@ The aim of the \gls{maxcut} problem is to find a set of vertices that maximizes 
 It is a widely studied problem known to be $\NP$-hard.
 Formally, given an undirected graph $G = (V, E)$ with $n = |V|$ vertices and non-negative weights $w_{j, k} = w_{k, j}$ on the edges $(j, k) \in E$, one looks to bipartition $V$ into two sets $S \subseteq V$ and $\bar{S} = V \setminus S \subseteq V$ such that the objective function $L$ is maximized:
 \begin{equation} \label{eqn:max-cut-objective}
-L(z) = \sum_{(j, k) \in E} w_{j, k}[z_j(1 - z_k) + z_k(1 - z_j)].
+L(z) = \sum_{(j, k) \in E} w_{j, k}\left[z_j\left(1 - z_k\right) + z_k(1 - z_j)\right].
 \end{equation}
 Here $z \in \{0, 1\}^n$ is a bit string that describes the bipartition as follows: if a vertex $j$ is in partition $S$, then $z_j = 0$, and if a vertex $j$ is in partition $\bar{S}$ then $z_j = 1$.
 For example, \Cref{fig:maxcut-5-example} shows an example of a maximum cut on a graph with five vertices.
@@ -28,7 +28,7 @@ L(z) = \frac{1}{2} \sum_{(j, k) \in E} w_{j, k}(1 - z_jz_k),
 where $z_j \in \{-1, 1\}$ for $j \in V$.
 This objective function can be represented by the following problem Hamiltonian:
 \begin{equation} \label{eqn:problem-hamiltonian}
-H_L = \frac{1}{2} \sum_{(j, k) \in E} w_{j, k}(I - Z^{(j)}Z^{(k)}).
+H_L = \frac{1}{2} \sum_{(j, k) \in E} w_{j, k}\left(I - Z^{(j)}Z^{(k)}\right).
 \end{equation}
 This gives the problem unitary
 \begin{equation} \label{eqn:problem-unitary}
@@ -39,12 +39,12 @@ and the standard mixer unitary as defined in \Cref{sec:qaoa}:
 U_B(\beta) = e^{-i\beta H_B} = \prod_{j \in V} e^{-i\beta X^{(j)}}.
 \end{equation}
 
-\section{Implementation}
+\section{Implementation} \label{sec:qaoa-implementation}
 The \gls{qaoa} was implemented in Python using the Project Q~\cite{steiger2018projectq}, Quantum Inspire~\cite{quantuminspire}, and SciPy~\cite{scipy} frameworks to solve the \gls{maxcut} problem on the graph from \Cref{fig:maxcut-4-graph}.
 The optimal solutions for this graph are $z = 0101$ and $z = 1010$ with $L(z) = 4$.
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.4\linewidth]{figures/maxcut_4_graph.pdf}
+    \includegraphics[width=0.375\linewidth]{figures/maxcut_4_graph.pdf}
     \caption{
         Undirected 2-regular graph $G = (V, E)$ with $n = 4$ vertices $V = \{0, 1, 2, 3\}$ and 4 edges $E = \{(0,1), (0,3), (1,2), (2,3)\}$ with unit weight $w_{j, k} = w_{k, j} = 1$.
     }
