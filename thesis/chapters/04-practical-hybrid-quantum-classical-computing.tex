@@ -190,6 +190,9 @@ For each number of qubits $n$, we generate a \gls{qaoa} \gls{maxcut} circuit on 
 These random graphs are generated with no self-loops or parallel edges according to the algorithm described by \textcite{steger1999generating}.
 The respective quantum circuit for a 2-regular graph with $n$ vertices has a depth $d$ of $4n$.
 This means that the depth increases as the number of qubits and problem size increases, as is the case with most realistic implementations of quantum algorithms.
+We run the benchmarks on SURF's cluster computer Lisa on the \mintinline{bash}{fat_soil_shared} partition.
+The thread affinity was set up in a way that the threads run as much on the same \gls{cpu} socket as possible.
+The benchmark results are displayed in \Cref{table:qx_benchmark}.
 
 % node 0 cpus: 0 4 8 12 16 20 24 28 32 36
 % node 0 size: 385618 MB
@@ -235,4 +238,5 @@ This means that the depth increases as the number of qubits and problem size inc
         Execution times shown are the average of fifty repeated circuit executions.
         The optimal amount of cores $t$ is highlighted for every $n$.
     }
+    \label{table:qx_benchmark}
 \end{table}

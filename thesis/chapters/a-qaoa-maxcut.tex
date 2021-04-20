@@ -132,16 +132,16 @@ Rx q[3], 5.156352
 
 
 The quantum circuit is implemented using the Qiskit quantum computing library.
-To find the optimal parameters $\vec{\gamma}^*, \vec{\beta}^*$ a classical optimizer provided by SciPy is used.
+To find the optimal parameters $\vec{\gamma}_\text{opt}, \vec{\beta}_\text{opt}$ a classical optimizer provided by SciPy is used.
 The relevant cost function is
 \begin{equation}
 C_p(\vec{\gamma}, \vec{\beta}) = \bra{\psi(\vec{\gamma}, \vec{\beta})}H_L\ket{\psi(\vec{\gamma}, \vec{\beta})},
 \end{equation}
 and we look to solve the optimization problem
 \begin{equation}
-\vec{\gamma}^*, \vec{\beta}^* = \argmax_{\vec{\gamma}, \vec{\beta}} C_p(\vec{\gamma}, \vec{\beta}).
+\vec{\gamma}_\text{opt}, \vec{\beta}_\text{opt} = \argmax_{\vec{\gamma}, \vec{\beta}} C_p(\vec{\gamma}, \vec{\beta}).
 \end{equation}
-We then prepare the state $\ket{\psi(\vec{\gamma}^*, \vec{\beta}^*)}$ and measure multiple times in the computational basis to extract the solution, which is the bit string with the highest probability.
+We then prepare the state $\ket{\psi(\vec{\gamma}_\text{opt}, \vec{\beta}_\text{opt})}$ and measure multiple times in the computational basis to extract the solution, which is the bit string with the highest probability.
 If there are $n$ optimal solutions, they can be extracted by choosing the $n$ bit strings with the highest probabilities. 
 
 \section{Results}
