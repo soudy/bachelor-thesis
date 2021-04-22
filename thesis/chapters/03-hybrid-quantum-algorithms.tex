@@ -240,14 +240,14 @@ The system starts in the equal superposition state
 \begin{equation}
 \ket{s} = H^{\otimes n}\ket{0}^{\otimes n} = \frac{1}{\sqrt{N}} \sum_{j=0}^{N-1} \ket{j}.
 \end{equation}
-A trial state $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ is then obtained by applying the ansatz to \ket{s}:
+A trial state $\ket{\vec{\gamma}, \vec{\beta}}$ is then obtained by applying the ansatz to \ket{s}:
 \begin{align}
-\ket{\psi(\vec{\gamma}, \vec{\beta})} &= U(\vec{\gamma}, \vec{\beta})\ket{s} \\
+\ket{\vec{\gamma}, \vec{\beta}} &= U(\vec{\gamma}, \vec{\beta})\ket{s} \\
 &= U_B(\beta_p)U_L(\gamma_p) \ldots U_B(\beta_1)U_L(\gamma_1)\ket{s},
 \end{align}
 and the cost function to optimize is as follows:
 \begin{equation} 
-C_p(\vec{\gamma}, \vec{\beta}) = \bra{\psi(\vec{\gamma}, \vec{\beta})}H_L\ket{\psi(\vec{\gamma}, \vec{\beta})}.
+C_p(\vec{\gamma}, \vec{\beta}) = \bra{\vec{\gamma}, \vec{\beta}}H_L\ket{\vec{\gamma}, \vec{\beta}}.
 \end{equation}
 The subscript $p$ is added to the cost function's definition to indicate the number of layers.
 Unlike the \gls{vqe} which minimizes the cost function, we are interested in maximizing $C_p$ to find the bit string which satisfies the most clauses.
@@ -255,5 +255,5 @@ We look to solve the optimization problem
 \begin{equation}
 M_p = \max_{\vec{\gamma}, \, \vec{\beta}} C_p(\vec{\gamma}, \vec{\beta}).
 \end{equation}
-By measuring $\ket{\psi(\vec{\gamma}, \vec{\beta})}$ multiple times in the computational basis we get a bit string $z$ with high probability for which $L(z)$ is near or greater than $M_p$.
+By measuring $\ket{\vec{\gamma}, \vec{\beta}}$ multiple times in the computational basis we get a bit string $z$ with high probability for which $L(z)$ is near or greater than $M_p$.
 The approximation ratio gets better as $p$ increases, and as $p \to \infty$, $M_p = L_{\text{max}}$.

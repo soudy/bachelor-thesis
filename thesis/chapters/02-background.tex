@@ -126,7 +126,7 @@ Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subse
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.65\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \includegraphics[width=0.7\linewidth]{figures/complexity-classes-hierarchy.pdf}
     \caption[An overview of the hierarchy of some of the complexity classes discussed.]{
         An overview of the hierarchy of some of the complexity classes discussed.
         This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$.
@@ -182,7 +182,7 @@ Simplifying then, the state of a qubit can be written as
 Here, $\theta$ and $\varphi$ define a point on the surface of a three-dimensional sphere referred to as the Bloch sphere (\Cref{fig:bloch-sphere}).
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.33\linewidth]{figures/bloch-sphere.pdf}
+    \includegraphics[width=0.375\linewidth]{figures/bloch-sphere.pdf}
     \caption[Bloch sphere representation of a qubit's state.]{
         Bloch sphere representation of a qubit's state.
     }
@@ -558,7 +558,7 @@ This is necessary to get the result in the correct order.
 
 The \gls{qft} circuit works as follows.
 With $N = 2^n$ where $n$ is the number of qubits, the computational basis exists of the states $\left\{\ket{0}, \ldots, \ket{N-1}\right\}$.
-We use the notation $\ket{j}$ for a decimal number $j$ in the binary representation $j_1,\ldots,j_n$, e.g. $\ket{15} = \ket{j_1j_2j_3j_4} = \ket{1111}$.
+We use the notation $\ket{j}$ for a decimal number $j$ in the binary representation $j_1,\ldots,j_m$, e.g. $\ket{15} = \ket{j_1j_2j_3j_4} = \ket{1111}$.
 Furthermore, the following notation is used to represent fractional binary numbers:
 \begin{equation}
 [0.j_1\ldots j_m] = \sum_{k=1}^{m} j_k2^{-k}.
@@ -628,7 +628,7 @@ U_\omega =
 With the oracle defined, the quantum circuit of Grover's algorithm is shown in \Cref{fig:grover-circuit}.
 \begin{figure}[h]
     \[
-    \Qcircuit @C=1em @R=0.75em @!R {
+    \Qcircuit @C=1em @R=1em @!R {
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_1} = \ket{0}} & \gate{H} & \multigate{3}{U_\omega} & \gate{H} & \multigate{2}{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
         & & \rstick{\,\vdots} & & & & & & & & \vdots \\
         \push{\rule{0em}{1em}} & & & & \lstick{\ket{q_n} = \ket{0}} & \gate{H} & \ghost{U_\omega} & \gate{H} & \ghost{2\op{0^n}{0^n} - I} & \gate{H} & \meter & \cw \\
@@ -651,14 +651,14 @@ Consider a search space of $N = 4$ with two qubits where we are looking for $\ke
 The amplitudes of the search space start out in an equal superposition:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\linewidth]{figures/aa_initial_equal.pdf}
+    \includegraphics[width=0.525\linewidth]{figures/aa_initial_equal.pdf}
 \end{figure}
 
 \noindent
 After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\linewidth]{figures/aa_phase_flipped_mean.pdf}
+    \includegraphics[width=0.525\linewidth]{figures/aa_phase_flipped_mean.pdf}
 \end{figure}
 
 \noindent
@@ -666,7 +666,7 @@ Note that measuring this state will still give each state with equal probabiliti
 Using the diffusion operator $H^{\otimes n}\left(2\op{0^n}{0^n} - I\right)H^{\otimes n}$, the amplitudes are inverted about their mean (displayed as the dotted orange line):
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\linewidth]{figures/aa_diffused.pdf}
+    \includegraphics[width=0.525\linewidth]{figures/aa_diffused.pdf}
 \end{figure}
 
 \noindent

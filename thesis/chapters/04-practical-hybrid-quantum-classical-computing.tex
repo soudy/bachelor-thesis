@@ -1,6 +1,7 @@
 \chapter[Practical Hybrid Quantum-Classical Computing]{Practical Hybrid Quantum-Classical\\Computing} \label{chap:practical-hybrid-quantum-classical-computing}
 This chapter is focused on the practical execution of \glspl{hqca} using the Quantum Inspire quantum computing platform and SURF's \gls{hpc} center.
 It will start with describing the relevant platforms, followed by reviewing and analyzing how these platforms are used to execute \glspl{hqca} in different workflows.
+We will then explore and describe different methods to increase the efficiency of the execution of \glspl{hqca}.
 
 \section{Quantum Inspire}
 Quantum Inspire is a full-stack quantum computing platform that QuTech launched last year to make quantum systems available to the general public for exploratory research~\cite{last2020quantum}.
@@ -59,7 +60,7 @@ SURF offers an integrated ICT research infrastructure and provides services in t
 This report is mainly interested in the computing services, and more precisely the Lisa and Cartesius cluster computers.
 These cluster computers can be thought of as a network of computers (nodes).
 Each node has its own \glspl{cpu}, memory, disk space, and a shared file system.
-Cluster computers are often used for \acrfull{hpc}, where a large amount of resources (\glspl{cpu}, \glspl{gpu}, memory etc.) are used to solve computationally expensive problems.
+Cluster computers are often used for \acrfull{hpc}, where a large amount of resources (\glspl{cpu}, \glspl{gpu}, memory, etc.) are used to solve computationally expensive problems.
 Interacting with a cluster computer works different than a regular computer: instead of submitting a script or command (job) and immediately being run, cluster computers use a batch system that runs your job as soon as sufficient resources are available.
 Lisa and Cartesius use the Slurm workload manager~\cite{yoo2003slurm} as job scheduler.
 The specifications of the Lisa and Cartesius cluster computers are described in \Cref{table:surf-cluster-computers}.
@@ -148,12 +149,10 @@ The efficiency of a hybrid quantum-classical experiment is then defined by the s
 T_\text{total} = T_Q(n, d, s) + T_L + T_C(p),
 \end{equation}
 and a lower value is considered more efficient.
-%Nearly all near-term applications of executing \glspl{hqca} are focused on researching these algorithms --- experimenting with different parameters, evaluating how well they scale, analyzing performance of different ans{\"a}tze and optimizers, etc.
-% A wait time of several days is not uncommon for cluster computers. As cluster computers aim to perform calculations that would take months or even years on a regular PC, a couple of days waiting is generally considered acceptable.
 
 To get an initial understanding on the efficiency of different quantum back-ends we implement and benchmark the \gls{qaoa} to solve the \gls{maxcut} problem on a 2-regular graph with 4 vertices (qubits) and edges.
 The details of the \gls{maxcut} problem and the \gls{qaoa} implementation are described in \Cref{chap:qaoa-maxcut}.
-This report will focus on the quantities $T_Q$ and $T_L$ as they are the largest and most relevant.
+This report will mainly focus on the quantities $T_Q$ and $T_L$ as they are the largest and most relevant.
 Some work has been done on optimizing the classical optimization part~\cite{lavrijsen2020classical, sung2020exploration}.
 The benchmark results are displayed in \Cref{table:baseline-benchmark}.
 The efficiency of these different quantum parts should not be compared to each other as each quantum part is a different tool with a different application.
@@ -178,32 +177,32 @@ Rather, it can be interpreted as a demonstration of how different quantum parts 
     \label{table:baseline-benchmark}
 \end{table}
 
+Given the measurements from \Cref{table:baseline-benchmark}, we can estimate how much time it would take to execute a meaningful and practical \gls{hqca} experiment.
+In the context of running the \gls{vqe} on a hardware back-end, \textcite{kandala2017hardware} estimate that with the current architecture in the order of $10^5$ (best case) to $10^6$ (worst case) quantum circuit executions are needed to achieve results within chemical accuracy.
+This is a very rough estimate, as the amount of circuit executions required depends on the problem at hand, desired accuracy, hardware error rates, choice of ansatz, etc.
+Using the total average time taken per circuit execution by the Starmon-5 \gls{qpu} from \Cref{table:baseline-benchmark}, this would take in the order of 32 to 328 days just in quantum execution and wait time.
+On top of that, there is an additional development time that should be considered, which includes debugging and testing quantum circuit behavior using quantum circuit simulators.
+In the following sections we will explore different methods of potentially increasing the efficiency of the execution of \glspl{hqca}.
+
 \subsection{QX Simulator Batch Parameters}
 When submitting a job to the job scheduler on SURF's \gls{hpc} center, one can define the resources required for the job through batch parameters.
-Choosing the right parameters for a job can optimize its efficiency and help the job scheduler use the system's resources as efficiently as possible.
-This improves both the quantum simulation execution time ($T_Q$) and job wait time ($T_L$).
-In the context of the SURF QX simulator back-end, we are interested in figuring out the optimal amount of cores to use for quantum circuit simulations of different qubit counts.
+Choosing the right parameters for a job can optimize its efficiency and help the job scheduler use the system's resources as optimal as possible.
+In the context of the SURF QX simulator back-end, we are interested in figuring out the optimal amount of cores and memory to use for quantum circuit simulations of different qubit counts.
+Choosing the optimal amount of cores improves both the quantum simulation execution time ($T_Q$) and scheduling efficiency ($T_L$), whereas choosing the right amount of memory ensures that the simulation has access to enough memory and increases scheduling efficiency.
+We run all experiments and benchmarks on SURF's cluster computer Lisa on the quantum computing nodes (\mintinline{bash}{fat_soil_shared} partition).
 
+\subsubsection{Number of Cores Parameter}
 To determine the optimal amount of cores to use for a given number of qubits, we measured the execution time of QX simulator for quantum circuits with different number of qubits.
 The quantum circuits used are circuits generated by our \gls{qaoa} implementation on the \gls{maxcut} problem.
 For each number of qubits $n$, we generate a \gls{qaoa} \gls{maxcut} circuit on a random 2-regular graph with $n$ vertices.
 These random graphs are generated with no self-loops or parallel edges according to the algorithm described by \textcite{steger1999generating}.
 The respective quantum circuit for a 2-regular graph with $n$ vertices has a depth $d$ of $4n$.
 This means that the depth increases as the number of qubits and problem size increases, as is the case with most realistic implementations of quantum algorithms.
-We run the benchmarks on SURF's cluster computer Lisa on the \mintinline{bash}{fat_soil_shared} partition.
 The thread affinity was set up in a way that the threads run as much on the same \gls{cpu} socket as possible.
-The benchmark results are displayed in \Cref{table:qx_benchmark}.
 
-% node 0 cpus: 0 4 8 12 16 20 24 28 32 36
-% node 0 size: 385618 MB
-% node 0 free: 384565 MB
-% node 1 cpus: 1 5 9 13 17 21 25 29 33 37
-% node 1 size: 387069 MB
-% node 1 free: 385858 MB
-% node 2 cpus: 2 6 10 14 18 22 26 30 34 38
-% node 2 size: 387050 MB
-% node 2 free: 385626 MB
-% node 3 cpus: 3 7 11 15 19 23 27 31 35 39
+The benchmark results are displayed in \Cref{table:qx_benchmark}.
+For lower qubit counts adding more cores does not or only slightly improve the execution time.
+Given the limited amount of resources available on the quantum nodes and the minor speedup gained, simulations below 20 qubits should probably not be given more than one or two cores.
 
 \begin{table}[ht]
     \centering
@@ -235,8 +234,19 @@ The benchmark results are displayed in \Cref{table:qx_benchmark}.
     \caption[Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.]{
         Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.
         Here $n$ is the number of qubits, $d$ is the depth of the circuit, and $t$ is the number of cores.
-        Execution times shown are the average of fifty repeated circuit executions.
+        Execution times shown are the average of 20 repeated circuit executions.
         The optimal amount of cores $t$ is highlighted for every $n$.
     }
     \label{table:qx_benchmark}
 \end{table}
+
+\subsubsection{Memory Parameter}
+The \mintinline{bash}{fat_soil_shared} partition is composed of shared nodes, which means that multiple users can run jobs on the same node and resources like memory and disk space are shared.
+For this reason, to ensure that a simulation has access to enough memory, the simulation job should specify the amount of memory it needs.
+
+% default is (1.5TB)*n/40
+\subsection{Development Cycle}
+% simulation and qpu back-ends are in the cloud, network overhead, local simulation
+
+% sum up speedups and factor relative to table 4.3 measurements
+% - simulation efficiency can be improved by factor x by choosing the optimal amount of resources
