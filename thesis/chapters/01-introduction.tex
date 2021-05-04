@@ -15,7 +15,7 @@ Until recently, quantum computing had been a mainly theoretical field.
 These days however, thanks to recent technological advances, various quantum devices are being actively developed.
 Furthermore, technological giants such as IBM, Microsoft, Intel, and Google are investing heavily in the development of quantum computers.
 The applications of these current quantum devices are very limited however, due to their inability to store information for a long time and their sensitivity to errors.
-For instance, \textcite[Appendix~M]{fowler2012surface} estimate that to factor a 2000-bit number using Shor's algorithm would require a quantum computer with about a billion physical qubits, and error rates below $4 \times 10^{-13}$.
+For instance, \textcite[Appendix~M]{fowler2012surface} estimate that factoring a 2000-bit number using Shor's algorithm would require a quantum computer with about a billion physical qubits, and error rates below $4 \times 10^{-13}$.
 In contrast, devices today have about 50 to 100 physical qubits with error rates above $0.1$.
 
 These small and error-prone quantum devices, often referred to as \gls{nisq} devices, may be unfit to run quantum algorithms like Shor's algorithm, but they may still prove to be useful and perform tasks intractable by classical computers~\cite{preskill2018quantum, bravyi2020quantum}.
@@ -35,13 +35,13 @@ This makes them suitable to run on \gls{nisq} devices, and are expected to be on
 It is important to note that \gls{nisq} devices running \glspl{hqca} will likely not be revolutionary by itself.
 Instead, it should be seen as an important stepping stone towards more powerful quantum devices and algorithms.
 
-Research towards \glspl{hqca} often involves executing quantum circuits on actual \glspl{qpu} or through quantum circuit simulation.
+Research towards \glspl{hqca} often involves executing quantum circuits on actual \glspl{qpu} and through quantum circuit simulation.
 To support this kind of research, classical and quantum computing facilities are needed.
 Furthermore, these facilities need to be connected and able to interchange data in a timely manner for this kind of research to be feasible.
 This is especially challenging given that both quantum and classical resources are shared with other users.
 
 \section{Objective}
-The purpose of this thesis is to propose and analyze different workflows for the efficient execution of \acrlongpl{hqca}.
+The purpose of this thesis is to analyze different workflows for the practical execution of \glspl{hqca} and propose improvements to be made to increase the efficiency.
 This work is in collaboration with TNO, QuTech, and SURF, and is focused on the efficient execution of \glspl{hqca} using QuTech's quantum computing platform Quantum Inspire~\cite{quantuminspire} and SURF's \gls{hpc} center~\cite{surf}.
 To allow for the efficient execution of \glspl{hqca}, the SURF \gls{hpc} and Quantum Inspire computing facilities should be able to interchange data in a timely manner.
 A key part in this is figuring out sources of overhead and current bottlenecks.

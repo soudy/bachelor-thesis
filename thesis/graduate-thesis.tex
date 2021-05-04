@@ -10,7 +10,7 @@
 \usepackage{newpxmath}
 \usepackage{fancyhdr}
 \usepackage{lipsum}
-\usepackage[margin=3.15cm]{geometry}
+\usepackage[margin=3.1cm]{geometry}
 \usepackage[toc,nonumberlist,nogroupskip,nopostdot]{glossaries}
 \usepackage{graphicx}
 \usepackage[english]{babel}
@@ -30,6 +30,7 @@
 \usepackage{array}
 \usepackage{subcaption}
 \usepackage[cache=false]{minted}
+\usepackage{amssymb}
 
 \setlength{\cftfigindent}{0pt}  % remove indentation from figures in lof
 \setlength{\cfttabindent}{0pt}  % remove indentation from tables in lot
@@ -82,7 +83,7 @@
 \newcolumntype{x}[1]{>{\centering\arraybackslash}p{#1}}
 
 % Variables
-\newcommand{\thesistitle}{High Performance Computing Workflows for the Efficient Execution of Hybrid Quantum-Classical Algorithms}
+\newcommand{\thesistitle}{Improvements on the Efficiency of the Practical Execution of Hybrid Quantum-Classical Algorithms}
 \newcommand{\authorname}{Steven Oud}
 \newcommand{\igate}{
     \begin{pmatrix}
@@ -158,8 +159,8 @@
 
 \makenoidxglossaries
 
-\newabbreviation{nisq}{NISQ}{noisy intermediate\--scale quantum}
-\newabbreviation{hqca}{HQCA}{hybrid quantum\--classical algorithm}
+\newabbreviation{nisq}{NISQ}{noisy intermediate-scale quantum}
+\newabbreviation{hqca}{HQCA}{hybrid quantum-classical algorithm}
 \newabbreviation{hpc}{HPC}{high performance computing}
 \newabbreviation{sat}{SAT}{boolean satisfiability}
 \newabbreviation{vqe}{VQE}{variational quantum eigensolver}
@@ -216,6 +217,7 @@
         \vspace{0.75cm}
         \textbf{\large Harold Meerwaldt, QuTech\\
             Damian Podareanu, SURF\\
+            Ariana Torres Knoop, SURF\\
             Richard Versluis, TNO}
         
         \vspace{0.75cm}
@@ -235,6 +237,7 @@
 \chapter*{Abstract}
 \lipsum[5]
 
+\glsunsetall
 \cleardoublepage
 \tableofcontents
 
@@ -243,6 +246,7 @@
 
 \cleardoublepage
 \listoftables
+\glsresetall
 
 \cleardoublepage
 \pagenumbering{arabic}

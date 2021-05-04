@@ -91,7 +91,7 @@ A job script is essentially a recipe of commands that you want your job job to e
 Through this script you can load the required modules, handle input and output data processing, define the amount of resources your job requires, and handle the running of the actual application.
 The job script is submitted to the job scheduler and will be run on a batch node as soon as the requested resources are available.
 
-\section{Hybrid Quantum-Classical Workflows}
+\section{Hybrid Quantum-Classical Workflows} \label{sec:workflows}
 When researching and running \glspl{hqca}, different problems require different workflows.
 For example, small simulation experiments do not require \gls{hpc} facilities, unless one wants to run the experiment many times in parallel with varying parameters.
 In \Cref{table:hqca-workflows} the five different workflows which are considered in this report are described.
@@ -153,7 +153,7 @@ and a lower value is considered more efficient.
 To get an initial understanding on the efficiency of different quantum back-ends we implement and benchmark the \gls{qaoa} to solve the \gls{maxcut} problem on a 2-regular graph with 4 vertices (qubits) and edges.
 The details of the \gls{maxcut} problem and the \gls{qaoa} implementation are described in \Cref{chap:qaoa-maxcut}.
 This report will mainly focus on the quantities $T_Q$ and $T_L$ as they are the largest and most relevant.
-Some work has been done on optimizing the classical optimization part~\cite{lavrijsen2020classical, sung2020exploration}.
+Some work related to optimizing the classical optimization part has been done by \textcite{lavrijsen2020classical} and \textcite{sung2020exploration}.
 The benchmark results are displayed in \Cref{table:baseline-benchmark}.
 The efficiency of these different quantum parts should not be compared to each other as each quantum part is a different tool with a different application.
 Rather, it can be interpreted as a demonstration of how different quantum parts behave on the same problem.
@@ -164,7 +164,7 @@ Rather, it can be interpreted as a demonstration of how different quantum parts 
         \begin{tabular}{ c|c|c|c }
             Quantum part & $T_Q(n, d, s)$ & $T_L$ & $T_Q(n, d, s) + T_L$ \\
             \hline
-            Simulation (Local) & $0.009\text{s} \pm 0.001$s & $0.010 \text{s} \pm 0.022$s & $0.019 \text{s} \pm 0.023$s \\
+            Simulation (Local, Qiskit) & $0.009\text{s} \pm 0.001$s & $0.010 \text{s} \pm 0.022$s & $0.019 \text{s} \pm 0.023$s \\
             Simulation (\gls{hpc}) & $0.016\text{s} \pm 0.001$s & $11.734\text{s} \pm 2.029$s & $11.751\text{s} \pm 2.029$s \\
             \gls{qpu} (Starmon-5) & $0.622\text{s} \pm 0.000$s & $27.742\text{s} \pm 0.610$s & $28.365\text{s} \pm 0.610$s \\
         \end{tabular}
@@ -184,9 +184,25 @@ Using the total average time taken per circuit execution by the Starmon-5 \gls{q
 On top of that, there is an additional development time that should be considered, which includes debugging and testing quantum circuit behavior using quantum circuit simulators.
 In the following sections we will explore different methods of potentially increasing the efficiency of the execution of \glspl{hqca}.
 
+\subsection{Development Cycle}
+The development cycle of \glspl{hqca} usually consists of three phases of quantum circuit execution: noiseless simulation, noisy simulation, and hardware.
+Quantum Inspire's \gls{qpu} and simulation back-ends are all in the cloud, introducing a network overhead.
+While this is hard to avoid for the \gls{qpu} back-ends, for some applications of the simulator back-ends this network overhead may be avoided through local simulation.
+This is especially true for simulations of approximately 24 qubits and lower, for which the benefits of \gls{hpc} do not yet become substantial.
+For this range of simulations, the network and possible job queue overhead greatly exceeds the actual quantum circuit execution time.
+To avoid this unnecessary overhead for small simulations, support for a local simulation back-end in Quantum Inspire can be useful.
+As per the measurements from \Cref{table:baseline-benchmark}, local simulation is a factor of $\sim1000$ faster for 4-qubit simulations over \gls{hpc} simulation because of the network and job scheduler overhead.
+
+Another way to increase the efficiency of the \gls{hqca} development cycle is to reduce the amount of circuits that need to be executed on a \gls{qpu}.
+This can be achieved if one has access to a noisy quantum simulator which models the target \gls{qpu}'s hardware noise well.
+QX simulator supports the quantum depolarizing channel~\cite[Section 8.3.4]{nielsen2002quantum}, which is a standard model for noise in quantum systems.
+However, the quantum depolarizing channel does not accurately represent the errors encountered on actual \glspl{qpu}.
+By adding support for better user-configurable error channels that correspond more to actual hardware noise, the amount of quantum circuits that need to be executed on actual \glspl{qpu} is decreased.
+One can then use the noisy quantum simulator for a larger part of the development process, which will increase the development efficiency as quantum circuit simulation is often more accessible and has less overhead cost.
+
 \subsection{QX Simulator Batch Parameters}
 When submitting a job to the job scheduler on SURF's \gls{hpc} center, one can define the resources required for the job through batch parameters.
-Choosing the right parameters for a job can optimize its efficiency and help the job scheduler use the system's resources as optimal as possible.
+Choosing the right parameters for a job can optimize its execution time and help the job scheduler use the system's resources as optimal as possible.
 In the context of the SURF QX simulator back-end, we are interested in figuring out the optimal amount of cores and memory to use for quantum circuit simulations of different qubit counts.
 Choosing the optimal amount of cores improves both the quantum simulation execution time ($T_Q$) and scheduling efficiency ($T_L$), whereas choosing the right amount of memory ensures that the simulation has access to enough memory and increases scheduling efficiency.
 We run all experiments and benchmarks on SURF's cluster computer Lisa on the quantum computing nodes (\mintinline{bash}{fat_soil_shared} partition).
@@ -198,35 +214,66 @@ For each number of qubits $n$, we generate a \gls{qaoa} \gls{maxcut} circuit on 
 These random graphs are generated with no self-loops or parallel edges according to the algorithm described by \textcite{steger1999generating}.
 The respective quantum circuit for a 2-regular graph with $n$ vertices has a depth $d$ of $4n$.
 This means that the depth increases as the number of qubits and problem size increases, as is the case with most realistic implementations of quantum algorithms.
-The thread affinity was set up in a way that the threads run as much on the same \gls{cpu} socket as possible.
+The thread affinity was set up in a way that the threads run as much on the same \gls{cpu} socket(s) as possible according to the layout from \Cref{table:fat-soil-affinities}.
+\begin{table}[ht]
+    \centering
+    {\renewcommand{\arraystretch}{1.05}
+        \begin{tabular}{c|c}
+            \gls{cpu} socket & \glspl{cpu} \\
+            \hline
+            0 & 0, 4, 8, 12, 16, 20, 24, 28, 32, 36 \\
+            1 & 1, 5, 9, 13, 17, 21, 25, 29, 33, 37 \\
+            2 & 2, 6, 10, 14, 18, 22, 26, 30, 34, 38 \\
+            3 & 3, 7, 11, 15, 19, 23, 27, 31, 35, 39 \\
+        \end{tabular}
+    }
+    \caption[Overview of the layout of the sockets and \glspl{cpu} on the \mintinline{bash}{fat_soil_shared} quantum nodes.]{
+        Overview of the layout of the sockets and \glspl{cpu} on the \mintinline{bash}{fat_soil_shared} quantum nodes.
+        Each node has 4 sockets with 10 \glspl{cpu} per socket for a total of 40 \glspl{cpu}.
+    }
+    \label{table:fat-soil-affinities}
+\end{table}
 
 The benchmark results are displayed in \Cref{table:qx_benchmark}.
 For lower qubit counts adding more cores does not or only slightly improve the execution time.
 Given the limited amount of resources available on the quantum nodes and the minor speedup gained, simulations below 20 qubits should probably not be given more than one or two cores.
+For simulations of 20 qubits and above, increasing the amount of cores becomes more fruitful.
+As the number of qubit increases, the execution time increases exponentially, and for simulations of 20 qubits and more, increasing the amount of cores begins to save time in the order of seconds and even minutes.
+These higher qubit simulations can be sped up an order of 7 to 10 by using 32 or more cores.
+The speedup stagnates greatly after 32 cores, and while for some cases the speedup continues to increase beyond 32 cores, it is a relatively small speedup.
+Depending on the seasonality, 32 cores per simulation might occupy too many resources.
+In this case, a speedup on the order of 4 to 5 may still be achieved with 16 cores.
+The trade-off to be considered when choosing the amount of cores to use per number of qubits depends on the available resources, seasonality, and speedup gained.
+The performance of quantum circuit simulation can be further pushed by using \glspl{gpu} as shown in \cite[Appendix B]{oud2019simulation}, however QX simulator does not currently support \gls{gpu} simulation.
 
 \begin{table}[ht]
     \centering
-    \begin{adjustwidth}{-1.2cm}{-1.2cm}
+    \begin{adjustwidth}{-1.6cm}{-1.6cm}
     {\renewcommand{\arraystretch}{1.05}
         \setlength{\tabcolsep}{2.5pt}
         \small
         \begin{tabular}{ccccccccccccc}
             $n$ & $d$ & $t = 1$ & $t = 2$ & $t = 4$ & $t = 8$ & $t = 16$ & $t = 20$ & $t = 24$ & $t = 28$ & $t = 32$ & $t = 36$ & $t = 40$ \\
             \hline
-            $4$ & $16$ & $0.020$s & \underline{$\mathbf{0.020}$\textbf{s}} & $0.020$s & $0.020$s & $0.035$s & $0.032$s & $0.026$s & $0.029$s & $0.029$s & $0.028$s & $0.031$s \\
-            $6$ & $24$ & \underline{$\mathbf{0.019}$\textbf{s}} & $0.019$s & $0.020$s & $0.020$s & $0.036$s & $0.040$s & $0.028$s & $0.026$s & $0.027$s & $0.029$s & $0.028$s \\
-            $8$ & $32$ & \underline{$\mathbf{0.018}$\textbf{s}} & $0.019$s & $0.020$s & $0.021$s & $0.037$s & $0.040$s & $0.030$s & $0.036$s & $0.029$s & $0.030$s & $0.029$s \\
-            $10$ & $40$ & \underline{$\mathbf{0.019}$\textbf{s}} & $0.020$s & $0.020$s & $0.021$s & $0.039$s & $0.040$s & $0.028$s & $0.035$s & $0.030$s & $0.031$s & $0.030$s \\
-            $12$ & $48$ & \underline{$\mathbf{0.020}$\textbf{s}} & $0.021$s & $0.022$s & $0.023$s & $0.041$s & $0.043$s & $0.028$s & $0.037$s & $0.029$s & $0.033$s & $0.030$s \\
-            $14$ & $56$ & $0.024$s & $0.025$s & \underline{$\mathbf{0.024}$\textbf{s}} & $0.024$s & $0.043$s & $0.046$s & $0.033$s & $0.037$s & $0.027$s & $0.029$s & $0.030$s \\
-            $16$ & $64$ & $0.037$s & $0.031$s & $0.031$s & $0.030$s & $0.049$s & $0.051$s & $0.040$s & $0.049$s & \underline{$\mathbf{0.029}$\textbf{s}} & $0.037$s & $0.033$s \\
-            $18$ & $72$ & $0.074$s & $0.055$s & $0.044$s & $0.040$s & $0.061$s & $0.066$s & $0.046$s & $0.061$s & $0.044$s & $0.040$s & \underline{$\mathbf{0.039}$\textbf{s}} \\
-            $20$ & $80$ & $0.299$s & $0.178$s & $0.114$s & $0.083$s & $0.118$s & $0.115$s & $0.067$s & $0.114$s & $0.074$s & \underline{$\mathbf{0.065}$\textbf{s}} & $0.066$s \\
-            $22$ & $88$ & $1.685$s & $0.847$s & $0.585$s & $0.494$s & $0.645$s & $0.605$s & $0.224$s & $0.390$s & $0.195$s & $0.193$s & \underline{$\mathbf{0.189}$\textbf{s}} \\
-            $24$ & $96$ & $7.083$s & $3.703$s & $2.593$s & $2.286$s & $2.976$s & $2.723$s & $1.196$s & $2.109$s & $1.009$s & $0.952$s & \underline{$\mathbf{0.913}$\textbf{s}} \\
-            $26$ & $104$ & $29.827$s & $16.296$s & $11.385$s & $9.991$s & $11.566$s & $11.555$s & $5.318$s & $8.434$s & $4.475$s & $4.287$s & \underline{$\mathbf{4.092}$\textbf{s}} \\
-            $28$ & $112$ & $123.789$s & $68.968$s & $48.236$s & $42.365$s & $45.519$s & $45.031$s & $32.523$s & $35.187$s & \underline{$\mathbf{25.186}$\textbf{s}} & $25.186$s & $30.037$s \\
-            $30$ & $120$ & $619.899$s & $292.743$s & $204.698$s & $179.886$s & $183.584$s & $181.825$s & $112.307$s & $133.398$s & $100.625$s & \underline{$\mathbf{99.066}$\textbf{s}} & $103.479$s \\
+            $4$ & $16$ & $0.026$s & \underline{$\mathbf{0.023}$\textbf{s}} & $0.027$s & $0.027$s & $0.027$s & $0.025$s & $0.027$s & $0.031$s & $0.031$s & $0.032$s & $0.043$s \\
+            $6$ & $24$ & $0.023$s & $0.024$s & \underline{$\mathbf{0.023}$\textbf{s}} & $0.027$s & $0.028$s & $0.028$s & $0.028$s & $0.032$s & $0.032$s & $0.028$s & $0.031$s \\
+            $8$ & $32$ & \underline{$\mathbf{0.023}$\textbf{s}} & $0.025$s & $0.025$s & $0.028$s & $0.028$s & $0.025$s & $0.027$s & $0.031$s & $0.030$s & $0.028$s & $0.035$s \\
+            $10$ & $40$ & \underline{$\mathbf{0.023}$\textbf{s}} & $0.024$s & $0.026$s & $0.025$s & $0.030$s & $0.030$s & $0.028$s & $0.028$s & $0.028$s & $0.027$s & $0.041$s \\
+            $12$ & $48$ & $0.025$s & $0.026$s & \underline{$\mathbf{0.023}$\textbf{s}} & $0.028$s & $0.029$s & $0.035$s & $0.029$s & $0.027$s & $0.034$s & $0.029$s & $0.045$s \\
+            $14$ & $56$ & $0.032$s & $0.032$s & \underline{$\mathbf{0.027}$\textbf{s}} & $0.030$s & $0.030$s & $0.032$s & $0.028$s & $0.033$s & $0.027$s & $0.029$s & $0.044$s \\
+            $16$ & $64$ & $0.047$s & $0.041$s & $0.041$s & $0.039$s & \underline{$\mathbf{0.028}$\textbf{s}} & $0.042$s & $0.039$s & $0.038$s & $0.030$s & $0.038$s & $0.042$s \\
+            $18$ & $72$ & $0.106$s & $0.070$s & $0.053$s & $0.051$s & $0.050$s & $0.039$s & $0.049$s & \underline{$\mathbf{0.037}$\textbf{s}} & $0.039$s & $0.042$s & $0.043$s \\
+            $20$ & $80$ & $0.417$s & $0.242$s & $0.145$s & $0.105$s & $0.078$s & $0.072$s & $0.083$s & $0.085$s & \underline{$\mathbf{0.069}$\textbf{s}} & $0.075$s & $0.075$s \\
+            $22$ & $88$ & $2.023$s & $1.102$s & $0.719$s & $0.553$s & $0.353$s & $0.292$s & $0.264$s & $0.234$s & $0.219$s & $0.213$s & \underline{$\mathbf{0.213}$\textbf{s}} \\
+            $24$ & $96$ & $8.853$s & $4.800$s & $3.164$s & $2.533$s & $1.685$s & $1.446$s & $1.297$s & $1.187$s & $1.087$s & $1.026$s & \underline{$\mathbf{0.983}$\textbf{s}} \\
+            $26$ & $104$ & $38.943$s & $20.991$s & $13.787$s & $11.045$s & $7.390$s & $6.668$s & $5.734$s & $5.212$s & $4.805$s & $4.512$s & \underline{$\mathbf{4.318}$\textbf{s}} \\
+            $28$ & $112$ & $165.904$s & $89.254$s & $58.518$s & $46.915$s & $36.217$s & $36.297$s & $33.298$s & $28.917$s & $24.977$s & \underline{$\mathbf{22.797}$\textbf{s}} & $27.495$s \\
+            $30$ & $120$ & $709.055$s & $380.020$s & $249.144$s & $199.599$s & $157.228$s & $139.533$s & $117.362$s & $112.245$s & \underline{$\mathbf{102.267}$\textbf{s}} & $106.867$s & $104.845$s \\
+            $31$ & $124$ & $1463.286$s & $786.563$s & $516.334$s & $413.828$s & $294.204$s & $264.214$s & $240.679$s & $220.995$s & $206.918$s & \underline{$\mathbf{205.207}$\textbf{s}} & $206.205$s \\
+            $32$ & $128$ & $433.306$s & $242.520$s & $179.003$s & $165.639$s & $114.784$s & $104.654$s & $88.358$s & $79.150$s & $72.859$s & $69.329$s & \underline{$\mathbf{66.556}$\textbf{s}} \\
+            $33$ & $132$ & $1163.903$s & $638.818$s & $466.237$s & $425.379$s & $286.237$s & $243.540$s & $210.175$s & $186.534$s & $169.039$s & $160.732$s & \underline{$\mathbf{153.434}$\textbf{s}} \\
+            $34$ & $136$ & $1773.986$s & $957.530$s & $651.446$s & $566.473$s & $370.061$s & $317.345$s & $273.304$s & $292.984$s & $224.161$s & $208.400$s & \underline{$\mathbf{195.224}$\textbf{s}} \\
+            $35$ & $140$ & $4196.293$s & $2271.537$s & $1429.258$s & $0.018$s & \underline{$\mathbf{0.017}$\textbf{s}} & $0.018$s & $187.123$s & $421.320$s & $385.663$s & $358.514$s & $338.494$s \\
             
         \end{tabular}
     }
@@ -234,7 +281,7 @@ Given the limited amount of resources available on the quantum nodes and the min
     \caption[Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.]{
         Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.
         Here $n$ is the number of qubits, $d$ is the depth of the circuit, and $t$ is the number of cores.
-        Execution times shown are the average of 20 repeated circuit executions.
+        Execution times shown are the average of 10 repeated circuit executions.
         The optimal amount of cores $t$ is highlighted for every $n$.
     }
     \label{table:qx_benchmark}
@@ -243,10 +290,8 @@ Given the limited amount of resources available on the quantum nodes and the min
 \subsubsection{Memory Parameter}
 The \mintinline{bash}{fat_soil_shared} partition is composed of shared nodes, which means that multiple users can run jobs on the same node and resources like memory and disk space are shared.
 For this reason, to ensure that a simulation has access to enough memory, the simulation job should specify the amount of memory it needs.
-
-% default is (1.5TB)*n/40
-\subsection{Development Cycle}
-% simulation and qpu back-ends are in the cloud, network overhead, local simulation
+By default, a job on the \mintinline{bash}{fat_soil_shared} partition is given $37.5$ GB of memory per requested core.
+This is not a fit default for QX simulator, as its memory usage grows with the number of qubits, not necessarily the amount of cores it uses.
 
 % sum up speedups and factor relative to table 4.3 measurements
 % - simulation efficiency can be improved by factor x by choosing the optimal amount of resources

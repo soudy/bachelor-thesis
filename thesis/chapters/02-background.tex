@@ -97,7 +97,7 @@ This report mainly focuses on complexity classes involving Turing machines and q
 The class $\P$ contains all decision problems solvable by a deterministic Turing machine in polynomial time.
 Problems that fall under this class are often referred to as tractable or easy problems~\cite{cormen2009introduction}.
 The class $\NP$ (non-deterministic polynomial) contains all problems \emph{verifiable} by a deterministic Turing machine in polynomial time.
-It is clear that $\P \subseteq \NP$, because if you can solve a problem in polynomial time, you can also verify it in polynomial time.
+It is clear that $\P \subseteq \NP$, because if you can solve a problem in polynomial time, you can also verify it in polynomial time --- you can verify it by solving it.
 A still unsolved and important question in computer science is whether $\P = \NP$.
 That is, can all problems that can be verified in polynomial time also be solved in polynomial time?
 A problem is said to be $\NP$-hard when every problem in $\NP$ can be reduced into it in polynomial time, even if it is outside of $\NP$.
@@ -119,6 +119,8 @@ It is known that there are $\NP$ problems that can be efficiently solved on a qu
 As mentioned in the previous section, quantum computers can also solve all problems in $\P$ efficiently, so $\P \subseteq \BQP$.
 Furthermore, quantum computers are more powerful than classical probabilistic computers~\cite{bernstein1997quantum}, giving $\BPP \subseteq \BQP$.
 How $\BQP$ relates to $\P$ and $\NP$ exactly is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
+It also seems very unlikely that quantum computers will be able to solve $\NP$-complete problems in polynomial time, or $\BQP \cap \NP\text{-complete} = \varnothing$.
+
 The quantum analog of $\NP$ goes by the name of $\QMA$ (Quantum Merlin Arthur), and is related to $\BQP$ in the same way that $\NP$ is related to $\P$.
 That is, $\QMA$ is the set of all decision problems verifiable by a quantum computer in polynomial time where a bounded error rate of $1/3$ is allowed.
 Similarly then, a problem is said to be $\QMA$-hard when every problem in $\QMA$ can be reduced to it, and a problem is said to be $\QMA$-complete if it is both $\QMA$-hard and in $\QMA$.
@@ -126,7 +128,7 @@ Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subse
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.7\linewidth]{figures/complexity-classes-hierarchy.pdf}
+    \includegraphics[width=0.6\linewidth]{figures/complexity-classes-hierarchy.pdf}
     \caption[An overview of the hierarchy of some of the complexity classes discussed.]{
         An overview of the hierarchy of some of the complexity classes discussed.
         This graphic assumes $\P \neq \NP$, $\P \neq \BPP$, and $\P \subseteq \BPP \subseteq \BQP$.
@@ -231,7 +233,7 @@ For example, when measuring the state $\ket{\Phi^+}$ from \Cref{eqn:bell-state},
 So by measuring one qubit, one also knows the state of the other qubit.
 
 \subsection{State Evolution} \label{sec:state-evolution}
-The evolution of a closed quantum system is described by a unitary transformation~\cite[Section 2.2]{nielsen2002quantum}.\footnote{In this report, a perfectly closed system is assumed, even though in reality all systems interact somewhat with other systems.}
+The evolution of a closed quantum system is described by a unitary transformation~\cite[Section 2.2]{nielsen2002quantum}.\footnote{In this report, a perfectly closed system is assumed, even though in reality all systems interact somewhat with other systems. This is not an issue for practical quantum computers though due to quantum error correction, which can protect quantum information against noise from the external environment.}
 A state \ket{\psi} at time $t_1$ is related to state \ket{\psi'} at time $t_2$ by a unitary operator $U$:
 \begin{equation}
 \ket{\psi'} = U\ket{\psi}.
@@ -594,7 +596,7 @@ A common problem in computer science is examining a large number of different po
 This is the same problem that Grover's algorithm looks to solve.
 Usually, there is some structure in the problem which allows for more efficient algorithms.
 For example, if a list of numbers is sorted, one can find a number in $O(\log n)$ using binary search.
-For hard problems that do not have such obvious structure like the \gls{sat} problem, Grover's algorithm can provide a quadratic speedup.
+For hard problems that do not have such obvious structure, Grover's algorithm can be used to achieve a quadratic speedup.
 
 The function $f(x)$ from \Cref{eqn:black-box-fn} is sometimes referred to as a black box function, as its internal workings is not of interest.
 Grover's algorithm is a general algorithm which can be applied to many algorithms that use search heuristics.
@@ -639,10 +641,10 @@ With the oracle defined, the quantum circuit of Grover's algorithm is shown in \
     \caption{Quantum circuit representation of Grover's algorithm.}
     \label{fig:grover-circuit}
 \end{figure}
-The quantum state can be thought of as having two registers: the target qubits $\ket{q1\ldots q_n}$ and the oracle qubit \ket{y}.
+The quantum state can be thought of as having two registers: the target qubits $\ket{q_1\ldots q_n}$ and the oracle qubit \ket{y}.
 The oracle qubit \ket{y} starts in the state $H\ket{1} = (\ket{0} - \ket{1})/\sqrt{2}$.
-When the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
-However, if the oracle is applied to $\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
+When the oracle is applied to $\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
+However, if the oracle is applied to $\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
 After the oracle is applied, the solution is marked with a negative phase.
 To extract this solution, a procedure called amplitude amplification is used.
 Amplitude amplification can be thought of as inversion about the mean.
