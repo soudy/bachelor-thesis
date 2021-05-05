@@ -3,27 +3,46 @@ import psutil
 import time
 import numpy as np
 
+from qiskit.circuit.random import random_circuit
+from qiskit.compiler import transpile, assemble
+
+from quantuminspire.qiskit import QI
+from quantuminspire.qiskit.backend_qx import QuantumInspireBackend
+
+from qaoa_maxcut import set_qi_authentication, DEFAULT_QI_API_URL
+
 
 qubits = list(range(1, 36))
-shots = 10
+shots = 5
+depth = 2
 
 
-def create_cqasm_file(n):
-    cqasm = f"""version 1.0
+def create_cqasm_file(backend, n):
+    circ = random_circuit(n, depth, measure=True, max_operands=2, seed=55)
 
-qubits {n}
+    (experiment,) = assemble(transpile(circ, backend=backend),
+                                backend=backend).experiments
 
-measure_all
-"""
+    cqasm = QuantumInspireBackend._generate_cqasm(
+        experiment,
+        full_state_projection=False
+    )
+
+    print(cqasm)
+
     with open(f"/scratch/memory_cqasm_{n}.qc", "w+") as f:
         f.write(cqasm)
 
 
 if __name__ == "__main__":
+    set_qi_authentication("c15a7bdafcb71f7a3462c8515b23d64b7c3392d3",
+                          DEFAULT_QI_API_URL)
+    backend = QI.get_backend("QX single-node simulator")
+
     data = {}
     for n in qubits:
         mems = []
-        create_cqasm_file(n)
+        create_cqasm_file(backend, n)
 
         for _ in range(shots):
             peak_memory = 0
