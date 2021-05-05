@@ -19,7 +19,7 @@ The partition of the visualized cut can be described as the bit string $z = 0010
     \label{fig:maxcut-5-example}
 \end{figure}
 
-The \gls{qaoa} algorithm can be used for solving \gls{maxcut} problems by assigning a vertex $j \in V$ to a qubit $\ket{q_j}$.
+The \gls{qaoa} can be used for solving \gls{maxcut} problems by assigning a vertex $j \in V$ to a qubit $\ket{q_j}$.
 A qubit $\ket{q_j}$ is in state \ket{0} if a vertex $j$ is in partition $S$, and state \ket{1} if vertex $j$ is in partition $\bar{S}$.
 To encode the objective function from \Cref{eqn:max-cut-objective}, note that the objective function can be rewritten as follows:
 \begin{equation}

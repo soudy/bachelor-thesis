@@ -5,7 +5,7 @@ Second, the basic ideas of quantum mechanics are presented.
 Finally, an overview of the quantum circuit computational model is given along with a description of two important quantum algorithms to demonstrate the computing power of quantum computers.
 
 \section{Computational Complexity}
-In computer science, there seems to be a fundamental limit to what problems computers can solve.
+There seems to be a fundamental limit to what problems computers can solve.
 Some problems seem to be inherently uncomputable: there exists no general solution that does not go into an infinite loop for certain inputs~\cite{church1936note, turing1937computable}.
 On the other hand, there are limitations to the efficiency in which problems can be solved.
 This section will look at how one can define the computational efficiency of certain algorithms.
@@ -332,9 +332,9 @@ With this definition of projective measurements, the expectation value of an obs
 \begin{equation}
 \begin{aligned}
 \expval{O}_\psi &= \bra{\psi}O\ket{\psi} \\
-&= \bra{\psi}\left(\sum_{j=0}^{N-1}\lambda_j \vert\lambda_j\rangle \langle\lambda_j\vert \right)\ket{\psi} \\
-&= \sum_{j=0}^{N-1}\lambda_j \langle \psi | \lambda_j\rangle \langle \lambda_j \vert \psi \rangle \\
-&= \sum_{j=0}^{N-1}\lambda_j \vert\langle\lambda_j \vert \psi\rangle \rvert^2.
+&= \bra{\psi}\left(\sum_{j}\lambda_j \vert\lambda_j\rangle \langle\lambda_j\vert \right)\ket{\psi} \\
+&= \sum_{j}\lambda_j \langle \psi | \lambda_j\rangle \langle \lambda_j \vert \psi \rangle \\
+&= \sum_{j}\lambda_j \vert\langle\lambda_j \vert \psi\rangle \rvert^2.
 \end{aligned}
 \end{equation}
 The expectation value is the sum of all possible outcomes (eigenvalues of $O$) weighted by their probability.

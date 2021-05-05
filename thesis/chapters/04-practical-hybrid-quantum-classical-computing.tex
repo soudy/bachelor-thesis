@@ -197,7 +197,7 @@ Another way to increase the efficiency of the \gls{hqca} development cycle is to
 This can be achieved if one has access to a noisy quantum simulator which models the target \gls{qpu}'s hardware noise well.
 QX simulator supports the quantum depolarizing channel~\cite[Section 8.3.4]{nielsen2002quantum}, which is a standard model for noise in quantum systems.
 However, the quantum depolarizing channel does not accurately represent the errors encountered on actual \glspl{qpu}.
-By adding support for better user-configurable error channels that correspond more to actual hardware noise, the amount of quantum circuits that need to be executed on actual \glspl{qpu} is decreased.
+By adding support for better user-configurable error channels that correspond more to actual hardware noise, the amount of quantum circuits that need to be executed on actual \glspl{qpu} can be decreased.
 One can then use the noisy quantum simulator for a larger part of the development process, which will increase the development efficiency as quantum circuit simulation is often more accessible and has less overhead cost.
 
 \subsection{QX Simulator Batch Parameters}
@@ -206,6 +206,8 @@ Choosing the right parameters for a job can optimize its execution time and help
 In the context of the SURF QX simulator back-end, we are interested in figuring out the optimal amount of cores and memory to use for quantum circuit simulations of different qubit counts.
 Choosing the optimal amount of cores improves both the quantum simulation execution time ($T_Q$) and scheduling efficiency ($T_L$), whereas choosing the right amount of memory ensures that the simulation has access to enough memory and increases scheduling efficiency.
 We run all experiments and benchmarks on SURF's cluster computer Lisa on the quantum computing nodes (\mintinline{bash}{fat_soil_shared} partition).
+This partition consists of four nodes with 1.5 TB memory, two NVIDIA TitanRTX \glspl{gpu}, and four sockets with 10 \glspl{cpu} per socket.
+These quantum nodes are especially tailored for the development and execution of (hybrid) quantum simulations.
 
 \subsubsection{Number of Cores Parameter}
 To determine the optimal amount of cores to use for a given number of qubits, we measured the execution time of QX simulator for quantum circuits with different number of qubits.
@@ -217,7 +219,7 @@ This means that the depth increases as the number of qubits and problem size inc
 The thread affinity was set up in a way that the threads run as much on the same \gls{cpu} socket(s) as possible according to the layout from \Cref{table:fat-soil-affinities}.
 \begin{table}[ht]
     \centering
-    {\renewcommand{\arraystretch}{1.05}
+    {\renewcommand{\arraystretch}{1.15}
         \begin{tabular}{c|c}
             \gls{cpu} socket & \glspl{cpu} \\
             \hline
@@ -234,7 +236,7 @@ The thread affinity was set up in a way that the threads run as much on the same
     \label{table:fat-soil-affinities}
 \end{table}
 
-The benchmark results are displayed in \Cref{table:qx_benchmark}.
+The benchmark results are displayed in \Cref{table:qx-benchmark}.
 For lower qubit counts adding more cores does not or only slightly improve the execution time.
 Given the limited amount of resources available on the quantum nodes and the minor speedup gained, simulations below 20 qubits should probably not be given more than one or two cores.
 For simulations of 20 qubits and above, increasing the amount of cores becomes more fruitful.
@@ -246,7 +248,7 @@ In this case, a speedup on the order of 4 to 5 may still be achieved with 16 cor
 The trade-off to be considered when choosing the amount of cores to use per number of qubits depends on the available resources, seasonality, and speedup gained.
 The performance of quantum circuit simulation can be further pushed by using \glspl{gpu} as shown in \cite[Appendix B]{oud2019simulation}, however QX simulator does not currently support \gls{gpu} simulation.
 
-\begin{table}[ht]
+\begin{table}[H]
     \centering
     \begin{adjustwidth}{-1.6cm}{-1.6cm}
     {\renewcommand{\arraystretch}{1.05}
@@ -284,7 +286,7 @@ The performance of quantum circuit simulation can be further pushed by using \gl
         Execution times shown are the average of 10 repeated circuit executions.
         The optimal amount of cores $t$ is highlighted for every $n$.
     }
-    \label{table:qx_benchmark}
+    \label{table:qx-benchmark}
 \end{table}
 
 \subsubsection{Memory Parameter}
@@ -292,6 +294,79 @@ The \mintinline{bash}{fat_soil_shared} partition is composed of shared nodes, wh
 For this reason, to ensure that a simulation has access to enough memory, the simulation job should specify the amount of memory it needs.
 By default, a job on the \mintinline{bash}{fat_soil_shared} partition is given $37.5$ GB of memory per requested core.
 This is not a fit default for QX simulator, as its memory usage grows with the number of qubits, not necessarily the amount of cores it uses.
+To ensure that simulations request a reasonable amount of memory, we measure the memory usage of QX simulator running random circuits of depth 2 for different number of qubits.
+This is done by spawning a QX simulator process and polling the operating system every 0.1 millisecond for the respective process' \gls{rss} memory usage.
+We then take the highest amount of memory measured by polling and take that as the ``total" memory usage of the simulation.
+This is repeated 10 times per $n$ qubits.
+The results are displayed in \Cref{table:qx-memory-usage}.
+We plot the data in \Cref{fig:qx-memory-plot}, along with a fitted exponential function to predict the amount of memory $\hat{m}$ required (in GB) for a simulation of $n$ qubits:
+\begin{equation}
+\hat{m}(n) = \left(3.20017417 \cdot 10^{-8}\right) \cdot e^{0.693145626n} + 0.0210389214.
+\end{equation}
+This function is especially useful to define the memory requirement for simulations of $n \ge 31$ qubits, where the default of $37.5$ GB of memory per requested core becomes too small.
 
-% sum up speedups and factor relative to table 4.3 measurements
-% - simulation efficiency can be improved by factor x by choosing the optimal amount of resources
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cc}
+        $n$ & \gls{rss} memory usage \\
+        \hline
+        1 & $\text{18.96 MB} \pm \text{918.08 kB}$ \\
+        2 & $\text{19.72 MB} \pm \text{1.80 MB}$ \\
+        3 & $\text{19.97 MB} \pm \text{971.35 kB}$ \\
+        4 & $\text{19.72 MB} \pm \text{1.13 MB}$ \\
+        5 & $\text{20.28 MB} \pm \text{1.68 MB}$ \\
+        6 & $\text{19.52 MB} \pm \text{1.04 MB}$ \\
+        7 & $\text{20.74 MB} \pm \text{2.19 MB}$ \\
+        8 & $\text{19.89 MB} \pm \text{1.53 MB}$ \\
+        9 & $\text{19.79 MB} \pm \text{1.12 MB}$ \\
+        10 & $\text{19.87 MB} \pm \text{991.81 kB}$ \\
+        11 & $\text{19.45 MB} \pm \text{1.03 MB}$ \\
+        12 & $\text{19.48 MB} \pm \text{1.24 MB}$ \\
+        13 & $\text{20.00 MB} \pm \text{1.93 MB}$ \\
+        14 & $\text{19.64 MB} \pm \text{1.02 MB}$ \\
+        15 & $\text{20.77 MB} \pm \text{725.03 kB}$ \\
+        16 & $\text{23.35 MB} \pm \text{2.19 MB}$ \\
+        17 & $\text{21.51 MB} \pm \text{935.23 kB}$ \\
+        18 & $\text{26.94 MB} \pm \text{1.46 MB}$ \\
+    \end{tabular}
+    \quad
+    \begin{tabular}{cc}
+        $n$ & \gls{rss} memory usage \\
+        \hline
+        19 & $\text{36.45 MB} \pm \text{715.73 kB}$ \\
+        20 & $\text{53.87 MB} \pm \text{915.52 kB}$ \\
+        21 & $\text{88.12 MB} \pm \text{159.36 kB}$ \\
+        22 & $\text{153.70 MB} \pm \text{1.63 MB}$ \\
+        23 & $\text{288.00 MB} \pm \text{858.89 kB}$ \\
+        24 & $\text{555.85 MB} \pm \text{742.69 kB}$ \\
+        25 & $\text{1.09 GB} \pm \text{2.47 MB}$ \\
+        26 & $\text{2.17 GB} \pm \text{892.79 kB}$ \\
+        27 & $\text{4.32 GB} \pm \text{963.74 kB}$ \\
+        28 & $\text{8.61 GB} \pm \text{1.02 MB}$ \\
+        29 & $\text{17.20 GB} \pm \text{1.28 MB}$ \\
+        30 & $\text{34.38 GB} \pm \text{2.26 MB}$ \\
+        31 & $\text{68.74 GB} \pm \text{781.89 kB}$ \\
+        32 & $\text{137.46 GB} \pm \text{1.05 MB}$ \\
+        33 & $\text{274.90 GB} \pm \text{901.16 kB}$ \\
+        34 & $\text{549.78 GB} \pm \text{1.17 MB}$ \\
+        35 & $\text{1.10 TB} \pm \text{995.41 kB}$ \\
+        \phantom{36} & \\
+    \end{tabular}
+    \caption[QX simulator \gls{rss} memory usage for varying number of qubits.]{
+        QX simulator \gls{rss} memory usage for varying number of qubits.
+        The measurements shown are the average taken of 10 runs.
+    }
+    \label{table:qx-memory-usage}
+\end{table}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.765\linewidth]{figures/qx_memory_plot.pdf}
+    
+    \caption[Plot of the \gls{rss} memory usage of QX simulator as the number of qubits increases.]{
+        Plot of the \gls{rss} memory usage of QX simulator as the number of qubits increases.
+        We use non-linear least squares~\cite{branch1999subspace} to fit an exponential function $\hat{m}(n) = a \cdot e^{bn} + c$ to the data, which gives $a = 3.20017417 \cdot 10^{-8}$, $b = 0.693145626$, and $c = 0.0210389214$ with $R^2 = 0.99$.
+        We fit the function to the mean of 10 runs plus its standard deviation to err on the high side to ensure that the simulation has more than enough memory available.
+    }
+    \label{fig:qx-memory-plot}
+\end{figure}
