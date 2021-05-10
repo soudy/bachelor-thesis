@@ -109,7 +109,7 @@ Methods have been developed to improve the gradient descent algorithm --- for ex
     \label{fig:gradient_descent}
 \end{figure}
 
-\section{Variational Quantum Eigensolver}
+\section{Variational Quantum Eigensolver} \label{sec:vqe}
 The \gls{vqe} was the first proposed variational \gls{hqca}.
 It aims to solve the problem of finding eigenvalues of a Hermitian matrix $H$.
 The problem of finding eigenvalues for large matrices is ubiquitous in quantum chemistry, but potential applications range from determining the results of search engines~\cite{page1999pagerank} to designing new materials and drugs~\cite{golub2000eigenvalue}.
@@ -135,7 +135,7 @@ A $k$-local Hamiltonian is a Hamiltonian that can be expressed as a sum of Hamil
 This problem was shown to be $\QMA$-complete for $k \geq 2$, while the 1-local Hamiltonian problem is in $\P$ \cite{kempe2006complexity}.
 However, quantum computers can still offer an advantage above classical computers for this problem.
 Any Hamiltonian $H$ can be represented as a linear combination of Pauli operators:
-\begin{align}
+\begin{align} \label{eq:pauli_hamiltonian}
 H &= \sum_j h_j P_j \\
   &= \sum_j h_j \prod_k P_j^{(k)},
 \end{align} 
@@ -185,8 +185,7 @@ The number of potential solutions is often too large to scan one by one and sele
 Most combinatorial optimization problems are known be $\NP$-complete~\cite{schrijver2003combinatorial}.
 The \gls{qaoa} depends on an integer $p \ge 1$, for which the quality of the approximation improves as $p$ increases.
 Even for $p = 1$, the \gls{qaoa} is not efficiently simulatable by classical computers~\cite{farhi2016quantum}.
-It was also briefly believed to guarantee better approximation ratios than any known polynomial time classical algorithm~\cite{farhi2014quantum}, but \textcite{barak2015beating} proposed a more effective classical algorithm.
-Nevertheless, the \gls{qaoa} has received attention from the scientific community in the last few years because of its classical intractability, wide range of applications, and promising performance guarantees.
+The \gls{qaoa} has received attention from the scientific community in the last few years because of its classical intractability, wide range of applications, and promising performance guarantees.
 
 The \gls{qaoa} looks to solve combinatorial optimization problems, which are specified by $n$ bits and $m$ clauses.
 A clause is a constraint on a subset of the bits which is satisfied for certain assignment of those bits, and not satisfied for other assignments.

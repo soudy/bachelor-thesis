@@ -26,7 +26,10 @@ That is, the number of primitive operations it performs scales quadratically wit
 Constant factors are ignored as they become negligible as $n \to \infty$.
 While they are practically significant --- an algorithm that runs in $O(n/2)$ performs half as many primitive operations as an algorithm that runs in $O(n)$ --- they are not relevant to asymptotic analysis, as both functions grow linearly with $n$. 
 
-Formally, if we have functions $f(n)$ and $g(n)$ such that $f(n)$ eventually grows slower than $Mg(n)$ for some real $M$ as $n \to \infty$, we say $f(n) = O(g(n))$.
+Formally, if we have functions $f(n)$ and $g(n)$ such that $f(n)$ eventually grows slower than $Mg(n)$ for some real $M$ as $n \to \infty$, we say
+\begin{equation}
+f(n) = O(g(n)).
+\end{equation}
 For example, given $f(n) = 10n^3 + 7n^2$ and $g(n) = n^3$, $f(n)$ begins to grow slower than $Mg(n)$ with $M = 11$ for $n > 7$.
 Thus, $g$ bounds $f$ from above, and $f(n) = O(g(n)) = O(n^3)$.
 Some common big-O run times are shown in \Cref{table:common-big-o}, along with their written name and an example.

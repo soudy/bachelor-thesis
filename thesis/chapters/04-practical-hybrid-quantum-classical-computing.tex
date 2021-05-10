@@ -134,8 +134,8 @@ This is also the biggest advantage of the \gls{hpc}-\gls{hpc} workflow --- one c
 % mostly research towards HQCA's, not really practical applications/no speedups to be gained yet
 % most research towards HQCA's doesnt need supercomputers - can still be useful for running multiple experiments
 
-\section{Hybrid Quantum-Classical Workflow Analysis}
-In this section we define and analyze the efficiency of executing \glspl{hqca} using the workflows defined in the previous section.
+\section{Hybrid Quantum-Classical Workflow Analysis} \label{sec:hqca-analysis}
+In this section we define and analyze the efficiency of executing \glspl{hqca} using the different workflows defined in the previous section.
 There are many variables to be considered when talking about the efficiency of a hybrid quantum-classical workflow: network latency, circuit optimization, scheduler wait times, optimizer choice, etc.
 In the end, the aim is to reduce the amount of time it takes to run a full experiment.
 The variables we consider to describe the efficiency of a hybrid quantum-classical experiment in this report are as follows:
@@ -248,12 +248,12 @@ In this case, a speedup on the order of 4 to 5 may still be achieved with 16 cor
 The trade-off to be considered when choosing the amount of cores to use per number of qubits depends on the available resources, seasonality, and speedup gained.
 The performance of quantum circuit simulation can be further pushed by using \glspl{gpu} as shown in \cite[Appendix B]{oud2019simulation}, however QX simulator does not currently support \gls{gpu} simulation.
 
-\begin{table}[H]
+\clearpage
+
+\begin{sidewaystable}
     \centering
-    \begin{adjustwidth}{-1.6cm}{-1.6cm}
-    {\renewcommand{\arraystretch}{1.05}
+    {\renewcommand{\arraystretch}{1.15}
         \setlength{\tabcolsep}{2.5pt}
-        \small
         \begin{tabular}{ccccccccccccc}
             $n$ & $d$ & $t = 1$ & $t = 2$ & $t = 4$ & $t = 8$ & $t = 16$ & $t = 20$ & $t = 24$ & $t = 28$ & $t = 32$ & $t = 36$ & $t = 40$ \\
             \hline
@@ -271,15 +271,13 @@ The performance of quantum circuit simulation can be further pushed by using \gl
             $26$ & $104$ & $38.943$s & $20.991$s & $13.787$s & $11.045$s & $7.390$s & $6.668$s & $5.734$s & $5.212$s & $4.805$s & $4.512$s & \underline{$\mathbf{4.318}$\textbf{s}} \\
             $28$ & $112$ & $165.904$s & $89.254$s & $58.518$s & $46.915$s & $36.217$s & $36.297$s & $33.298$s & $28.917$s & $24.977$s & \underline{$\mathbf{22.797}$\textbf{s}} & $27.495$s \\
             $30$ & $120$ & $709.055$s & $380.020$s & $249.144$s & $199.599$s & $157.228$s & $139.533$s & $117.362$s & $112.245$s & \underline{$\mathbf{102.267}$\textbf{s}} & $106.867$s & $104.845$s \\
-            $31$ & $124$ & $1463.286$s & $786.563$s & $516.334$s & $413.828$s & $294.204$s & $264.214$s & $240.679$s & $220.995$s & $206.918$s & \underline{$\mathbf{205.207}$\textbf{s}} & $206.205$s \\
-            $32$ & $128$ & $433.306$s & $242.520$s & $179.003$s & $165.639$s & $114.784$s & $104.654$s & $88.358$s & $79.150$s & $72.859$s & $69.329$s & \underline{$\mathbf{66.556}$\textbf{s}} \\
-            $33$ & $132$ & $1163.903$s & $638.818$s & $466.237$s & $425.379$s & $286.237$s & $243.540$s & $210.175$s & $186.534$s & $169.039$s & $160.732$s & \underline{$\mathbf{153.434}$\textbf{s}} \\
-            $34$ & $136$ & $1773.986$s & $957.530$s & $651.446$s & $566.473$s & $370.061$s & $317.345$s & $273.304$s & $292.984$s & $224.161$s & $208.400$s & \underline{$\mathbf{195.224}$\textbf{s}} \\
-            $35$ & $140$ & $4196.293$s & $2271.537$s & $1429.258$s & $0.018$s & \underline{$\mathbf{0.017}$\textbf{s}} & $0.018$s & $187.123$s & $421.320$s & $385.663$s & $358.514$s & $338.494$s \\
-            
+            $31$ & $124$ & $1472.514$s & $790.639$s & $516.800$s & $414.011$s & $290.862$s & $273.124$s & $240.179$s & $223.271$s & $211.491$s & \underline{$\mathbf{206.095}$\textbf{s}} & $207.198$s \\
+            $32$ & $128$ & $3057.337$s & $1632.737$s & $1063.347$s & $848.455$s & $589.475$s & $521.410$s & $463.496$s & $422.008$s & $393.498$s & $375.739$s & \underline{$\mathbf{358.297}$\textbf{s}} \\
+            $33$ & $132$ & $1163.903$s & $3394.258$s & $2208.448$s & $1910.517$s & $1213.746$s & $1092.388$s & $1002.076$s & $943.971$s & $886.324$s & $864.818$s & \underline{$\mathbf{836.761}$\textbf{s}} \\
+            $34$ & $136$ & $1773.986$s & $957.530$s & $653.930$s & \underline{$\mathbf{567.841}$\textbf{s}} & $2339.177$s & $2054.360$s & $1751.735$s & $1654.835$s & $1500.719$s & $1457.184$s & $1363.338$s \\
+            $35$ & $140$ & $4196.293$s & $2271.537$s & $1429.258$s & $1161.150$s & \underline{$\mathbf{638.049}$\textbf{s}} & $4010.296$s & $3426.965$s & $3058.449$s & $2942.693$s & $2787.467$s & $2674.791$s \\
         \end{tabular}
     }
-    \end{adjustwidth}
     \caption[Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.]{
         Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.
         Here $n$ is the number of qubits, $d$ is the depth of the circuit, and $t$ is the number of cores.
@@ -287,7 +285,9 @@ The performance of quantum circuit simulation can be further pushed by using \gl
         The optimal amount of cores $t$ is highlighted for every $n$.
     }
     \label{table:qx-benchmark}
-\end{table}
+\end{sidewaystable}
+
+\clearpage
 
 \subsubsection{Memory Parameter}
 The \mintinline{bash}{fat_soil_shared} partition is composed of shared nodes, which means that multiple users can run jobs on the same node and resources like memory and disk space are shared.
@@ -370,3 +370,29 @@ This function is especially useful to define the memory requirement for simulati
     }
     \label{fig:qx-memory-plot}
 \end{figure}
+
+\subsection{Parallel Quantum Circuit Execution}
+In the \gls{vqe} one uses a quantum computer to measure the energy of a molecular Hamiltonian.
+As described in \Cref{sec:vqe}, this is done by decomposing the Hamiltonian into a linear combination of Pauli operators~(\Cref{eq:pauli_hamiltonian}).
+Consider the following simple one-qubit Hamiltonian:
+\begin{equation}
+H = g_0Z_0 + g_1X_0,
+\end{equation}
+for which the energy is given as
+\begin{equation}
+\expval{H} = g_0\expval{Z_0} + g_1\expval{X_0},
+\end{equation}
+where $g_0$ and $g_1$ are some constants.
+Since the Pauli terms $\expval{Z_0}$ and $\expval{X_0}$ do not commute and measurement is destructive, we need to run the same quantum circuit twice: once for measuring $\expval{Z_0}$, and once for measuring $\expval{X_0}$.
+These circuit evaluations are independent of each other and could be executed in parallel to cut the calculation time in half.
+The number of measurement directions required per energy measurement increases rapidly for molecular Hamiltonians: the LiH and $\ensuremath{\mathrm{BeH_2}}$ molecules require 25 and 44 measurement directions respectively~\cite[Supplementary Information, Section III]{kandala2017hardware}.
+For simulator back-ends this parallelization is easily achieved by simply running multiple simulations in parallel.
+Even more, because we have full access to the state vector in quantum simulation, one can simply save the final state vector of the quantum circuit before measurement and measure in any number of ways you like.
+For \gls{qpu} back-ends, this kind of parallelization requires access to multiple \glspl{qpu}.
+At this moment, most development in quantum hardware is focused on the quality, and not the quantity of \glspl{qpu}.
+However, access to multiple \gls{nisq} devices may be required to make the execution of \glspl{hqca} feasible and practical.
+Assuming even access to two \glspl{qpu}, the estimate of the execution time of a meaningful \gls{hqca} experiment given in \Cref{sec:hqca-analysis} can be approximately halved from ranging from 32 to 328 days, to ranging from 16 to 164 days.
+
+\subsection{Quantum Circuit Batching}
+\subsubsection{Gradient Circuits Batching}
+\subsubsection{Breadth Optimization}
