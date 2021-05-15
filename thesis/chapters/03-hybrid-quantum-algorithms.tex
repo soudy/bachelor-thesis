@@ -62,7 +62,7 @@ The specific structure of the ansatz usually depends on the problem, as one can 
 Such ans{\"a}tze are referred to as problem-inspired ans{\"a}tze.
 On the other hand, there are problem-agnostic ans{\"a}tze that are used when no information is available for tailoring a specific ansatz.
 
-\subsection{Optimization}
+\subsection{Optimization} \label{sec:optimization}
 With the cost function and ansatz defined, the next step in a variational \gls{hqca} is to train the parameters $\vec{\theta}$ using a classical optimization algorithm to solve the optimization problem from \Cref{eqn:optimization-problem}.
 The two main types of optimization methods to consider are gradient-based methods and gradient-free methods.
 The former methods involve calculating first- or higher-order derivatives of the cost function, while the latter methods use only function evaluations.
@@ -71,7 +71,7 @@ In general, the computational cost of gradient-based methods is larger, but the 
 While gradient-free methods are straightforward to use for optimizing the quantum circuit parameters, gradient-based methods are more involved.
 Consider a parameterized gate of the form $G(\theta) = e^{-i\theta/2 H}$ from the general ansatz description in \Cref{eqn:ansatz-unitary}.
 Using the parameter-shift rule as described by \textcite{schuld2019evaluating}, the derivative of the gate $G$ with respect to a parameter $\theta$ can be described as follows:
-\begin{equation}
+\begin{equation} \label{eqn:gate-derivative}
 \dfrac{\partial G}{\partial \theta} = \dfrac{1}{2}\left[G\left(\theta + \dfrac{\pi}{2}\right) - G\left(\theta - \dfrac{\pi}{2}\right)\right].
 \end{equation}
 That is, the derivative of $G$ with respect to a parameter $\theta$ can be computed analytically by evaluating the quantum circuit twice with shifted parameters $\theta \pm \pi/2$.
@@ -84,7 +84,7 @@ For example, the derivative of a cost function $C(\vec{\theta}) = \sum_k \bra{0^
 \end{aligned}
 \end{equation}
 where $\vec{e}_l$ is a vector with $1$ as its $l$-th element and $0$ for all other elements.
-Note that calculating $\partial C$ with $m$ parameters $\vec{\theta}$ requires you to evaluate the quantum circuit twice for every parameter, for a total of $2m$ quantum circuit evaluations per gradient evaluation.
+Note that calculating $\partial C$ with $m$ parameters $\vec{\theta}$ requires you to evaluate the quantum circuit twice for every parameter, for a total of $2m$ quantum circuit executions per gradient evaluation.
 The parameter-shift rule can be further generalized to calculate higher-order derivatives of quantum gates as demonstrated by \textcite{mari2021estimating}, allowing the use of optimization methods that use higher-order derivates such as Newton's method.
 
 A common way to perform gradient-based optimization is through gradient descent based algorithms.

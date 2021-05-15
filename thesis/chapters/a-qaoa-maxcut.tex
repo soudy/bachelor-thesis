@@ -87,7 +87,7 @@ The complete quantum circuit for the \gls{qaoa} for \gls{maxcut} on this graph i
         Quantum circuit for the $p$-layer \gls{qaoa} on the graph from \Cref{fig:maxcut-4-graph}.
         Each vertex $j \in V$ is represented by qubit $\ket{q_j}$.
         The circuit starts by preparing an equal superposition state, after which the problem unitary $U_L(\gamma)$ and mixer unitary $U_B(\beta)$ are applied $p$ times.
-        In general, the depth of the circuit is $p(3m + n)$, where $p$ is the number of layers, $m$ is the number of edges, and $n$ is the number of vertices. 
+        In general, the depth of the circuit is $1 + p(3m + 1)$, where $p$ is the number of layers and $m$ is the number of edges. 
     }
     \label{fig:qaoa-circuit}
 \end{figure}

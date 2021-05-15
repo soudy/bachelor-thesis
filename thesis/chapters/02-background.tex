@@ -455,10 +455,31 @@ Then, a $\textnormal{CNOT}$ is applied with the first qubit as control and the s
 \ket{\psi} = \dfrac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right).
 \end{equation}
 This state is then measured, which will measure 00 or 11 with equal probability.
+Quantum circuits are often executed multiple times (multiple ``shots") to get a probability distribution of all possible outcomes.
+
+Quantum gates can be applied in parallel on different qubits.
+Because of this, it is often more useful to talk about the depth of a quantum circuit rather than the number of gates.
+The depth of a quantum circuit is number of steps required for the quantum operations making up the circuit to run.
+For example, the quantum circuit in \Cref{fig:circuit-depth-example} consists of 8 quantum gates, but has a depth of 4 (measurement gates are omitted from the depth calculation).
+The gates in every column are considered to be one time step as they can be executed in parallel.
+Instead of applying the first column of gates sequentially as $(I \otimes I \otimes S)(I \otimes X \otimes I)(H \otimes I \otimes I)\ket{000}$, it can be thought of as applying the single operator $(H \otimes X \otimes S)\ket{000}$.
+
+\begin{figure}[ht]
+    \large
+    \[
+    \Qcircuit @C=1em @R=1em @!R {
+        & & \lstick{\ket{0}} & \gate{H} & \ctrl{1} & \ctrl{1} & \gate{S} & \meter & \cw  \\
+        & & \lstick{\ket{0}} & \gate{X} & \targ & \gate{R_z(\pi/4)} & \qw & \meter & \cw \\
+        & & \lstick{\ket{0}} & \gate{S} & \qw & \gate{R_x(\pi/2)} & \gate{T^\dagger} & \meter & \cw \\
+    }
+    \]
+    \caption{A quantum circuit consisting of 8 gates with a depth of 4.}
+    \label{fig:circuit-depth-example}
+\end{figure}
 
 In classical computations, copying bits is a common operation.
 However, in quantum computing the data one can copy is much more restricted.
-If a qubit is in a computational basic state, that state can be copied by a $\textnormal{CNOT}$ gate~(\Cref{fig:copy-basis-state}).\footnote{More formally, if a quantum state is in a basis state of a known orthogonal basis, the state can be copied.}
+If a qubit is in a computational basis state, that state can be copied by a $\textnormal{CNOT}$ gate~(\Cref{fig:copy-basis-state}).\footnote{More formally, if a quantum state is in a basis state of a known orthogonal basis, the state can be copied.}
 \begin{figure}[ht]
     \large
     \[
@@ -631,6 +652,14 @@ U_\omega =
 \end{equation}
 
 With the oracle defined, the quantum circuit of Grover's algorithm is shown in \Cref{fig:grover-circuit}.
+The quantum state can be thought of as having two registers: the target qubits $\ket{q_1\ldots q_n}$ and the oracle qubit \ket{y}.
+The oracle qubit \ket{y} starts in the state $H\ket{1} = (\ket{0} - \ket{1})/\sqrt{2}$.
+When the oracle is applied to $\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
+However, if the oracle is applied to $\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
+After the oracle is applied, the solution is marked with a negative phase.
+To extract this solution, a procedure called amplitude amplification is used.
+Amplitude amplification can be thought of as inversion about the mean.
+
 \begin{figure}[h]
     \[
     \Qcircuit @C=1em @R=1em @!R {
@@ -644,26 +673,19 @@ With the oracle defined, the quantum circuit of Grover's algorithm is shown in \
     \caption{Quantum circuit representation of Grover's algorithm.}
     \label{fig:grover-circuit}
 \end{figure}
-The quantum state can be thought of as having two registers: the target qubits $\ket{q_1\ldots q_n}$ and the oracle qubit \ket{y}.
-The oracle qubit \ket{y} starts in the state $H\ket{1} = (\ket{0} - \ket{1})/\sqrt{2}$.
-When the oracle is applied to $\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ is not a solution, the state stays the same.
-However, if the oracle is applied to $\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$ and $x$ \emph{is} a solution, the state becomes $-\ket{q_1\ldots q_n}(\ket{0} - \ket{1})/\sqrt{2}$.
-After the oracle is applied, the solution is marked with a negative phase.
-To extract this solution, a procedure called amplitude amplification is used.
-Amplitude amplification can be thought of as inversion about the mean.
 
 Consider a search space of $N = 4$ with two qubits where we are looking for $\ket{\omega} = \ket{10}$.
 The amplitudes of the search space start out in an equal superposition:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.525\linewidth]{figures/aa_initial_equal.pdf}
+    \includegraphics[width=0.55\linewidth]{figures/aa_initial_equal.pdf}
 \end{figure}
 
 \noindent
 After applying the oracle $U_\omega$ the solution state \ket{10} has its phase flipped:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.525\linewidth]{figures/aa_phase_flipped_mean.pdf}
+    \includegraphics[width=0.55\linewidth]{figures/aa_phase_flipped_mean.pdf}
 \end{figure}
 
 \noindent
@@ -671,7 +693,7 @@ Note that measuring this state will still give each state with equal probabiliti
 Using the diffusion operator $H^{\otimes n}\left(2\op{0^n}{0^n} - I\right)H^{\otimes n}$, the amplitudes are inverted about their mean (displayed as the dotted orange line):
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.525\linewidth]{figures/aa_diffused.pdf}
+    \includegraphics[width=0.55\linewidth]{figures/aa_diffused.pdf}
 \end{figure}
 
 \noindent
