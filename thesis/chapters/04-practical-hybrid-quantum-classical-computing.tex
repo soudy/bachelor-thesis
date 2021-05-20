@@ -143,7 +143,7 @@ The variables we consider to describe the efficiency of a hybrid quantum-classic
     \item $T_L$ describes the latency between the classical and quantum computation. This includes latencies such as network overhead, scheduler wait time, resource initialization, etc.
     \item $T_C(p)$ describes the time taken by the classical optimization algorithm for $p$ parameters.
 \end{itemize}
-The efficiency of a hybrid quantum-classical experiment is then characterized by the sum of these variables:
+We then characterize the time taken by a hybrid quantum-classical experiment by the sum of these variables:
 \begin{equation}
 T_\text{total} = T_Q(n, d, s) + T_L + T_C(p),
 \end{equation}
@@ -190,7 +190,7 @@ While this is hard to avoid for the \gls{qpu} back-ends, for some applications o
 This is especially true for simulations of approximately 24 qubits and lower, for which the benefits of \gls{hpc} do not yet become substantial.
 For this range of simulations, the network and possible job queue overhead greatly exceeds the actual quantum circuit execution time.
 To avoid this unnecessary overhead for small simulations, support for a local simulation back-end in the Quantum Inspire \gls{sdk} can be useful.
-As per the measurements from \Cref{table:baseline-benchmark}, local simulation is a factor of $\sim1000$ faster for 4-qubit simulations over \gls{hpc} simulation because of the network and job scheduler overhead.
+As per the measurements from \Cref{table:baseline-benchmark}, local simulation is a factor of $\sim$1000 faster for 4-qubit simulations over \gls{hpc} simulation because of the network and job scheduler overhead.
 
 Another way to increase the efficiency of the \gls{hqca} development cycle is to reduce the amount of circuits that need to be executed on a \gls{qpu}.
 This can be achieved if one has access to a noisy quantum simulator which models the target \gls{qpu}'s hardware noise well.
@@ -244,7 +244,7 @@ As the number of qubits increases, the execution time increases exponentially, a
 These higher qubit simulations can be sped up an order of 7 to 10 by using 32 or more cores.
 The speedup stagnates after 32 cores, and while for some cases the speedup continues to increase beyond 32 cores, it is a relatively small speedup.
 Depending on the seasonality (how many people are actively using the system), 32 cores per simulation might occupy too many resources.
-In this case, a speedup on the order of 4 to 5 may still be achieved with 16 cores.
+In this case, a speedup on the order of 4 to 6 may still be achieved with 16 cores.
 The trade-off to be considered when choosing the amount of cores to use per number of qubits depends on the available resources, seasonality, and speedup gained.
 The performance of quantum circuit simulation can be further pushed by using \glspl{gpu} as shown in \cite[Appendix B]{oud2019simulation}, however QX simulator does not currently support \gls{gpu} simulation.
 
@@ -273,9 +273,9 @@ The performance of quantum circuit simulation can be further pushed by using \gl
             $30$ & $182$ & $709.1$s & $380.0$s & $249.1$s & $199.6$s & $179.1$s & $157.2$s & $139.5$s & $117.4$s & $112.2$s & \underline{$\mathbf{102.3}$\textbf{s}} & $106.9$s & $104.8$s \\
             $31$ & $188$ & $1472.5$s & $790.6$s & $516.8$s & $414.0$s & $368.9$s & $290.9$s & $273.1$s & $240.2$s & $223.3$s & $211.5$s & \underline{$\mathbf{206.1}$\textbf{s}} & $207.2$s \\
             $32$ & $194$ & $3057.3$s & $1632.7$s & $1063.3$s & $848.5$s & $724.1$s & $589.5$s & $521.4$s & $463.5$s & $422.0$s & $393.5$s & $375.7$s & \underline{$\mathbf{358.3}$\textbf{s}} \\
-            $33$ & $200$ & $6307.4$s & $3394.2$s & $2206.7$s & $1770.6$s & $1506.3$s & $1198.8$s & $1090.5$s & $1030.3$s & $1114.8$s & $898.1$s & $883.2$s & \underline{$\mathbf{837.0}$\textbf{s}} \\
-            $34$ & $206$ & $14827.4$s & $7855.2$s & $4996.7$s & $3853.7$s & $2971.9$s & $2325.1$s & $2066.3$s & $1798.9$s & $2043.4$s & $1498.6$s & $1454.3$s & \underline{$\mathbf{1390.7}$\textbf{s}} \\
-            $35$ & $212$ & $37658.7$s & $20438.4$s & $12516.8$s & $9242.1$s & $6645.5$s & $4926.8$s & $4034.7$s & $3424.5$s & $4063.6$s & $2936.7$s & $2769.5$s & \underline{$\mathbf{2679.0}$\textbf{s}} \\
+            $33$ & $200$ & $6307.4$s & $3394.2$s & $2206.7$s & $1770.6$s & $1506.3$s & $1198.8$s & $1090.5$s & $1030.3$s & $944.7$s & $898.1$s & $883.2$s & \underline{$\mathbf{837.0}$\textbf{s}} \\
+            $34$ & $206$ & $14827.4$s & $7855.2$s & $4996.7$s & $3853.7$s & $2971.9$s & $2325.1$s & $2066.3$s & $1798.9$s & $1603.6$s & $1498.6$s & $1454.3$s & \underline{$\mathbf{1390.7}$\textbf{s}} \\
+            $35$ & $212$ & $37658.7$s & $20438.4$s & $12516.8$s & $9242.1$s & $6645.5$s & $4926.8$s & $4034.7$s & $3424.5$s & $3093.3$s & $2936.7$s & $2769.5$s & \underline{$\mathbf{2679.0}$\textbf{s}} \\
         \end{tabular}
     }
     \caption[Benchmark results of the execution time of quantum circuits using QX simulator for different qubit and core counts.]{
@@ -421,10 +421,12 @@ At this moment, most development in quantum hardware is focused on the quality, 
 However, access to multiple \gls{nisq} devices may be required to make the execution of \glspl{hqca} feasible and practical.
 Assuming even access to two \glspl{qpu}, the estimate of the execution time of a meaningful \gls{hqca} experiment given in \Cref{sec:hqca-analysis} can be approximately halved from ranging from 32 to 328 days, to ranging from 16 to 164 days.
 
-\subsection{Quantum Circuit Batching}
-\subsubsection{Gradient Circuits Batching}
+\subsection{Quantum Circuit Grouping}
+\subsubsection{Gradient Circuits Grouping}
 Recall from \Cref{sec:optimization} that we can analytically calculate the gradient of a quantum circuit through the parameter-shift rule.
 That is, given a parameterized quantum gate of the form $G(\theta) = e^{-i\theta/2 H}$, one can calculate the derivative of $G$ with respect to $\theta$ by executing the quantum circuit twice with shifted parameters $\theta \pm \pi/2$ (\Cref{eqn:gate-derivative}).
 For a circuit with $m$ parameterized gates, $2m$ quantum circuit executions are required to calculate the gradient.
 
 \subsubsection{Breadth Optimization}
+
+\subsection{Summary}
