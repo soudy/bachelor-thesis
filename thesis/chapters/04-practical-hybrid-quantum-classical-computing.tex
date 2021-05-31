@@ -183,7 +183,7 @@ Using the total average time taken per circuit execution by the Starmon-5 \gls{q
 On top of that, there is an additional development time that should be considered, which includes debugging and testing quantum circuit behavior using quantum circuit simulators.
 In the following sections we will explore different methods of potentially increasing the efficiency of the execution of \glspl{hqca}.
 
-\subsection{Development Cycle}
+\subsection{Development Cycle} \label{sec:dev-cycle}
 The development cycle of \glspl{hqca} usually consists of three phases of quantum circuit execution: noiseless simulation, noisy simulation, and execution on hardware.
 Quantum Inspire's \gls{qpu} and simulation back-ends are all in the cloud, introducing a network overhead.
 While this is hard to avoid for the \gls{qpu} back-ends, for some applications of the simulator back-ends this network overhead may be avoided through local simulation.
@@ -199,7 +199,7 @@ However, the quantum depolarizing channel does not accurately represent the erro
 By adding support for better user-configurable error channels that correspond more to actual hardware noise, the amount of quantum circuits that need to be executed on actual \glspl{qpu} can be decreased.
 One can then use the noisy quantum simulator for a larger part of the development process, which will increase the development efficiency as quantum circuit simulation is often more accessible and has less overhead cost.
 
-\subsection{QX Simulator Batch Parameters}
+\subsection{QX Simulator Batch Parameters} \label{sec:qx-parameters}
 When submitting a job to the job scheduler on SURF's \gls{hpc} center, one can define the resources required for the job through batch parameters.
 Choosing the right parameters for a job can optimize its execution time and help the job scheduler use the system's resources as optimal as possible.
 In the context of the SURF QX simulator back-end, we are interested in figuring out the optimal number of cores and memory to use for quantum circuit simulations of different qubit counts.
@@ -399,7 +399,7 @@ This function is especially useful to define the memory requirement for simulati
     \label{fig:qx-memory-plot}
 \end{figure}
 
-\subsection{Parallel Quantum Circuit Execution}
+\subsection{Parallel Quantum Circuit Execution} \label{sec:parallel-qpu}
 In the \gls{vqe} one uses a quantum computer to measure the energy of a molecular Hamiltonian.
 As described in \Cref{sec:vqe}, this is done by decomposing the Hamiltonian into a linear combination of Pauli operators~(\Cref{eq:pauli_hamiltonian}).
 Consider the following simple one-qubit Hamiltonian:
@@ -421,12 +421,37 @@ At this moment, most development in quantum hardware is focused on the quality, 
 However, access to multiple \gls{nisq} devices may be required to make the execution of \glspl{hqca} feasible and practical.
 Assuming even access to two \glspl{qpu}, the estimate of the execution time of a meaningful \gls{hqca} experiment given in \Cref{sec:hqca-analysis} can be approximately halved from ranging from 32 to 328 days, to ranging from 16 to 164 days.
 
-\subsection{Quantum Circuit Grouping}
-\subsubsection{Gradient Circuits Grouping}
+\subsection{Quantum Circuit Hardware Batching} \label{sec:circuit-batching}
+For the \gls{qpu} back-ends of Quantum Inspire, most time is spent on circuit compilation and uploading to control hardware ($T_L$ in \Cref{table:baseline-benchmark}).
+The control hardware for Quantum Inspire's \gls{qpu} back-ends support uploading multiple quantum circuits in one batch, which can be used to reduce the overall amount of time spent on these overheads.
+The \glspl{qpu} can still only execute one circuit at a time, but by uploading multiple circuits in the same batch, there is only a overhead for the first circuit.
+In this section, we will look at how we can take advantage of this circuit batching to reduce the time taken to execute a \gls{hqca} experiment on Quantum Inspire's \gls{qpu} back-ends.
+
+\subsubsection{Gradient Circuits Batching}
 Recall from \Cref{sec:optimization} that we can analytically calculate the gradient of a quantum circuit through the parameter-shift rule.
 That is, given a parameterized quantum gate of the form $G(\theta) = e^{-i\theta/2 H}$, one can calculate the derivative of $G$ with respect to $\theta$ by executing the quantum circuit twice with shifted parameters $\theta \pm \pi/2$ (\Cref{eqn:gate-derivative}).
 For a circuit with $m$ parameterized gates, $2m$ quantum circuit executions are required to calculate the gradient.
+These gradient circuits can be generated in parallel and submitted in a single batch.
 
-\subsubsection{Breadth Optimization}
+\subsubsection{Particle Swarm Optimization}
+Gradient based optimization algorithms can make use of circuit batching as described in the previous section, but non-gradient methods are generally limited to executing circuits sequentially.
+The iterative optimization algorithms discussed in this report so far consider one candidate solution in the parameter space at the same time.
+The \gls{pso} method optimizes a function by considering a population of candidate solutions (particles), and moving these particles around according to  the particle's position and velocity~\cite{kennedy1995particle, shi1998modified}.
+A particle moves through the search space based on its local best known position, but is also influenced by positions found by other particles.
 
 \subsection{Summary}
+This chapter described different methods for improving the efficiency of the execution of \glspl{hqca} using the Quantum Inspire quantum computing platform and SURF's \gls{hpc} center.
+To summarize, we propose the following changes:
+\begin{itemize}
+    \item
+    In \Cref{sec:dev-cycle} we show that for quantum circuit simulations that do not require \gls{hpc} facilities, local simulation is a factor of 1000 faster than running simulations in the cloud.
+    In addition, by adding support for error channels that correspond more to actual hardware noise in QX simulator, one can reduce the amount of quantum circuits that need to be executed on actual \glspl{qpu}, reducing the overall time of a \gls{hqca} experiment.
+    \item
+    \Cref{sec:qx-parameters} analyzes the performance of QX simulator on SURF's cluster computer Lisa.
+    Based on benchmark data we propose methods for determining the optimal batch parameters for QX simulations.
+    This allows for more efficient scheduling and improves the simulation execution speed up to a factor of 14.
+    \item
+    \Cref{sec:parallel-qpu} shows how access to multiple \glspl{qpu} can improve the execution time of \gls{vqe} implementations by parallelizing measurements in different directions.
+    \item
+    \Cref{sec:circuit-batching} describes how one can make use of the control hardware's ability to upload multiple quantum circuits in one batch to reduce the total time spent on overheads such as circuit compilation and uploading to control hardware.
+\end{itemize}
