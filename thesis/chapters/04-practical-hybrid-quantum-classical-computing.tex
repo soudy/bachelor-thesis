@@ -425,19 +425,66 @@ Assuming even access to two \glspl{qpu}, the estimate of the execution time of a
 For the \gls{qpu} back-ends of Quantum Inspire, most time is spent on circuit compilation and uploading to control hardware ($T_L$ in \Cref{table:baseline-benchmark}).
 The control hardware for Quantum Inspire's \gls{qpu} back-ends support uploading multiple quantum circuits in one batch, which can be used to reduce the overall amount of time spent on these overheads.
 The \glspl{qpu} can still only execute one circuit at a time, but by uploading multiple circuits in the same batch, there is only a overhead for the first circuit.
+The total time spent on overhead when executing $n$ quantum circuits using no batching can be described as
+\begin{equation}
+T_{NB} = T_L \cdot n.
+\end{equation}
+When introducing circuit batching, the total time spent on overhead when executing $n$ quantum circuits is described as
+\begin{equation} \label{eqn:batching-analytic}
+T_{B} = \sum^{n/s} T_L + (s-1)\left(T_L - \left(F \cdot T_L\right)\right),
+\end{equation}
+where $s$ is the batch size and $F \in [0, 1]$ is the speedup fraction that defines what fraction of $T_L$ is reduced for all but the first circuit in a batch.
+Note that $T_{NB}$ can be thought of as $T_B$ with a batch size of $1$.
 In this section, we will look at how we can take advantage of this circuit batching to reduce the time taken to execute a \gls{hqca} experiment on Quantum Inspire's \gls{qpu} back-ends.
 
 \subsubsection{Gradient Circuits Batching}
 Recall from \Cref{sec:optimization} that we can analytically calculate the gradient of a quantum circuit through the parameter-shift rule.
 That is, given a parameterized quantum gate of the form $G(\theta) = e^{-i\theta/2 H}$, one can calculate the derivative of $G$ with respect to $\theta$ by executing the quantum circuit twice with shifted parameters $\theta \pm \pi/2$ (\Cref{eqn:gate-derivative}).
 For a circuit with $m$ parameterized gates, $2m$ quantum circuit executions are required to calculate the gradient.
-These gradient circuits can be generated in parallel and submitted in a single batch.
+These gradient circuits can be generated in parallel and submitted in batches.
+The speedup gained will depend on the batch size and speedup factor.
+
+\subsubsection{Measurement Direction Batching}
+Circuit batching can be used to speed up the execution of quantum algorithms that require measuring in multiple directions.
+As discussed in \Cref{sec:parallel-qpu}, some quantum algorithms require measuring the same circuit in different measurement directions.
+Especially in the context of the \gls{vqe}, the number of measurement directions can grow rapidly, and a separate circuit execution is required per measurement direction.
+These circuits are all equivalent except for some predetermined gates at the end, so they can be generated in parallel and submitted in batches.
 
 \subsubsection{Particle Swarm Optimization}
 Gradient based optimization algorithms can make use of circuit batching as described in the previous section, but non-gradient methods are generally limited to executing circuits sequentially.
 The iterative optimization algorithms discussed in this report so far consider one candidate solution in the parameter space at the same time.
 The \gls{pso} method optimizes a function by considering a population of candidate solutions (particles), and moving these particles around according to  the particle's position and velocity~\cite{kennedy1995particle, shi1998modified}.
 A particle moves through the search space based on its local best known position, but is also influenced by positions found by other particles.
+Circuit batching can be used in combination with \gls{pso} to potentially reduce the time spent on overhead.
+Multiple quantum circuits for exploring different candidate solutions can be submitted in a single batch, while only paying the overhead cost once.
+
+We estimate the speedup gained by using circuit batching in combination with \gls{pso} according to \Cref{eqn:batching-analytic}.
+In \Cref{fig:batching-times-batch-size} and \Cref{fig:batching-times-speedup-factors} we plot the impact of changing batch size and speedup factor respectively.
+As is expected, by increasing the batch size and speedup factor we can reduce the overall time spent on overhead.
+Given a speedup factor of $F = 0.3$ and assuming that \gls{pso} takes approximately the same amount of circuit executions to find the same quality optimum as non-\gls{pso} methods, we predict that by using \gls{pso} one can use circuit batching to reduce the total overhead time~(\Cref{fig:batching-times-batch-size}).
+If we consider larger factors of $F$~(\Cref{fig:batching-times-speedup-factors}), \gls{pso} methods become considerable even if they take more circuit executions.
+More research however is needed to investigate the performance and convergence rate of \gls{pso} on \glspl{hqca}.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/pso_batch_times_batch_sizes.pdf}
+        \caption{Overhead time estimation with fixed speedup factor of $F = 0.3$ and variable batch size.}
+        \label{fig:batching-times-batch-size}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=1\linewidth]{figures/pso_batch_times_speedup_factor.pdf}
+        \caption{Overhead time estimation with fixed batch size of $s = 5$ and variable speedup factor.}
+        \label{fig:batching-times-speedup-factors}
+    \end{subfigure}
+    
+    \caption{
+        Estimation of time taken on overhead by \gls{qpu} back-ends for different number of circuit executions with varying batch sizes and speedup factors.
+    }
+\end{figure}
 
 \subsection{Summary}
 This chapter described different methods for improving the efficiency of the execution of \glspl{hqca} using the Quantum Inspire quantum computing platform and SURF's \gls{hpc} center.
