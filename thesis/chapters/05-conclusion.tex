@@ -1,2 +1,18 @@
 \chapter{Conclusion} \label{chap:conclusion}
-% - simulation efficiency can be improved by factor x by choosing the optimal amount of resources
+\Acrlongpl{hqca} are a family of quantum algorithms that can run on the \gls{nisq} devices that we currently have access to.
+This report analyzes the efficiency of different workflows for the practical execution of \glspl{hqca} using QuTech's quantum computing platform Quantum Inspire and SURF's \gls{hpc} center.
+Based on our analysis, we propose different methods to increase the efficiency of the execution of \glspl{hqca}.
+We show that local simulation is vastly more efficient for low qubit simulations and small experiments due to network and job scheduler overheads.
+In addition, the efficiency of the \gls{hqca} development cycle can be improved with the addition of more hardware accurate error models to QX simulator.
+This would reduce the number of quantum circuits that need to be executed on actual \glspl{qpu}.
+We also define the optimal batch parameters to use for the Lisa simulator back-end, which increases the simulation execution time up to a factor of 14.
+Defining the optimal batch parameters also ensures that the available resources are being utilized as efficiently as possible.
+Furthermore, we show how one can parallelize certain parts of \glspl{hqca} assuming access to multiple \glspl{qpu}.
+Finally, we propose the use of \gls{pso} methods to increase the efficiency of training quantum circuits by reducing the number of network round trips required.
+
+\section*{Further Work}
+This work can be extended in different ways.
+First, as described in \Cref{sec:dev-cycle}, local simulation and more hardware accurate error models can be added to Quantum Inspire and QX simulator respectively to reduce the amount of time spent on network overhead and queue waiting times.
+Second, the performance of quantum circuit simulation using QX simulator can be further improved by adding \gls{gpu} support.
+Finally, more research towards the performance of \gls{pso} methods on \glspl{hqca} can help put numbers to the estimates discussed in \Cref{sec:circuit-batching}.
+In addition, more information and measurements about the different overheads in the hardware back-ends would allow for a more realistic estimation of the potential speedup gained by using hardware circuit batching.

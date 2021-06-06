@@ -1,5 +1,5 @@
 \chapter{Background} \label{chap:background}
-This chapter is focused on making the reader familiar with concepts used throughout this report.
+This chapter is focused on making the reader familiar with the concepts used throughout this report.
 First, an introduction to computational complexity is given to establish a mathematical framework to describe the efficiency of computer algorithms.
 Second, the basic ideas of quantum mechanics are presented.
 Finally, an overview of the quantum circuit computational model is given along with a description of two important quantum algorithms to demonstrate the computing power of quantum computers.
@@ -57,9 +57,9 @@ Throughout this report, algorithms that are bounded above by a polynomial (i.e. 
 
 \subsection{Turing Machines}
 The previous section described the measurement of computational efficiency as the number of primitive operations it performs for a given input size.
-This abstract definition can be extended by choosing a computational model in order to define what a primitive operation means.
+This abstract definition can be extended by choosing a computational model to define what a primitive operation means.
 The standard computational model used for this is the Turing machine.
-It is chosen as computational model for the analysis of computational efficiency because of its simplicity and because it is able to simulate most physically realizable computational models with little overhead~\cite{arora2009computational}.
+It is chosen as computational model for the analysis of computational efficiency because of its simplicity and because it can simulate most physically realizable computational models with little overhead~\cite{arora2009computational}.
 
 A Turing machine is an abstract machine that manipulates symbols from a work alphabet on a finite amount of one-way infinite length tapes divided into cells~\cite{turing1937computable}~(\Cref{fig:single-tape-turing-machine}).
 Along these tapes runs a tape head that can read and write one symbol at a time.
@@ -77,7 +77,7 @@ These states as described in \Cref{eqn:turing-state} can be read as ``in state $
     \includegraphics[width=0.5\linewidth]{figures/single-tape-turing-machine.pdf}
     \caption[The tape of a single-tape Turing machine in an arbitrary state.]{
         The tape of a single-tape Turing machine in an arbitrary state.
-        Note that any multi-tape Turing machines can be efficiently simulated by a single-tape Turing machine~\cite{hartmanis1965computational}, so complexity classes are not affected by changing between single-tape and multi-tape machines.
+        Note that any multi-tape Turing machine can be efficiently simulated by a single-tape Turing machine~\cite{hartmanis1965computational}, so complexity classes are not affected by changing between single-tape and multi-tape machines.
     }
     \label{fig:single-tape-turing-machine}
 \end{figure}
@@ -89,7 +89,7 @@ That is, can a Turing machine simulate any model of computation in polynomial ti
 The quantum computational model brings doubt to this claim.
 It is known that quantum computers can efficiently simulate a Turing machine~\cite{bennett1973logical}, but there appears to be no efficient algorithm for simulating a quantum computer on a Turing machine~\cite{deutsch1985quantum}.
 Furthermore, \textcite{arute2019quantum} experimentally demonstrated a quantum computer sampling from a probability distribution intractable by a classical computer.
-This gives us good reasons to believe that classical computers cannot efficiently simulate quantum computers, and that quantum computers are more computationally powerful for some problems.
+This gives us good reasons to believe that classical computers cannot efficiently simulate quantum computers and that quantum computers are more computationally powerful for some problems.
 
 \subsection{Complexity Classes}
 Complexity classes are sets of computational problems that share some common feature with regard to the computational resources they need to solve some problem~\cite{arora2009computational}.
@@ -124,7 +124,7 @@ Furthermore, quantum computers are more powerful than classical probabilistic co
 How $\BQP$ relates to $\P$ and $\NP$ exactly is still unknown, however, it seems unlikely that $\BQP = \NP$~\cite{aaronson2010bqp}.
 It also seems very unlikely that quantum computers will be able to solve $\NP$-complete problems in polynomial time, or $\BQP \cap \NP\text{-complete} = \varnothing$.
 
-The quantum analog of $\NP$ goes by the name of $\QMA$ (Quantum Merlin Arthur), and is related to $\BQP$ in the same way that $\NP$ is related to $\P$.
+The quantum analog of $\NP$ goes by the name of $\QMA$ (Quantum Merlin Arthur) and is related to $\BQP$ in the same way that $\NP$ is related to $\P$.
 That is, $\QMA$ is the set of all decision problems verifiable by a quantum computer in polynomial time where a bounded error rate of $1/3$ is allowed.
 Similarly then, a problem is said to be $\QMA$-hard when every problem in $\QMA$ can be reduced to it, and a problem is said to be $\QMA$-complete if it is both $\QMA$-hard and in $\QMA$.
 Just like $\P$ and $\NP$, it is clear that $\BQP \subseteq \QMA$, and $\P \subseteq \NP \subseteq \QMA$.
@@ -149,7 +149,7 @@ This section describes the necessary background of quantum mechanics required fo
 In classic information theory, the smallest unit of information is the bit.
 Quantum information is built upon an analogous concept: the quantum bit, or qubit.
 Qubits are physical objects that appear in nature on the scale of atoms and subatomic particles.
-A qubit can be any two-state quantum-mechanical system such as the spin of an electron, which can be spin up or down, or the polarization of a photon, which can be horizontally of vertically polarized.
+A qubit can be any two-state quantum-mechanical system such as the spin of an electron, which can be spin up or down, or the polarization of a photon, which can be horizontally or vertically polarized.
 In this report, qubits will be treated as abstract mathematical objects as the physical realization of qubits is beyond the scope of this work.
 The state of a qubit is denoted as follows:
 \begin{equation} \label{eqn:qubit-state}
@@ -164,7 +164,7 @@ As these values are probabilities, they should be normalized: $|\alpha_0|^2 + |\
 Formally, a qubit can be thought of as a unit vector in a two-dimensional Hilbert space.
 
 A qubit differs from a classical bit in that it can be in a linear combination, or superposition of states.
-While a bit can be only be in the state 0 or 1, a qubit can be in one of infinitely many superpositions of states.
+While a bit can only be in the state 0 or 1, a qubit can be in one of infinitely many superpositions of states.
 However, the laws of quantum mechanics restrict direct access to the probability amplitudes of a state.
 Instead, when measuring a qubit, it collapses to basis state \ket{j} with probability $|\alpha_j|^2$.
 For example, consider the state
@@ -459,7 +459,7 @@ Quantum circuits are often executed multiple times (multiple ``shots") to get a 
 
 Quantum gates can be applied in parallel on different qubits.
 Because of this, it is often more useful to talk about the depth of a quantum circuit rather than the number of gates.
-The depth of a quantum circuit is number of steps required for the quantum operations making up the circuit to run.
+The depth of a quantum circuit is the number of steps required for the quantum operations making up the circuit to run.
 For example, the quantum circuit in \Cref{fig:circuit-depth-example} consists of 8 quantum gates, but has a depth of 4 (measurement gates are omitted from the depth calculation).
 The gates in every column are considered to be one time step as they can be executed in parallel.
 Instead of applying the first column of gates sequentially as $(I \otimes I \otimes S)(I \otimes X \otimes I)(H \otimes I \otimes I)\ket{000}$, it can be thought of as applying the single operator $(H \otimes X \otimes S)\ket{000}$.
@@ -478,7 +478,7 @@ Instead of applying the first column of gates sequentially as $(I \otimes I \oti
 \end{figure}
 
 In classical computations, copying bits is a common operation.
-However, in quantum computing the data one can copy is much more restricted.
+However, in quantum computing, the data one can copy is much more restricted.
 If a qubit is in a computational basis state, that state can be copied by a $\textnormal{CNOT}$ gate~(\Cref{fig:copy-basis-state}).\footnote{More formally, if a quantum state is in a basis state of a known orthogonal basis, the state can be copied.}
 \begin{figure}[ht]
     \large
@@ -541,7 +541,7 @@ For $N = 2^n$ amplitudes, the \gls{qft} uses $O(n^2)$ gates, where $n$ is the am
 The best-known classical algorithm for computing the \gls{dft} uses $O(n2^n)$ gates.
 That is, the \gls{qft} is exponentially more efficient than the best-known classical algorithm.
 However, the applications of the \gls{qft} are limited.
-The result of the \gls{qft} are stored in the amplitudes of the quantum state.
+The result of the \gls{qft} is stored in the amplitudes of the quantum state.
 These amplitudes cannot be directly accessed by measurement, so there is no way to extract the results.
 On the other hand, the \gls{qft} is the backbone of the phase estimation algorithm, which in term can be used to solve problems including the order-finding problem and the factoring problem efficiently.
 

@@ -165,7 +165,7 @@ H = - \sum_i \frac{\nabla_{\vec{r}_i}^2}{2}
 + \sum_{i,j>i} \frac{1}{|\vec{r}_i - \vec{r}_j|}.
 \end{equation}
 This form of Hamiltonian is often referred to as the first quantized formulation of quantum chemistry~\cite[Appendix A]{o2016scalable}.
-In order to represent electronic Hamiltonians on a quantum computer, it needs to be mapped from an operator acting on indistinguishable fermions to an operator acting on distinguishable qubits.
+To represent electronic Hamiltonians on a quantum computer, it needs to be mapped from an operator acting on indistinguishable fermions to an operator acting on distinguishable qubits.
 There are several approaches to this~\cite{kassal2011simulating}, but the most widely used approach in quantum chemistry uses the second quantized formulation~\cite{mcardle2018quantum}.
 The second quantized Hamiltonian must then be mapped into qubits in order to be implemented on a quantum computer.
 The most common mappings for this are the Jordan-Wigner~\cite{somma2002simulating} and Bravyi-Kitaev~\cite{seeley2012bravyi} transformations.
@@ -182,7 +182,7 @@ Alternative ans{\"a}tze have been proposed to reduce the quantum resources requi
 The \acrfull{qaoa} is a variational \gls{hqca} that produces approximate solutions for combinatorial optimization problems~\cite{farhi2014quantum}.
 Combinatorial optimization is focused on finding an optimal solution in a finite set of potential solutions.
 The number of potential solutions is often too large to scan one by one and select the best option, so more efficient methods are required.
-Most combinatorial optimization problems are known be $\NP$-complete~\cite{schrijver2003combinatorial}.
+Most combinatorial optimization problems are known to be $\NP$-hard~\cite{schrijver2003combinatorial}.
 The \gls{qaoa} depends on an integer $p \ge 1$, for which the quality of the approximation improves as $p$ increases.
 Even for $p = 1$, the \gls{qaoa} is not efficiently simulatable by classical computers~\cite{farhi2016quantum}.
 The \gls{qaoa} has received attention from the scientific community in the last few years because of its classical intractability, wide range of applications, and promising performance guarantees.
